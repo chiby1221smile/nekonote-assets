@@ -48,6 +48,20 @@ const CONFIG = {
 
   // ブログ本文をClaudeに渡す最大文字数
   MAX_ARTICLE_CHARS: 8000,
+
+  // ===== 巡回メンテナンス設定 =====
+
+  // この日数を超えた古いファイルは削除（またはアーカイブ）する
+  RETENTION_DAYS: 180,
+
+  // 各ファイルのリンク確認・内容更新チェックの間隔（日）
+  RECHECK_INTERVAL_DAYS: 30,
+
+  // 1回の巡回で処理する最大ファイル数（GASの実行時間制限対策）
+  MAX_MAINTENANCE_PER_RUN: 50,
+
+  // 期限切れファイルの扱い： 'trash'＝ゴミ箱へ（30日間復元可） / 'archive'＝_アーカイブフォルダへ移動
+  OLD_FILE_ACTION: 'trash',
 };
 
 // ステータス列の定義（A列=URLは拡張機能が書き込む。B列以降をこのスクリプトが使う）
@@ -474,13 +488,26 @@ function saveMarkdown_(analysis, content, sourceUrl) {
     .slice(0, 20);
   const fileName = today + '_' + safeAuthor + '_' + safeTitle + '.md';
 
-  const md =
+  const md = buildMarkdown_(analysis, content, sourceUrl, { savedAt: today });
+  const file = folder.createFile(fileName, md, 'text/markdown');
+  return file.getUrl();
+}
+
+/**
+ * Markdownファイルの中身を組み立てる（新規保存・巡回時の再生成の両方から使う）
+ */
+function buildMarkdown_(analysis, content, sourceUrl, dates) {
+  const today = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy-MM-dd');
+  return (
     '---\n' +
     'source: ' + sourceUrl + '\n' +
     'source_type: ' + content.sourceType + '\n' +
     'author: "' + content.authorLabel + '"\n' +
     (content.createdAt ? 'posted_at: "' + content.createdAt + '"\n' : '') +
-    'saved_at: ' + today + '\n' +
+    'saved_at: ' + (dates.savedAt || today) + '\n' +
+    (dates.updatedAt ? 'updated_at: ' + dates.updatedAt + '\n' : '') +
+    'last_checked: ' + (dates.lastChecked || today) + '\n' +
+    'content_hash: ' + md5_(content.text) + '\n' +
     'category: ' + analysis.category + '\n' +
     'tags: [' + (analysis.tags || []).join(', ') + ']\n' +
     '---\n\n' +
@@ -488,10 +515,8 @@ function saveMarkdown_(analysis, content, sourceUrl) {
     '## 要約\n\n' + analysis.summary + '\n\n' +
     (content.includeFullText ? '## 元投稿\n\n' + content.text + '\n\n' : '') +
     content.mediaNote +
-    '\n[元コンテンツを開く](' + sourceUrl + ')\n';
-
-  const file = folder.createFile(fileName, md, 'text/markdown');
-  return file.getUrl();
+    '\n[元コンテンツを開く](' + sourceUrl + ')\n'
+  );
 }
 
 /**
@@ -500,6 +525,251 @@ function saveMarkdown_(analysis, content, sourceUrl) {
 function getOrCreateFolder_(parent, name) {
   const it = parent.getFoldersByName(name);
   return it.hasNext() ? it.next() : parent.createFolder(name);
+}
+
+// ===== 巡回メンテナンス =====
+
+/**
+ * 保存済みナレッジの巡回メンテナンス。週1回トリガーから実行される。
+ *  - RETENTION_DAYS を超えた古いファイルを削除（またはアーカイブ）
+ *  - リンク切れ（投稿削除・ページ消滅）を検出してマーク（ファイルは残す）
+ *  - ブログ記事は内容が変わっていたら要約を再生成（カテゴリ変更時はフォルダも移動）
+ *  - 実施内容は「巡回ログ」シートに記録
+ */
+function maintainKnowledge() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) {
+    console.log('別の実行が進行中のためスキップします');
+    return;
+  }
+  try {
+    const root = DriveApp.getFolderById(CONFIG.ROOT_FOLDER_ID);
+    const now = new Date();
+    let actions = 0;
+
+    const folders = root.getFolders();
+    while (folders.hasNext() && actions < CONFIG.MAX_MAINTENANCE_PER_RUN) {
+      const folder = folders.next();
+      if (folder.getName().indexOf('_') === 0) continue; // _アーカイブ等はスキップ
+
+      const files = folder.getFiles();
+      while (files.hasNext() && actions < CONFIG.MAX_MAINTENANCE_PER_RUN) {
+        const file = files.next();
+        if (!/\.md$/i.test(file.getName())) continue;
+        try {
+          if (maintainOneFile_(file, root, now)) actions++;
+        } catch (e) {
+          console.warn('巡回中にエラー（続行）: ' + file.getName() + ': ' + e);
+        }
+      }
+    }
+    console.log('巡回完了：' + actions + '件処理しました');
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/**
+ * 週1回（月曜4時ごろ）の巡回トリガーを設置する（初回に1度だけ手動実行する）
+ */
+function installMaintenanceTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'maintainKnowledge') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('maintainKnowledge')
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.MONDAY)
+    .atHour(4)
+    .create();
+  console.log('週1回（月曜4時ごろ）の巡回トリガーを設置しました');
+}
+
+/**
+ * 1ファイルの巡回処理。実際に何か作業した場合 true を返す。
+ */
+function maintainOneFile_(file, root, now) {
+  const md = file.getBlob().getDataAsString('UTF-8');
+  const front = parseFront_(md);
+  const today = Utilities.formatDate(now, 'Asia/Tokyo', 'yyyy-MM-dd');
+
+  // 1) 保存期限チェック
+  const savedAt = front.saved_at ? new Date(front.saved_at) : null;
+  if (savedAt) {
+    const ageDays = (now.getTime() - savedAt.getTime()) / 86400000;
+    if (ageDays > CONFIG.RETENTION_DAYS) {
+      if (CONFIG.OLD_FILE_ACTION === 'archive') {
+        const archive = getOrCreateFolder_(root, '_アーカイブ');
+        file.moveTo(getOrCreateFolder_(archive, front.category || 'その他'));
+        logMaint_('アーカイブ', file.getName(), '保存から' + Math.floor(ageDays) + '日経過');
+      } else {
+        file.setTrashed(true);
+        logMaint_('期限切れ削除', file.getName(), '保存から' + Math.floor(ageDays) + '日経過（ゴミ箱から30日間復元可）');
+      }
+      return true;
+    }
+  }
+
+  // 2) チェック間隔の確認（最近チェック済みならスキップ）
+  if (front.last_checked) {
+    const checkedDays =
+      (now.getTime() - new Date(front.last_checked).getTime()) / 86400000;
+    if (checkedDays < CONFIG.RECHECK_INTERVAL_DAYS) return false;
+  }
+
+  const sourceUrl = front.source;
+  if (!sourceUrl) return false;
+
+  // 3) ブログ記事：再取得して内容が変わっていたら要約を再生成
+  if (front.source_type === 'ブログ・Web記事') {
+    const page = fetchWebPageData_(sourceUrl);
+    if (!page) {
+      markLinkDead_(file, md, today);
+      return true;
+    }
+    const newHash = md5_(page.text);
+    if (front.content_hash && newHash !== front.content_hash) {
+      const analysis = analyzeWithClaude_(page);
+      const newMd = buildMarkdown_(analysis, page, sourceUrl, {
+        savedAt: front.saved_at,
+        updatedAt: today,
+        lastChecked: today,
+      });
+      file.setContent(newMd);
+      if (analysis.category !== front.category) {
+        file.moveTo(getOrCreateFolder_(root, analysis.category));
+        logMaint_('内容更新＋カテゴリ移動', file.getName(), front.category + ' → ' + analysis.category);
+      } else {
+        logMaint_('内容更新', file.getName(), '記事内容の変更を検出し要約を再生成');
+      }
+      return true;
+    }
+    // 変更なし：チェック日とハッシュ（旧形式ファイルの補完）だけ更新
+    let updated = setFrontKey_(md, 'last_checked', today);
+    updated = setFrontKey_(updated, 'content_hash', newHash);
+    updated = setFrontKey_(updated, 'source_status', '正常');
+    file.setContent(updated);
+    return true;
+  }
+
+  // 4) X投稿・YouTube：リンク生存確認のみ（内容は変わらない前提）
+  const alive = checkSourceAlive_(front.source_type, sourceUrl);
+  if (!alive) {
+    markLinkDead_(file, md, today);
+  } else {
+    let updated = setFrontKey_(md, 'last_checked', today);
+    updated = setFrontKey_(updated, 'source_status', '正常');
+    file.setContent(updated);
+  }
+  return true;
+}
+
+/**
+ * リンク切れマークを付ける（ナレッジとして価値が残るためファイルは削除しない）
+ */
+function markLinkDead_(file, md, today) {
+  const front = parseFront_(md);
+  let updated = setFrontKey_(md, 'last_checked', today);
+  updated = setFrontKey_(updated, 'source_status', 'リンク切れ');
+  file.setContent(updated);
+  // 初回検出時のみログ（既にリンク切れ済みなら記録しない）
+  if (front.source_status !== 'リンク切れ') {
+    logMaint_('リンク切れ検出', file.getName(), '元コンテンツにアクセス不可（ファイルは保持）');
+  }
+}
+
+/**
+ * ソースがまだ生きているか確認する
+ */
+function checkSourceAlive_(sourceType, sourceUrl) {
+  try {
+    if (sourceType === 'X投稿') {
+      const id = extractTweetId_(sourceUrl);
+      return !!(id && fetchTweetData_(id));
+    }
+    if (sourceType === 'YouTube動画') {
+      const videoId = extractYouTubeId_(sourceUrl);
+      if (!videoId) return false;
+      const res = UrlFetchApp.fetch(
+        'https://www.youtube.com/oembed?url=' +
+          encodeURIComponent('https://www.youtube.com/watch?v=' + videoId) +
+          '&format=json',
+        { muteHttpExceptions: true }
+      );
+      return res.getResponseCode() === 200;
+    }
+    const res = UrlFetchApp.fetch(sourceUrl, {
+      muteHttpExceptions: true,
+      followRedirects: true,
+    });
+    return res.getResponseCode() === 200;
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * 巡回結果を「巡回ログ」シートに記録する
+ */
+function logMaint_(action, fileName, note) {
+  const ss = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+  let sheet = ss.getSheetByName('巡回ログ');
+  if (!sheet) {
+    sheet = ss.insertSheet('巡回ログ');
+    sheet.appendRow(['日時', '処理', 'ファイル名', '備考']);
+  }
+  sheet.appendRow([
+    Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy-MM-dd HH:mm'),
+    action,
+    fileName,
+    note,
+  ]);
+}
+
+/**
+ * frontmatter（--- で囲まれた部分）を key: value のオブジェクトに解析する
+ */
+function parseFront_(md) {
+  const m = md.match(/^---\n([\s\S]*?)\n---/);
+  const out = {};
+  if (!m) return out;
+  m[1].split('\n').forEach(function (line) {
+    const i = line.indexOf(':');
+    if (i > 0) {
+      out[line.slice(0, i).trim()] = line
+        .slice(i + 1)
+        .trim()
+        .replace(/^"|"$/g, '');
+    }
+  });
+  return out;
+}
+
+/**
+ * frontmatterの指定キーを更新（なければ追加）した文字列を返す
+ */
+function setFrontKey_(md, key, value) {
+  const m = md.match(/^---\n([\s\S]*?)\n---/);
+  if (!m) return md;
+  let fm = m[1];
+  const line = key + ': ' + value;
+  const re = new RegExp('^' + key + ':.*$', 'm');
+  fm = re.test(fm) ? fm.replace(re, line) : fm + '\n' + line;
+  return md.replace(/^---\n[\s\S]*?\n---/, '---\n' + fm + '\n---');
+}
+
+/**
+ * テキストのMD5ハッシュ（16進文字列）を返す
+ */
+function md5_(text) {
+  return Utilities.computeDigest(
+    Utilities.DigestAlgorithm.MD5,
+    text,
+    Utilities.Charset.UTF_8
+  )
+    .map(function (b) {
+      return ((b + 256) % 256).toString(16).padStart(2, '0');
+    })
+    .join('');
 }
 
 // ===== ユーティリティ =====
