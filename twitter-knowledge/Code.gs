@@ -1,9 +1,14 @@
 /**
- * Twitterナレッジ自動整理ツール
+ * ナレッジ自動整理ツール
  *
- * ナレッジシート（スプレッドシート）に溜まったX(Twitter)の投稿URLを定期的に処理し、
- * 投稿内容の取得 → Claude APIで要約・カテゴリー分類 → Google Driveの
+ * ナレッジシート（スプレッドシート）に溜まったURLを定期的に処理し、
+ * コンテンツの取得 → Claude APIで要約・カテゴリー分類 → Google Driveの
  * カテゴリー別フォルダにMarkdownファイルとして保存する。
+ *
+ * 対応ソース：
+ *  - X(Twitter)の投稿URL（x.com/ユーザー名/status/番号）
+ *  - YouTube動画URL（watch?v= / youtu.be / shorts）
+ *  - ブログ・Web記事のURL（上記以外の一般URL）
  *
  * セットアップ手順は同フォルダの README.md を参照。
  */
@@ -17,7 +22,7 @@ const CONFIG = {
   SHEET_NAME: 'シート1',
 
   // 出力先のGoogle DriveフォルダID（この下にカテゴリー別サブフォルダが自動作成される）
-  // 例: G:\マイドライブ\001ネコノテ\000_AI\ネコノテ-ai-team\knowledge\twitter のフォルダID
+  // 例: G:\マイドライブ\001ネコノテ\000_AI\ネコノテ-ai-team\knowledge のフォルダID
   ROOT_FOLDER_ID: 'ここに出力先フォルダIDを設定',
 
   // 使用するClaudeモデル（コスト重視なら 'claude-haiku-4-5-20251001'）
@@ -36,6 +41,9 @@ const CONFIG = {
 
   // 1回の実行で処理する最大件数（GASの実行時間制限対策）
   MAX_PER_RUN: 20,
+
+  // ブログ本文をClaudeに渡す最大文字数
+  MAX_ARTICLE_CHARS: 8000,
 };
 
 // ステータス列の定義（A列=URLは拡張機能が書き込む。B列以降をこのスクリプトが使う）
@@ -112,21 +120,12 @@ function testRunOnce() {
 // ===== 個別処理 =====
 
 /**
- * 1件のURLを処理：投稿取得 → 要約・分類 → Markdown保存
+ * 1件のURLを処理：コンテンツ取得 → 要約・分類 → Markdown保存
  */
 function processOneUrl_(url) {
-  const tweetId = extractTweetId_(url);
-  if (!tweetId) {
-    throw new Error('投稿URLではありません（x.com/ユーザー名/status/番号 の形式が必要）: ' + url);
-  }
-
-  const tweet = fetchTweetData_(tweetId);
-  if (!tweet) {
-    throw new Error('投稿を取得できませんでした（削除済み・非公開・年齢制限の可能性）');
-  }
-
-  const analysis = analyzeWithClaude_(tweet);
-  const fileUrl = saveMarkdown_(analysis, tweet, url);
+  const content = fetchContent_(url);
+  const analysis = analyzeWithClaude_(content);
+  const fileUrl = saveMarkdown_(analysis, content, url);
 
   return {
     category: analysis.category,
@@ -134,6 +133,43 @@ function processOneUrl_(url) {
     note: fileUrl,
   };
 }
+
+/**
+ * URLの種類を判別してコンテンツを取得する
+ */
+function fetchContent_(url) {
+  const tweetId = extractTweetId_(url);
+  if (tweetId) {
+    const tweet = fetchTweetData_(tweetId);
+    if (!tweet) {
+      throw new Error('投稿を取得できませんでした（削除済み・非公開・年齢制限の可能性）');
+    }
+    return tweet;
+  }
+
+  if (/(?:twitter\.com|x\.com)\//.test(url)) {
+    throw new Error(
+      '投稿URLではありません（x.com/ユーザー名/status/番号 の形式が必要）: ' + url
+    );
+  }
+
+  const videoId = extractYouTubeId_(url);
+  if (videoId) {
+    const video = fetchYouTubeData_(videoId);
+    if (!video) {
+      throw new Error('動画情報を取得できませんでした（削除済み・非公開の可能性）');
+    }
+    return video;
+  }
+
+  const page = fetchWebPageData_(url);
+  if (!page) {
+    throw new Error('ページを取得できませんでした（会員限定・アクセス制限の可能性）');
+  }
+  return page;
+}
+
+// ----- X(Twitter) -----
 
 /**
  * URLからツイートIDを抽出する
@@ -168,19 +204,135 @@ function fetchTweetData_(tweetId) {
     data.note_tweet && data.note_tweet.text ? data.note_tweet.text : data.text;
 
   return {
+    sourceType: 'X投稿',
     text: fullText,
     authorName: data.user ? data.user.name : '不明',
-    authorScreenName: data.user ? data.user.screen_name : '',
+    authorLabel: data.user
+      ? data.user.name + ' (@' + data.user.screen_name + ')'
+      : '不明',
+    fileAuthor: data.user ? data.user.screen_name : 'unknown',
     createdAt: data.created_at || '',
-    hasPhoto: !!(data.photos && data.photos.length),
-    hasVideo: !!data.video,
+    mediaNote:
+      (data.photos && data.photos.length ? '※ 画像付き投稿（画像は元URLで確認）\n' : '') +
+      (data.video ? '※ 動画付き投稿（動画は元URLで確認）\n' : ''),
+    includeFullText: true, // 投稿は短いので全文をMarkdownに含める
+  };
+}
+
+// ----- YouTube -----
+
+/**
+ * URLからYouTube動画IDを抽出する
+ */
+function extractYouTubeId_(url) {
+  const m = url.match(
+    /(?:youtube\.com\/watch\?(?:[^#]*&)?v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/live\/)([\w-]{11})/
+  );
+  return m ? m[1] : null;
+}
+
+/**
+ * oEmbedでタイトル・チャンネル名を取得し、動画ページから説明文を取得する
+ */
+function fetchYouTubeData_(videoId) {
+  const watchUrl = 'https://www.youtube.com/watch?v=' + videoId;
+  const res = UrlFetchApp.fetch(
+    'https://www.youtube.com/oembed?url=' + encodeURIComponent(watchUrl) + '&format=json',
+    { muteHttpExceptions: true }
+  );
+  if (res.getResponseCode() !== 200) return null;
+  const o = JSON.parse(res.getContentText());
+
+  // 説明文は動画ページのプレイヤーデータから抽出（取れなくても続行）
+  let description = '';
+  try {
+    const html = UrlFetchApp.fetch(watchUrl, { muteHttpExceptions: true }).getContentText();
+    const dm = html.match(/"shortDescription":"((?:[^"\\]|\\.)*)"/);
+    if (dm) description = JSON.parse('"' + dm[1] + '"');
+  } catch (e) {
+    console.warn('YouTube説明文の取得に失敗（続行）: ' + e);
+  }
+
+  return {
+    sourceType: 'YouTube動画',
+    text:
+      'タイトル: ' + o.title + '\n' +
+      'チャンネル: ' + o.author_name + '\n\n' +
+      '説明文:\n' + (description || '（取得できませんでした）'),
+    authorName: o.author_name,
+    authorLabel: o.author_name + '（YouTubeチャンネル）',
+    fileAuthor: o.author_name,
+    createdAt: '',
+    mediaNote: '※ 要約はタイトルと説明文に基づく（動画本編の内容は含まない）\n',
+    includeFullText: false,
+  };
+}
+
+// ----- ブログ・Web記事 -----
+
+/**
+ * ページを取得してタイトルと本文テキストを抽出する
+ */
+function fetchWebPageData_(url) {
+  let res;
+  try {
+    res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
+  } catch (e) {
+    return null;
+  }
+  if (res.getResponseCode() !== 200) return null;
+
+  const html = res.getContentText();
+  const title = decodeEntities_(
+    (html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [, ''])[1]
+  ).trim();
+
+  const body = decodeEntities_(
+    html
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+  )
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!body) return null;
+
+  const domain = (url.match(/^https?:\/\/([^/]+)/) || [, 'web'])[1].replace(/^www\./, '');
+
+  return {
+    sourceType: 'ブログ・Web記事',
+    text:
+      'ページタイトル: ' + (title || '（不明）') + '\n\n' +
+      '本文:\n' + body.slice(0, CONFIG.MAX_ARTICLE_CHARS),
+    authorName: domain,
+    authorLabel: domain,
+    fileAuthor: domain,
+    createdAt: '',
+    mediaNote: '',
+    includeFullText: false,
   };
 }
 
 /**
+ * 主要なHTML文字参照をデコードする
+ */
+function decodeEntities_(s) {
+  return String(s || '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;/g, "'")
+    .replace(/&amp;/g, '&');
+}
+
+// ----- 要約・分類 -----
+
+/**
  * Claude APIで要約とカテゴリー分類を行う
  */
-function analyzeWithClaude_(tweet) {
+function analyzeWithClaude_(content) {
   const apiKey =
     PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
   if (!apiKey) {
@@ -190,14 +342,14 @@ function analyzeWithClaude_(tweet) {
   }
 
   const prompt =
-    '以下のX(Twitter)投稿を分析し、JSONだけを出力してください。\n\n' +
-    '投稿者: ' + tweet.authorName + ' (@' + tweet.authorScreenName + ')\n' +
-    '投稿内容:\n' + tweet.text + '\n\n' +
+    '以下のコンテンツ（種類: ' + content.sourceType + '）を分析し、JSONだけを出力してください。\n\n' +
+    '発信者: ' + content.authorLabel + '\n' +
+    '内容:\n' + content.text + '\n\n' +
     '出力形式（JSON以外の文字は一切出力しないこと）:\n' +
     '{\n' +
     '  "category": "' + CONFIG.CATEGORIES.join(' | ') + ' のいずれか1つ",\n' +
     '  "title": "内容を表す30文字以内の日本語タイトル",\n' +
-    '  "summary": "要点を3〜5行でまとめた日本語要約",\n' +
+    '  "summary": "要点をまとめた日本語要約（X投稿は3〜5行、記事・動画は5〜8行）",\n' +
     '  "tags": ["関連キーワード", "を3〜5個"]\n' +
     '}';
 
@@ -232,34 +384,39 @@ function analyzeWithClaude_(tweet) {
   return parsed;
 }
 
+// ----- 保存 -----
+
 /**
  * カテゴリー別フォルダにMarkdownファイルを保存し、ファイルURLを返す
  */
-function saveMarkdown_(analysis, tweet, sourceUrl) {
+function saveMarkdown_(analysis, content, sourceUrl) {
   const root = DriveApp.getFolderById(CONFIG.ROOT_FOLDER_ID);
   const folder = getOrCreateFolder_(root, analysis.category);
 
   const today = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy-MM-dd');
   const safeTitle = analysis.title.replace(/[\\/:*?"<>|]/g, '').slice(0, 40);
-  const fileName = today + '_' + (tweet.authorScreenName || 'unknown') + '_' + safeTitle + '.md';
+  const safeAuthor = String(content.fileAuthor || 'unknown')
+    .replace(/[\\/:*?"<>|\s]/g, '')
+    .slice(0, 20);
+  const fileName = today + '_' + safeAuthor + '_' + safeTitle + '.md';
 
-  const content =
+  const md =
     '---\n' +
     'source: ' + sourceUrl + '\n' +
-    'author: "' + tweet.authorName + ' (@' + tweet.authorScreenName + ')"\n' +
-    'posted_at: "' + tweet.createdAt + '"\n' +
+    'source_type: ' + content.sourceType + '\n' +
+    'author: "' + content.authorLabel + '"\n' +
+    (content.createdAt ? 'posted_at: "' + content.createdAt + '"\n' : '') +
     'saved_at: ' + today + '\n' +
     'category: ' + analysis.category + '\n' +
     'tags: [' + (analysis.tags || []).join(', ') + ']\n' +
     '---\n\n' +
     '# ' + analysis.title + '\n\n' +
     '## 要約\n\n' + analysis.summary + '\n\n' +
-    '## 元投稿\n\n' + tweet.text + '\n\n' +
-    (tweet.hasPhoto ? '※ 画像付き投稿（画像は元URLで確認）\n' : '') +
-    (tweet.hasVideo ? '※ 動画付き投稿（動画は元URLで確認）\n' : '') +
-    '\n[元投稿を開く](' + sourceUrl + ')\n';
+    (content.includeFullText ? '## 元投稿\n\n' + content.text + '\n\n' : '') +
+    content.mediaNote +
+    '\n[元コンテンツを開く](' + sourceUrl + ')\n';
 
-  const file = folder.createFile(fileName, content, 'text/markdown');
+  const file = folder.createFile(fileName, md, 'text/markdown');
   return file.getUrl();
 }
 
