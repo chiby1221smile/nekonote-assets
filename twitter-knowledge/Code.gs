@@ -28,6 +28,10 @@ const CONFIG = {
   // 使用するClaudeモデル（コスト重視なら 'claude-haiku-4-5-20251001'）
   CLAUDE_MODEL: 'claude-sonnet-5',
 
+  // YouTube動画本編の解析に使うGeminiモデル
+  // （スクリプトプロパティ GEMINI_API_KEY 設定時のみ使用。未設定なら説明文で代用）
+  GEMINI_MODEL: 'gemini-2.5-flash',
+
   // 分類カテゴリー。ここを編集すれば分類軸を変えられる。
   // Claudeがどれにも当てはまらないと判断した場合は「その他」に入る。
   CATEGORIES: [
@@ -232,7 +236,9 @@ function extractYouTubeId_(url) {
 }
 
 /**
- * oEmbedでタイトル・チャンネル名を取得し、動画ページから説明文を取得する
+ * oEmbedでタイトル・チャンネル名を取得する。
+ * GEMINI_API_KEY が設定されていれば動画本編（音声・映像）の内容ダイジェストを
+ * Gemini APIで取得し、なければ動画ページの説明文で代用する。
  */
 function fetchYouTubeData_(videoId) {
   const watchUrl = 'https://www.youtube.com/watch?v=' + videoId;
@@ -243,14 +249,25 @@ function fetchYouTubeData_(videoId) {
   if (res.getResponseCode() !== 200) return null;
   const o = JSON.parse(res.getContentText());
 
-  // 説明文は動画ページのプレイヤーデータから抽出（取れなくても続行）
-  let description = '';
-  try {
-    const html = UrlFetchApp.fetch(watchUrl, { muteHttpExceptions: true }).getContentText();
-    const dm = html.match(/"shortDescription":"((?:[^"\\]|\\.)*)"/);
-    if (dm) description = JSON.parse('"' + dm[1] + '"');
-  } catch (e) {
-    console.warn('YouTube説明文の取得に失敗（続行）: ' + e);
+  // まず動画本編の内容取得を試みる（Gemini APIキーがある場合のみ）
+  let bodyText = '';
+  let bodyNote = '';
+  const digest = fetchYouTubeContentViaGemini_(watchUrl);
+  if (digest) {
+    bodyText = '動画本編の内容:\n' + digest;
+    bodyNote = '※ 要約は動画本編（音声・映像）の内容に基づく\n';
+  } else {
+    // フォールバック：動画ページのプレイヤーデータから説明文を抽出
+    let description = '';
+    try {
+      const html = UrlFetchApp.fetch(watchUrl, { muteHttpExceptions: true }).getContentText();
+      const dm = html.match(/"shortDescription":"((?:[^"\\]|\\.)*)"/);
+      if (dm) description = JSON.parse('"' + dm[1] + '"');
+    } catch (e) {
+      console.warn('YouTube説明文の取得に失敗（続行）: ' + e);
+    }
+    bodyText = '説明文:\n' + (description || '（取得できませんでした）');
+    bodyNote = '※ 要約はタイトルと説明文に基づく（動画本編の内容は含まない）\n';
   }
 
   return {
@@ -258,14 +275,71 @@ function fetchYouTubeData_(videoId) {
     text:
       'タイトル: ' + o.title + '\n' +
       'チャンネル: ' + o.author_name + '\n\n' +
-      '説明文:\n' + (description || '（取得できませんでした）'),
+      bodyText,
     authorName: o.author_name,
     authorLabel: o.author_name + '（YouTubeチャンネル）',
     fileAuthor: o.author_name,
     createdAt: '',
-    mediaNote: '※ 要約はタイトルと説明文に基づく（動画本編の内容は含まない）\n',
+    mediaNote: bodyNote,
     includeFullText: false,
   };
+}
+
+/**
+ * Gemini APIに動画URLを渡し、本編の内容ダイジェストを取得する。
+ * APIキー未設定・エラー時は null を返す（呼び出し元でフォールバック）。
+ * 制限：公開動画のみ。無料枠は1日あたり動画8時間まで。
+ */
+function fetchYouTubeContentViaGemini_(watchUrl) {
+  const apiKey =
+    PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
+  if (!apiKey) return null;
+
+  try {
+    const res = UrlFetchApp.fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/' +
+        CONFIG.GEMINI_MODEL + ':generateContent?key=' + apiKey,
+      {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                { file_data: { file_uri: watchUrl } },
+                {
+                  text:
+                    'この動画の内容を、話されている内容の要点がすべて分かるように' +
+                    '日本語で詳しくまとめてください。重要な発言は具体的に書き、' +
+                    '手順やノウハウが語られている場合は漏れなく記載してください。',
+                },
+              ],
+            },
+          ],
+        }),
+        muteHttpExceptions: true,
+      }
+    );
+    if (res.getResponseCode() !== 200) {
+      console.warn(
+        'Gemini APIエラー（説明文にフォールバック）: ' +
+          res.getContentText().slice(0, 200)
+      );
+      return null;
+    }
+    const body = JSON.parse(res.getContentText());
+    const text =
+      body.candidates &&
+      body.candidates[0] &&
+      body.candidates[0].content &&
+      body.candidates[0].content.parts
+        ? body.candidates[0].content.parts.map(function (p) { return p.text || ''; }).join('')
+        : '';
+    return text.trim() || null;
+  } catch (e) {
+    console.warn('Gemini呼び出しに失敗（説明文にフォールバック）: ' + e);
+    return null;
+  }
 }
 
 // ----- ブログ・Web記事 -----
