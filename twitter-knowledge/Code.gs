@@ -90,6 +90,8 @@ function processNewUrls() {
     const values = sheet.getRange(1, 1, lastRow, COL.NOTE).getValues();
     let processed = 0;
 
+    const saved = [];
+    let errors = 0;
     for (let i = 0; i < values.length && processed < CONFIG.MAX_PER_RUN; i++) {
       const url = String(values[i][COL.URL - 1] || '').trim();
       const status = String(values[i][COL.STATUS - 1] || '').trim();
@@ -99,15 +101,25 @@ function processNewUrls() {
       try {
         const result = processOneUrl_(url);
         writeRow_(sheet, rowNum, '済', result.category, result.title, result.note || '');
+        saved.push('・' + result.title + '（' + result.category + '）');
         processed++;
       } catch (e) {
         writeRow_(sheet, rowNum, 'エラー', '', '', String(e.message || e));
         console.warn('行' + rowNum + ' の処理に失敗: ' + e);
+        errors++;
         processed++;
       }
       Utilities.sleep(1000); // API連続呼び出しの間隔調整
     }
     console.log(processed + '件処理しました');
+
+    if (saved.length > 0) {
+      notifyDiscord_(
+        '📚 **ナレッジを' + saved.length + '件保存しました**\n' +
+          saved.join('\n') +
+          (errors > 0 ? '\n⚠️ エラー' + errors + '件（詳細はナレッジシート）' : '')
+      );
+    }
   } finally {
     lock.releaseLock();
   }
@@ -537,6 +549,89 @@ function buildMarkdown_(analysis, content, sourceUrl, dates) {
 function getOrCreateFolder_(parent, name) {
   const it = parent.getFoldersByName(name);
   return it.hasNext() ? it.next() : parent.createFolder(name);
+}
+
+// ===== Discord通知 =====
+
+/**
+ * Discord Webhookに通知を送る。
+ * スクリプトプロパティ DISCORD_WEBHOOK_URL が未設定なら何もしない（通知はオプション機能）。
+ */
+function notifyDiscord_(message) {
+  const webhookUrl =
+    PropertiesService.getScriptProperties().getProperty('DISCORD_WEBHOOK_URL');
+  if (!webhookUrl) return;
+  try {
+    UrlFetchApp.fetch(webhookUrl, {
+      method: 'post',
+      contentType: 'application/json',
+      payload: JSON.stringify({ content: String(message).slice(0, 1900) }),
+      muteHttpExceptions: true,
+    });
+  } catch (e) {
+    console.warn('Discord通知に失敗（処理は継続）: ' + e);
+  }
+}
+
+/**
+ * ナレッジフォルダ内の _レポート フォルダを確認し、未投稿の週次レポートが
+ * あればDiscordに冒頭を投稿する。週1回トリガーから実行される。
+ * （レポート本体はAIアシスタントが _レポート フォルダに保存する運用）
+ */
+function postWeeklyReport() {
+  const root = DriveApp.getFolderById(CONFIG.ROOT_FOLDER_ID);
+  const reportFolder = getOrCreateFolder_(root, '_レポート');
+  const files = reportFolder.getFiles();
+
+  while (files.hasNext()) {
+    const file = files.next();
+    const name = file.getName();
+    if (name.indexOf('posted_') === 0) continue; // 投稿済みはスキップ
+    if (!/\.md$/i.test(name)) continue;
+
+    const content = file.getBlob().getDataAsString('UTF-8');
+    // frontmatterを除いた本文の冒頭を抜粋
+    const body = content.replace(/^---\n[\s\S]*?\n---\n*/, '').trim();
+    const excerpt = body.slice(0, 1500);
+
+    notifyDiscord_(
+      '📋 **週次ナレッジレポート**\n\n' +
+        excerpt +
+        (body.length > 1500 ? '\n…（続きあり）' : '') +
+        '\n\n全文はこちら → ' + file.getUrl()
+    );
+    file.setName('posted_' + name);
+    console.log('レポートを投稿しました: ' + name);
+  }
+}
+
+/**
+ * 週次レポート投稿トリガー（月曜21時ごろ）を設置する（初回に1度だけ手動実行する）
+ */
+function installReportTrigger() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'postWeeklyReport') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('postWeeklyReport')
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.MONDAY)
+    .atHour(21)
+    .create();
+  console.log('週1回（月曜21時ごろ）のレポート投稿トリガーを設置しました');
+}
+
+/**
+ * Discord通知の動作確認用（Webhook設定後に1回実行する）
+ */
+function testDiscordNotify() {
+  const webhookUrl =
+    PropertiesService.getScriptProperties().getProperty('DISCORD_WEBHOOK_URL');
+  if (!webhookUrl) {
+    console.log('スクリプトプロパティ DISCORD_WEBHOOK_URL が未設定です');
+    return;
+  }
+  notifyDiscord_('✅ ナレッジ自動整理ツールからのテスト通知です');
+  console.log('テスト通知を送信しました。Discordのチャンネルを確認してください');
 }
 
 // ===== 巡回メンテナンス =====
