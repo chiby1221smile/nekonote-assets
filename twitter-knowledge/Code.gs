@@ -441,7 +441,8 @@ function analyzeWithClaude_(content) {
     '  "title": "内容を表す30文字以内の日本語タイトル",\n' +
     '  "summary": "要点をまとめた日本語要約（X投稿は3〜5行、記事・動画は5〜8行）",\n' +
     '  "tags": ["関連キーワード", "を3〜5個"],\n' +
-    '  "knowledge_type": "恒久 または 時事。恒久＝ノウハウ・原理原則・考え方など時間が経っても価値が落ちない知識。時事＝ニュース・特定バージョンの情報・キャンペーン・トレンドなど鮮度が命の情報。迷ったら恒久"\n' +
+    '  "knowledge_type": "恒久 または 時事。恒久＝ノウハウ・原理原則・考え方など時間が経っても価値が落ちない知識。時事＝ニュース・特定バージョンの情報・キャンペーン・トレンドなど鮮度が命の情報。迷ったら恒久",\n' +
+    '  "skill_candidate": "trueまたはfalse。AIアシスタントに繰り返し実行させられる具体的な手順・テクニック・ワークフローが含まれていればtrue。単なる情報・意見・ニュースはfalse"\n' +
     '}';
 
   const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
@@ -476,6 +477,8 @@ function analyzeWithClaude_(content) {
   if (parsed.knowledge_type !== '時事') {
     parsed.knowledge_type = '恒久';
   }
+  parsed.skill_candidate =
+    parsed.skill_candidate === true || parsed.skill_candidate === 'true';
   return parsed;
 }
 
@@ -517,6 +520,7 @@ function buildMarkdown_(analysis, content, sourceUrl, dates) {
     'content_hash: ' + md5_(content.text) + '\n' +
     'category: ' + analysis.category + '\n' +
     'knowledge_type: ' + (analysis.knowledge_type || '恒久') + '\n' +
+    'skill_candidate: ' + (analysis.skill_candidate ? 'true' : 'false') + '\n' +
     'tags: [' + (analysis.tags || []).join(', ') + ']\n' +
     '---\n\n' +
     '# ' + analysis.title + '\n\n' +
