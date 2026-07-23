@@ -51,7 +51,9 @@ const CONFIG = {
 
   // ===== 巡回メンテナンス設定 =====
 
-  // この日数を超えた古いファイルは削除（またはアーカイブ）する
+  // 「時事ネタ」がこの日数を超えたら削除（またはアーカイブ）する。
+  // 削除対象は knowledge_type が「時事」のファイルのみ。
+  // 「恒久」ナレッジ・keep: true 付き・判定情報なしのファイルは削除されない。
   RETENTION_DAYS: 180,
 
   // 各ファイルのリンク確認・内容更新チェックの間隔（日）
@@ -438,7 +440,8 @@ function analyzeWithClaude_(content) {
     '  "category": "' + CONFIG.CATEGORIES.join(' | ') + ' のいずれか1つ",\n' +
     '  "title": "内容を表す30文字以内の日本語タイトル",\n' +
     '  "summary": "要点をまとめた日本語要約（X投稿は3〜5行、記事・動画は5〜8行）",\n' +
-    '  "tags": ["関連キーワード", "を3〜5個"]\n' +
+    '  "tags": ["関連キーワード", "を3〜5個"],\n' +
+    '  "knowledge_type": "恒久 または 時事。恒久＝ノウハウ・原理原則・考え方など時間が経っても価値が落ちない知識。時事＝ニュース・特定バージョンの情報・キャンペーン・トレンドなど鮮度が命の情報。迷ったら恒久"\n' +
     '}';
 
   const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
@@ -468,6 +471,10 @@ function analyzeWithClaude_(content) {
   const parsed = JSON.parse(jsonMatch[0]);
   if (CONFIG.CATEGORIES.indexOf(parsed.category) === -1) {
     parsed.category = 'その他';
+  }
+  // 判定が不正な場合は安全側（恒久＝削除されない）に倒す
+  if (parsed.knowledge_type !== '時事') {
+    parsed.knowledge_type = '恒久';
   }
   return parsed;
 }
@@ -509,6 +516,7 @@ function buildMarkdown_(analysis, content, sourceUrl, dates) {
     'last_checked: ' + (dates.lastChecked || today) + '\n' +
     'content_hash: ' + md5_(content.text) + '\n' +
     'category: ' + analysis.category + '\n' +
+    'knowledge_type: ' + (analysis.knowledge_type || '恒久') + '\n' +
     'tags: [' + (analysis.tags || []).join(', ') + ']\n' +
     '---\n\n' +
     '# ' + analysis.title + '\n\n' +
@@ -593,17 +601,23 @@ function maintainOneFile_(file, root, now) {
   const today = Utilities.formatDate(now, 'Asia/Tokyo', 'yyyy-MM-dd');
 
   // 1) 保存期限チェック
+  // 削除対象は「時事ネタ」のみ。以下は期限に関係なく削除しない：
+  //  - knowledge_type が「恒久」（ノウハウ・原理原則など）
+  //  - keep: true が付いたファイル（手動保護）
+  //  - knowledge_type の記載がない旧形式ファイル（安全側に倒す）
   const savedAt = front.saved_at ? new Date(front.saved_at) : null;
-  if (savedAt) {
+  const isExpirable =
+    front.knowledge_type === '時事' && String(front.keep) !== 'true';
+  if (savedAt && isExpirable) {
     const ageDays = (now.getTime() - savedAt.getTime()) / 86400000;
     if (ageDays > CONFIG.RETENTION_DAYS) {
       if (CONFIG.OLD_FILE_ACTION === 'archive') {
         const archive = getOrCreateFolder_(root, '_アーカイブ');
         file.moveTo(getOrCreateFolder_(archive, front.category || 'その他'));
-        logMaint_('アーカイブ', file.getName(), '保存から' + Math.floor(ageDays) + '日経過');
+        logMaint_('アーカイブ', file.getName(), '時事ネタ・保存から' + Math.floor(ageDays) + '日経過');
       } else {
         file.setTrashed(true);
-        logMaint_('期限切れ削除', file.getName(), '保存から' + Math.floor(ageDays) + '日経過（ゴミ箱から30日間復元可）');
+        logMaint_('期限切れ削除', file.getName(), '時事ネタ・保存から' + Math.floor(ageDays) + '日経過（ゴミ箱から30日間復元可）');
       }
       return true;
     }
@@ -629,11 +643,15 @@ function maintainOneFile_(file, root, now) {
     const newHash = md5_(page.text);
     if (front.content_hash && newHash !== front.content_hash) {
       const analysis = analyzeWithClaude_(page);
-      const newMd = buildMarkdown_(analysis, page, sourceUrl, {
+      let newMd = buildMarkdown_(analysis, page, sourceUrl, {
         savedAt: front.saved_at,
         updatedAt: today,
         lastChecked: today,
       });
+      // 手動保護フラグは再生成後も引き継ぐ
+      if (String(front.keep) === 'true') {
+        newMd = setFrontKey_(newMd, 'keep', 'true');
+      }
       file.setContent(newMd);
       if (analysis.category !== front.category) {
         file.moveTo(getOrCreateFolder_(root, analysis.category));
