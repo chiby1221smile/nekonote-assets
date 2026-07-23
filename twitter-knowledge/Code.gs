@@ -90,14 +90,29 @@ function processNewUrls() {
     const values = sheet.getRange(1, 1, lastRow, COL.NOTE).getValues();
     let processed = 0;
 
+    // 処理済みURLの一覧（重複保存の検出用）
+    const seenUrls = {};
+    for (let i = 0; i < values.length; i++) {
+      const u = String(values[i][COL.URL - 1] || '').trim();
+      const s = String(values[i][COL.STATUS - 1] || '').trim();
+      if (u && s) seenUrls[u] = true;
+    }
+
     const saved = [];
     let errors = 0;
     for (let i = 0; i < values.length && processed < CONFIG.MAX_PER_RUN; i++) {
       const url = String(values[i][COL.URL - 1] || '').trim();
       const status = String(values[i][COL.STATUS - 1] || '').trim();
-      if (!url || status === '済' || status === 'エラー') continue;
+      if (!url || status === '済' || status === 'エラー' || status === '重複') continue;
 
       const rowNum = i + 1;
+
+      // 同じURLが既に処理済みなら重複としてスキップ
+      if (seenUrls[url]) {
+        writeRow_(sheet, rowNum, '重複', '', '', '既に処理済みのURLです');
+        continue;
+      }
+
       try {
         const result = processOneUrl_(url);
         writeRow_(sheet, rowNum, '済', result.category, result.title, result.note || '');
@@ -109,6 +124,7 @@ function processNewUrls() {
         errors++;
         processed++;
       }
+      seenUrls[url] = true;
       Utilities.sleep(1000); // API連続呼び出しの間隔調整
     }
     console.log(processed + '件処理しました');
@@ -176,7 +192,7 @@ function fetchContent_(url) {
     if (!tweet) {
       throw new Error('投稿を取得できませんでした（削除済み・非公開・年齢制限の可能性）');
     }
-    return tweet;
+    return enrichLinkOnlyTweet_(tweet);
   }
 
   if (/(?:twitter\.com|x\.com)\//.test(url)) {
@@ -235,7 +251,17 @@ function fetchTweetData_(tweetId) {
   const fullText =
     data.note_tweet && data.note_tweet.text ? data.note_tweet.text : data.text;
 
+  // 投稿に含まれるリンクの展開後URL（リンクのみ投稿の中身取得に使う）
+  const linkUrls = [];
+  if (data.entities && data.entities.urls) {
+    data.entities.urls.forEach(function (u) {
+      if (u.expanded_url) linkUrls.push(u.expanded_url);
+      else if (u.url) linkUrls.push(u.url);
+    });
+  }
+
   return {
+    linkUrls: linkUrls,
     sourceType: 'X投稿',
     text: fullText,
     authorName: data.user ? data.user.name : '不明',
@@ -249,6 +275,33 @@ function fetchTweetData_(tweetId) {
       (data.video ? '※ 動画付き投稿（動画は元URLで確認）\n' : ''),
     includeFullText: true, // 投稿は短いので全文をMarkdownに含める
   };
+}
+
+/**
+ * 本文がほぼリンクだけの投稿は、リンク先ページの内容を取得して要約対象に加える。
+ * 取得できない場合は元の投稿のまま返す。
+ */
+function enrichLinkOnlyTweet_(tweet) {
+  const textWithoutLinks = tweet.text.replace(/https?:\/\/\S+/g, '').trim();
+  if (textWithoutLinks.length >= 20) return tweet; // 本文が十分あるならそのまま
+
+  // リンク先URLを決める（展開URLがなければ本文中のURLをそのまま使う。リダイレクトで解決される）
+  let linkUrl = tweet.linkUrls && tweet.linkUrls.length ? tweet.linkUrls[0] : null;
+  if (!linkUrl) {
+    const m = tweet.text.match(/https?:\/\/\S+/);
+    linkUrl = m ? m[0] : null;
+  }
+  if (!linkUrl) return tweet;
+  if (/(?:twitter\.com|x\.com)\//.test(linkUrl)) return tweet; // 引用リポスト等はそのまま
+
+  const page = fetchWebPageData_(linkUrl);
+  if (!page) return tweet; // リンク先が取得できなければ従来どおり
+
+  tweet.displayText = tweet.text; // Markdownの「元投稿」欄には元の短文だけ載せる
+  tweet.text +=
+    '\n\n【投稿内のリンク先（' + linkUrl + '）の内容】\n' + page.text;
+  tweet.mediaNote += '※ 要約には投稿内リンク先の内容を含む\n';
+  return tweet;
 }
 
 // ----- YouTube -----
@@ -477,9 +530,17 @@ function analyzeWithClaude_(content) {
   }
 
   const body = JSON.parse(res.getContentText());
-  const text = body.content && body.content[0] ? body.content[0].text : '';
+  // 応答からテキストブロックだけを連結する（テキスト以外のブロックが混ざっても落ちないように）
+  let text = '';
+  (body.content || []).forEach(function (block) {
+    if (block && typeof block.text === 'string') text += block.text;
+  });
   const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Claude応答のJSON解析に失敗: ' + text.slice(0, 100));
+  if (!jsonMatch) {
+    throw new Error(
+      'Claude応答のJSON解析に失敗（stop_reason: ' + body.stop_reason + '）: ' + text.slice(0, 100)
+    );
+  }
 
   const parsed = JSON.parse(jsonMatch[0]);
   if (CONFIG.CATEGORIES.indexOf(parsed.category) === -1) {
@@ -537,7 +598,9 @@ function buildMarkdown_(analysis, content, sourceUrl, dates) {
     '---\n\n' +
     '# ' + analysis.title + '\n\n' +
     '## 要約\n\n' + analysis.summary + '\n\n' +
-    (content.includeFullText ? '## 元投稿\n\n' + content.text + '\n\n' : '') +
+    (content.includeFullText
+      ? '## 元投稿\n\n' + (content.displayText || content.text) + '\n\n'
+      : '') +
     content.mediaNote +
     '\n[元コンテンツを開く](' + sourceUrl + ')\n'
   );
