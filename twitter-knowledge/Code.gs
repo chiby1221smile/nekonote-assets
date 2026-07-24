@@ -228,7 +228,10 @@ function fetchContent_(url) {
  * URLからツイートIDを抽出する
  */
 function extractTweetId_(url) {
-  const m = url.match(/(?:twitter\.com|x\.com)\/[^/]+\/status(?:es)?\/(\d+)/);
+  // 通常形式（x.com/名前/status/番号）と別形式（x.com/i/web/status/番号）の両方に対応
+  const m = url.match(
+    /(?:twitter\.com|x\.com)\/(?:[^/]+\/status(?:es)?|i\/web\/status)\/(\d+)/
+  );
   return m ? m[1] : null;
 }
 
@@ -347,7 +350,10 @@ function enrichLinkOnlyTweet_(tweet) {
     return tweet; // 自分自身への画像リンク等は何もしない
   }
   if (/(?:twitter\.com|x\.com)\//.test(linkUrl)) {
-    console.log('リンク先は投稿以外のXページのためスキップ');
+    // X内の特殊ページ（記事・スペース等）は中身を取れないが、URLだけは記録する
+    console.log('リンク先は投稿以外のXページ: ' + linkUrl);
+    tweet.displayText = tweet.text;
+    tweet.text += '\n\nリンク先: ' + linkUrl + '（X内のページのため内容は未取得）';
     return tweet;
   }
 
