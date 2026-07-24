@@ -261,9 +261,27 @@ function fetchTweetData_(tweetId) {
     });
   }
 
+  // 添付画像のURL（フィールド名はAPI応答の揺れに備えて複数見る）
+  const imageUrls = [];
+  (data.photos || []).forEach(function (p) {
+    const u = p.url || p.media_url_https;
+    if (u) imageUrls.push(u);
+  });
+  if (!imageUrls.length && data.mediaDetails) {
+    data.mediaDetails.forEach(function (m) {
+      if (m.type === 'photo' && m.media_url_https) imageUrls.push(m.media_url_https);
+    });
+  }
+  const hasVideo =
+    !!data.video ||
+    (data.mediaDetails || []).some(function (m) {
+      return m.type === 'video' || m.type === 'animated_gif';
+    });
+
   return {
     id: tweetId,
     linkUrls: linkUrls,
+    imageUrls: imageUrls,
     sourceType: 'X投稿',
     text: fullText,
     authorName: data.user ? data.user.name : '不明',
@@ -273,8 +291,8 @@ function fetchTweetData_(tweetId) {
     fileAuthor: data.user ? data.user.screen_name : 'unknown',
     createdAt: data.created_at || '',
     mediaNote:
-      (data.photos && data.photos.length ? '※ 画像付き投稿（画像は元URLで確認）\n' : '') +
-      (data.video ? '※ 動画付き投稿（動画は元URLで確認）\n' : ''),
+      (imageUrls.length ? '※ 画像付き投稿（要約には画像の内容も含む）\n' : '') +
+      (hasVideo ? '※ 動画付き投稿（動画は元URLで確認）\n' : ''),
     includeFullText: true, // 投稿は短いので全文をMarkdownに含める
   };
 }
@@ -547,10 +565,14 @@ function analyzeWithClaude_(content) {
     );
   }
 
+  const hasImages = content.imageUrls && content.imageUrls.length > 0;
   const prompt =
     '以下のコンテンツ（種類: ' + content.sourceType + '）を分析し、JSONだけを出力してください。\n\n' +
     '発信者: ' + content.authorLabel + '\n' +
     '内容:\n' + content.text + '\n\n' +
+    (hasImages
+      ? '添付画像があります。画像内のテキスト・図・スクリーンショットの内容を読み取り、要約に必ず反映してください。\n\n'
+      : '') +
     '出力形式（JSON以外の文字は一切出力しないこと）:\n' +
     '{\n' +
     '  "category": "' + CONFIG.CATEGORIES.join(' | ') + ' のいずれか1つ",\n' +
@@ -560,6 +582,30 @@ function analyzeWithClaude_(content) {
     '  "knowledge_type": "恒久 または 時事。恒久＝ノウハウ・原理原則・考え方など時間が経っても価値が落ちない知識。時事＝ニュース・特定バージョンの情報・キャンペーン・トレンドなど鮮度が命の情報。迷ったら恒久",\n' +
     '  "skill_candidate": "trueまたはfalse。AIアシスタントに繰り返し実行させられる具体的な手順・テクニック・ワークフローが含まれていればtrue。単なる情報・意見・ニュースはfalse"\n' +
     '}';
+
+  // 添付画像（最大3枚）をダウンロードしてリクエストに含める
+  const parts = [];
+  if (hasImages) {
+    content.imageUrls.slice(0, 3).forEach(function (imgUrl) {
+      try {
+        const imgRes = UrlFetchApp.fetch(imgUrl, { muteHttpExceptions: true });
+        if (imgRes.getResponseCode() !== 200) return;
+        const mimeType = imgRes.getBlob().getContentType();
+        if (['image/jpeg', 'image/png', 'image/gif', 'image/webp'].indexOf(mimeType) === -1) return;
+        parts.push({
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: mimeType,
+            data: Utilities.base64Encode(imgRes.getContent()),
+          },
+        });
+      } catch (e) {
+        console.warn('画像の取得に失敗（テキストのみで続行）: ' + e);
+      }
+    });
+  }
+  parts.push({ type: 'text', text: prompt });
 
   const res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
     method: 'post',
@@ -571,7 +617,7 @@ function analyzeWithClaude_(content) {
     payload: JSON.stringify({
       model: CONFIG.CLAUDE_MODEL,
       max_tokens: 1024,
-      messages: [{ role: 'user', content: prompt }],
+      messages: [{ role: 'user', content: parts }],
     }),
     muteHttpExceptions: true,
   });
