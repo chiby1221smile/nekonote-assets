@@ -69,12 +69,16 @@ const CONFIG = {
 // ステータス列の定義（A列=URLは拡張機能が書き込む。B列以降をこのスクリプトが使う）
 const COL = { URL: 1, STATUS: 2, CATEGORY: 3, TITLE: 4, PROCESSED_AT: 5, NOTE: 6 };
 
+// スクリプトのバージョン（実行ログで貼り替えの反映確認に使う）
+const SCRIPT_VERSION = 'v5（画像解析＋診断ログ対応）';
+
 // ===== エントリーポイント =====
 
 /**
  * メイン処理。トリガーから定期実行される。手動実行も可。
  */
 function processNewUrls() {
+  console.log('スクリプトバージョン: ' + SCRIPT_VERSION);
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(10000)) {
     console.log('別の実行が進行中のためスキップします');
@@ -277,6 +281,11 @@ function fetchTweetData_(tweetId) {
     (data.mediaDetails || []).some(function (m) {
       return m.type === 'video' || m.type === 'animated_gif';
     });
+  console.log(
+    '投稿取得 ' + tweetId + ': 本文' + fullText.length + '文字, 画像' +
+      imageUrls.length + '枚, 動画' + (hasVideo ? 'あり' : 'なし') +
+      ', リンク' + linkUrls.length + '件'
+  );
 
   return {
     id: tweetId,
@@ -315,7 +324,9 @@ function enrichLinkOnlyTweet_(tweet) {
 
   // t.co短縮URLは実際のリンク先に解決する
   if (/^https?:\/\/t\.co\//.test(linkUrl)) {
-    linkUrl = resolveRedirect_(linkUrl);
+    const resolved = resolveRedirect_(linkUrl);
+    console.log('リンク解決: ' + linkUrl + ' → ' + resolved);
+    linkUrl = resolved;
   }
 
   // リンク先が別のX投稿（引用など）なら、その投稿の中身を取得して加える
@@ -323,18 +334,25 @@ function enrichLinkOnlyTweet_(tweet) {
   if (linkedTweetId) {
     if (linkedTweetId !== tweet.id) {
       const linked = fetchTweetData_(linkedTweetId);
+      console.log('リンク先のX投稿を取得: ' + (linked ? '成功' : '失敗'));
       if (linked) {
         tweet.displayText = tweet.text;
         tweet.text +=
           '\n\n【リンク先のX投稿（' + linked.authorLabel + '）の内容】\n' + linked.text;
         tweet.mediaNote += '※ 要約にはリンク先のX投稿の内容を含む\n';
       }
+    } else {
+      console.log('リンク先は同一投稿（画像・動画へのリンク）');
     }
     return tweet; // 自分自身への画像リンク等は何もしない
   }
-  if (/(?:twitter\.com|x\.com)\//.test(linkUrl)) return tweet; // 投稿以外のXページはそのまま
+  if (/(?:twitter\.com|x\.com)\//.test(linkUrl)) {
+    console.log('リンク先は投稿以外のXページのためスキップ');
+    return tweet;
+  }
 
   const page = fetchWebPageData_(linkUrl);
+  console.log('リンク先ページ取得: ' + (page ? '成功' : '失敗'));
   if (!page) {
     // 中身が取れなくても、解決済みのリンク先URLだけは記録しておく
     tweet.displayText = tweet.text;
