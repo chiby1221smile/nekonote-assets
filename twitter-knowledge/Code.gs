@@ -262,6 +262,7 @@ function fetchTweetData_(tweetId) {
   }
 
   return {
+    id: tweetId,
     linkUrls: linkUrls,
     sourceType: 'X投稿',
     text: fullText,
@@ -286,23 +287,72 @@ function enrichLinkOnlyTweet_(tweet) {
   const textWithoutLinks = tweet.text.replace(/https?:\/\/\S+/g, '').trim();
   if (textWithoutLinks.length >= 20) return tweet; // 本文が十分あるならそのまま
 
-  // リンク先URLを決める（展開URLがなければ本文中のURLをそのまま使う。リダイレクトで解決される）
+  // リンク先URLを決める（展開URLがなければ本文中のURLを使う）
   let linkUrl = tweet.linkUrls && tweet.linkUrls.length ? tweet.linkUrls[0] : null;
   if (!linkUrl) {
     const m = tweet.text.match(/https?:\/\/\S+/);
     linkUrl = m ? m[0] : null;
   }
   if (!linkUrl) return tweet;
-  if (/(?:twitter\.com|x\.com)\//.test(linkUrl)) return tweet; // 引用リポスト等はそのまま
+
+  // t.co短縮URLは実際のリンク先に解決する
+  if (/^https?:\/\/t\.co\//.test(linkUrl)) {
+    linkUrl = resolveRedirect_(linkUrl);
+  }
+
+  // リンク先が別のX投稿（引用など）なら、その投稿の中身を取得して加える
+  const linkedTweetId = extractTweetId_(linkUrl);
+  if (linkedTweetId) {
+    if (linkedTweetId !== tweet.id) {
+      const linked = fetchTweetData_(linkedTweetId);
+      if (linked) {
+        tweet.displayText = tweet.text;
+        tweet.text +=
+          '\n\n【リンク先のX投稿（' + linked.authorLabel + '）の内容】\n' + linked.text;
+        tweet.mediaNote += '※ 要約にはリンク先のX投稿の内容を含む\n';
+      }
+    }
+    return tweet; // 自分自身への画像リンク等は何もしない
+  }
+  if (/(?:twitter\.com|x\.com)\//.test(linkUrl)) return tweet; // 投稿以外のXページはそのまま
 
   const page = fetchWebPageData_(linkUrl);
-  if (!page) return tweet; // リンク先が取得できなければ従来どおり
+  if (!page) {
+    // 中身が取れなくても、解決済みのリンク先URLだけは記録しておく
+    tweet.displayText = tweet.text;
+    tweet.text += '\n\nリンク先: ' + linkUrl + '（内容は取得できず。サイト側の制限の可能性）';
+    return tweet;
+  }
 
   tweet.displayText = tweet.text; // Markdownの「元投稿」欄には元の短文だけ載せる
   tweet.text +=
     '\n\n【投稿内のリンク先（' + linkUrl + '）の内容】\n' + page.text;
   tweet.mediaNote += '※ 要約には投稿内リンク先の内容を含む\n';
   return tweet;
+}
+
+/**
+ * 短縮URLのリダイレクト先を1段階解決する（解決できなければ元のURLを返す）
+ */
+function resolveRedirect_(url) {
+  try {
+    const res = UrlFetchApp.fetch(url, {
+      muteHttpExceptions: true,
+      followRedirects: false,
+    });
+    const code = res.getResponseCode();
+    if (code >= 300 && code < 400) {
+      const headers = res.getHeaders();
+      const loc = headers['Location'] || headers['location'];
+      if (loc) return loc;
+    }
+    // t.coはHTML内のmetaタグで遷移させる場合もある
+    const m = res.getContentText().match(/URL=(https?:\/\/[^"'>\s]+)/i);
+    if (m) return m[1];
+  } catch (e) {
+    console.warn('リダイレクト解決に失敗（元URLを使用）: ' + e);
+  }
+  return url;
 }
 
 // ----- YouTube -----
