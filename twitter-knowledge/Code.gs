@@ -90,12 +90,13 @@ function processNewUrls() {
     const values = sheet.getRange(1, 1, lastRow, COL.NOTE).getValues();
     let processed = 0;
 
-    // 処理済みURLの一覧（重複保存の検出用）
+    // 処理済みURLの一覧（重複保存の検出用）。
+    // 「重複」マークの行は処理済みに数えない（元の行を再処理できるようにするため）
     const seenUrls = {};
     for (let i = 0; i < values.length; i++) {
       const u = String(values[i][COL.URL - 1] || '').trim();
       const s = String(values[i][COL.STATUS - 1] || '').trim();
-      if (u && s) seenUrls[u] = true;
+      if (u && (s === '済' || s === 'エラー')) seenUrls[u] = true;
     }
 
     const saved = [];
