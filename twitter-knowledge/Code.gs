@@ -70,7 +70,7 @@ const CONFIG = {
 const COL = { URL: 1, STATUS: 2, CATEGORY: 3, TITLE: 4, PROCESSED_AT: 5, NOTE: 6 };
 
 // スクリプトのバージョン（実行ログで貼り替えの反映確認に使う）
-const SCRIPT_VERSION = 'v5（画像解析＋診断ログ対応）';
+const SCRIPT_VERSION = 'v6（X特殊URL対応）';
 
 // ===== エントリーポイント =====
 
