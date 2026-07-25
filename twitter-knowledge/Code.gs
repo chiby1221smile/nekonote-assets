@@ -70,7 +70,7 @@ const CONFIG = {
 const COL = { URL: 1, STATUS: 2, CATEGORY: 3, TITLE: 4, PROCESSED_AT: 5, NOTE: 6 };
 
 // スクリプトのバージョン（実行ログで貼り替えの反映確認に使う）
-const SCRIPT_VERSION = 'v6（X特殊URL対応）';
+const SCRIPT_VERSION = 'v7（Discord通知の再試行・件数上限対応）';
 
 // ===== エントリーポイント =====
 
@@ -135,9 +135,14 @@ function processNewUrls() {
     console.log(processed + '件処理しました');
 
     if (saved.length > 0) {
+      // 件数が多いとDiscordの文字数上限を超えるため、一覧は先頭15件までにする
+      const MAX_LIST = 15;
+      const list = saved.slice(0, MAX_LIST).join('\n');
+      const omitted = saved.length - MAX_LIST;
       notifyDiscord_(
         '📚 **ナレッジを' + saved.length + '件保存しました**\n' +
-          saved.join('\n') +
+          list +
+          (omitted > 0 ? '\n…ほか' + omitted + '件' : '') +
           (errors > 0 ? '\n⚠️ エラー' + errors + '件（詳細はナレッジシート）' : '')
       );
     }
@@ -745,15 +750,30 @@ function notifyDiscord_(message) {
   const webhookUrl =
     PropertiesService.getScriptProperties().getProperty('DISCORD_WEBHOOK_URL');
   if (!webhookUrl) return;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const res = UrlFetchApp.fetch(webhookUrl, {
+        method: 'post',
+        contentType: 'application/json',
+        payload: JSON.stringify({ content: String(message).slice(0, 1900) }),
+        muteHttpExceptions: true,
+      });
+      const code = res.getResponseCode();
+      if (code >= 200 && code < 300) return; // 送信成功
+      console.warn(
+        'Discord通知 HTTP ' + code + '（試行' + attempt + '回目）: ' +
+          res.getContentText().slice(0, 200)
+      );
+    } catch (e) {
+      console.warn('Discord通知に失敗（試行' + attempt + '回目）: ' + e);
+    }
+    Utilities.sleep(2000);
+  }
+  // リトライしても失敗 → Discordが見えなくても気づけるよう巡回ログシートに記録
   try {
-    UrlFetchApp.fetch(webhookUrl, {
-      method: 'post',
-      contentType: 'application/json',
-      payload: JSON.stringify({ content: String(message).slice(0, 1900) }),
-      muteHttpExceptions: true,
-    });
+    logMaint_('Discord通知失敗', '', String(message).slice(0, 100) + '…');
   } catch (e) {
-    console.warn('Discord通知に失敗（処理は継続）: ' + e);
+    console.warn('通知失敗の記録にも失敗: ' + e);
   }
 }
 
