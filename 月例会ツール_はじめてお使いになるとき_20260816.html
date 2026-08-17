@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>月例会ツール はじめてお使いになるとき</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    color: #333; line-height: 1.8; margin: 0;
+    padding: 32px 24px 64px; max-width: 820px; margin-inline: auto;
+    background: #fff; font-size: 15px;
+  }
+  h1 {
+    font-size: 24px; color: #fff; background: #4a6572;
+    padding: 18px 20px; border-radius: 8px; margin: 0 0 8px;
+  }
+  .lead { color: #666; font-size: 14px; margin: 0 0 32px; }
+  h2 {
+    font-size: 19px; border-left: 6px solid #4a6572;
+    padding-left: 12px; margin: 40px 0 16px;
+  }
+  h3 { font-size: 16px; margin: 24px 0 8px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 14px; table-layout: fixed; }
+  th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; vertical-align: top; word-break: break-word; }
+  th { background: #eceff1; font-weight: bold; }
+  td.col { font-weight: bold; background: #fafafa; }
+  /* 列幅を表ごとにそろえる（3列の表は1列目を狭く・2列の表は42%） */
+  table:has(tr > *:nth-child(3)) th:first-child,
+  table:has(tr > *:nth-child(3)) td:first-child { width: 14%; }
+  table:has(tr > *:nth-child(3)) th:nth-child(2),
+  table:has(tr > *:nth-child(3)) td:nth-child(2) { width: 36%; }
+  table:not(:has(tr > *:nth-child(3))) th:first-child,
+  table:not(:has(tr > *:nth-child(3))) td:first-child { width: 42%; }
+  .box {
+    background: #f5f7f8; border: 1px solid #cfd8dc;
+    border-radius: 8px; padding: 16px 20px; margin: 20px 0;
+  }
+  .box.warn { background: #fff6ed; border-color: #f0c9a0; }
+  .box p:first-child { margin-top: 0; }
+  .box p:last-child { margin-bottom: 0; }
+  .box-title { font-weight: bold; margin-bottom: 8px; }
+  ol, ul { padding-left: 24px; }
+  li { margin-bottom: 8px; }
+  .step { font-weight: bold; color: #37474f; }
+  .ng { color: #c0392b; font-weight: bold; }
+  .key {
+    display: inline-block; border: 1px solid #4a6572; color: #37474f;
+    border-radius: 4px; padding: 0 7px; font-weight: bold; background: #fff; overflow-wrap: anywhere; line-height: 1.45;
+  }
+  .btn {
+    display: inline-block; background: #4a6572; color: #fff;
+    border-radius: 4px; padding: 0 9px; font-weight: bold; font-size: 14px; overflow-wrap: anywhere; line-height: 1.45;
+  }
+  .box table { margin: 8px 0 0; font-size: 13px; }
+  .foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 13px; color: #777; }
+  @media print {
+    body { padding: 0; font-size: 13px; }
+    h2 { page-break-after: avoid; }
+    table, .box { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>月例会ツール はじめてお使いになるとき</h1>
+<p class="lead">各支部の運営者向け／使い始めの準備（ログイン → 会員リストの取り込み → 役員の登録 → 会員の情報を埋める → 開催方式を入れる → 過去の主催レポートの取り込み）</p>
+
+<h2>1. この資料について</h2>
+<p>月例会ツールを<strong>使い始めるときの準備</strong>をまとめた資料です（このうち「会員リストの取り込み」だけは毎月行います）。月例会1回分の進め方（参加者を入れる、テーブル割りをする、名簿を出す）は、別冊の「使い方マニュアル」をご覧ください。</p>
+
+<h3>やっていただくのは6つです</h3>
+<table>
+  <tr><th>順番</th><th>やること</th><th>どこで</th></tr>
+  <tr><td class="col">1</td><td class="col">ログインする</td><td>ログイン画面</td></tr>
+  <tr><td class="col">2</td><td class="col">会員リストを取り込む</td><td>トップ画面の <span class="btn">会員リストを取り込む</span></td></tr>
+  <tr><td class="col">3</td><td class="col">役員を登録する</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">役員</span> タブ</td></tr>
+  <tr><td class="col">4</td><td class="col">会員の情報を埋める</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">会員詳細</span> タブ</td></tr>
+  <tr><td class="col">5</td><td class="col">開催方式を入れる</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">支部の設定</span> タブ</td></tr>
+  <tr><td class="col">6</td><td class="col">過去の主催レポートを取り込む</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">過去レポート</span> タブ</td></tr>
+</table>
+
+<div class="box warn">
+  <p class="box-title">順番の決まり：会員リストを取り込んでから、過去の主催レポートを取り込んでください</p>
+  <p><strong>2（会員リストの取り込み）を済ませてから、6（過去の主催レポートの取り込み）を行ってください。</strong>逆にすると、取り込んだ過去の記録に会員のお名前が正式な表記で入らず、所属支部の欄も空のままになります。</p>
+  <p><strong>あとから会員リストを取り込んでも、先に取り込んだ過去の記録は直りません。</strong>理由は「7. 過去の主催レポートを取り込む」にあります。</p>
+</div>
+
+<div class="box">
+  <p class="box-title">いちばん大事なこと：3まで終われば、月例会は回せます</p>
+  <p><strong>1（ログイン）から3（役員の登録）までが終われば、その日から月例会の準備に使えます。</strong>まずはここまでを済ませてください。</p>
+  <p><strong>4（会員の情報）は、量が多い作業です。</strong>会員の人数ぶん（18名以上）あるので、<strong>一度に全部やらなくて構いません。</strong>使いながら少しずつ埋めていってください。埋まっていくほど、テーブル割りの精度と <span class="key">星の評価</span> の点数がそろっていきます。</p>
+</div>
+
+<div class="box warn">
+  <p class="box-title">この資料に出てこない準備について</p>
+  <p>支部専用の保存先の用意と、支部名とパスワードでログインできるようにする設定は、画面の裏側の準備として済ませてあります。運営者の側で行っていただく作業はありません。</p>
+  <p><strong>ただし「会員リストを取り込む」だけは、運営者の側で行っていただきます。</strong>最初の1回だけでなく<strong>毎月</strong>行う作業です。やり方は次の「3. 会員リストを取り込む」にあります。</p>
+  <p>このツールを新しく入れた直後は、会員リストを1回取り込むまで会員の情報が出てきません（自分の支部の方も、他の支部の方も出ません）。まず取り込みを済ませてください。</p>
+</div>
+
+<h2>2. ログインする</h2>
+<p><strong>お渡しするのはURLとパスワードの2つです。</strong>どちらもこちらからお伝えします。</p>
+<ol>
+  <li>お渡ししたURLを、パソコンやスマートフォンのブラウザで開きます。</li>
+  <li><span class="key">月例会ツール</span> という見出しの画面が出ます。</li>
+  <li><span class="key">支部名</span> の欄に、支部名を入力します。<strong>「支部」の2文字は付けずに</strong>入力してください。</li>
+  <li><span class="key">パスワード</span> の欄に、お渡ししたパスワードを入力します。</li>
+  <li><span class="btn">ログイン</span> を押します。</li>
+</ol>
+<p>どちらかが違っていると <span class="key">支部名またはパスワードが違います</span> と出ます。<strong>大文字と小文字は区別されます。</strong>前後に空白が入っていないかも確かめてください。</p>
+
+<div class="box warn">
+  <p class="box-title">パスワードについて</p>
+  <table>
+    <tr><td class="col">支部で1つ</td><td>個人ごとのアカウントはありません。<strong>役員の方2〜3人で同じものを共有してください。</strong></td></tr>
+    <tr><td class="col">こちらで作ります</td><td>読み違えにくい英数字でこちらが作ってお渡しします。運営者の側で決めていただく必要はありません。</td></tr>
+    <tr><td class="col">変更はできません</td><td>画面から変える仕組みはありません。<strong>忘れたときや、外部に漏れてしまったときはご連絡ください。</strong>お調べするか、新しいものを作ってお渡しします。</td></tr>
+    <tr><td class="col">外に出さないでください</td><td>URLとパスワードは、支部の役員以外にはお伝えしないでください。<strong>この2つを知っている人は、支部のデータを開けます。</strong></td></tr>
+  </table>
+</div>
+
+<h3>ログインしたあとの画面</h3>
+<p>番号の付いたメニューが並んだ画面が出ます。この画面を、この資料では<strong>トップ画面</strong>と呼びます。ここが出発点です。</p>
+<p>画面の上には、どの画面を開いていても同じものが並んでいます。</p>
+<table>
+  <tr><th>表示</th><th>押すとどうなるか</th></tr>
+  <tr><td class="col">← トップに戻る</td><td>トップ画面に戻ります。</td></tr>
+  <tr><td class="col">ログアウト</td><td>ログインする前の画面に戻ります。</td></tr>
+  <tr><td class="col">?</td><td>その画面の説明が開きます。</td></tr>
+  <tr><td class="col">↑</td><td>画面の<strong>右下</strong>にあります。長い画面のいちばん上まで戻ります。</td></tr>
+</table>
+
+<div class="box">
+  <p class="box-title">入力するのは、その端末で最初の1回だけです</p>
+  <p>一度ログインすれば、<strong>同じ端末の同じブラウザで次に開いたときは、自動でログインした状態に戻ります。</strong>毎回入力する必要はありません。</p>
+  <p>もう一度入力が必要になるのは、<strong>別の端末で開いたとき</strong>と、<strong>ブラウザの履歴やデータを消したとき</strong>、<strong><span class="btn">ログアウト</span> を押したとき</strong>です。</p>
+</div>
+
+<h2>3. 会員リストを取り込む</h2>
+<p><strong>いちばん最初に行っていただく作業です。</strong>これを行わないと会員の一覧が空のままで、次の「役員を登録する」で名前を選ぶことができません。</p>
+<p><strong>これは毎月行う作業でもあります。</strong>新しく入会した方や、属性が変わった方を反映するためです。取り込みが済んでいない月は、トップ画面の上に <span class="key">今月の会員リストがまだ取り込まれていません</span> という帯が出ます。</p>
+
+<h3>やり方</h3>
+<ol>
+  <li>トップ画面の下のほうにある <span class="btn">会員リストを取り込む</span> を押します。帯が出ているときは、帯の <span class="btn">取り込む →</span> を押しても同じ画面が開きます。</li>
+  <li>画面に手順が4つ書かれています。そのとおりに進めます。
+    <ul>
+      <li><span class="key">会員一覧ページを開く（毎月のお知らせに記載のID・パスワード）</span></li>
+      <li><span class="key">「会員一覧」タブを選択し、表の上をクリックして Ctrl+A → Ctrl+C</span></li>
+      <li><span class="key">下のエリアをクリックして Ctrl+V で貼り付ける</span></li>
+      <li><span class="key">「取り込む」を押す</span></li>
+    </ul>
+  </li>
+  <li>貼り付ける場所は、薄く <span class="key">ここに貼り付ける</span> と書かれた広い欄です。</li>
+  <li><span class="btn">取り込む</span> を押します。</li>
+</ol>
+<p>うまくいくと <span class="key">○年○月分の会員リストを取り込みました。全支部 ○名 ／ この支部 ○名</span> と出ます。</p>
+
+<div class="box">
+  <p class="box-title">貼り付けるのは全国の会員一覧のままで構いません</p>
+  <p>コピーした表には他の支部の方も入っていますが、<strong>取り込まれるのは自分の支部の会員だけ</strong>です。選り分けていただく必要はありません。</p>
+</div>
+
+<div class="box warn">
+  <p class="box-title">先月分を貼ってしまったときは</p>
+  <p>貼り付けた表の日付が今月でないときは <span class="key">基準日が当月ではありません。</span> という確認が出ます。日付を確かめて、そのままでよければ <span class="btn">取り込む</span>、貼り直すなら <span class="btn">キャンセル</span> を押してください。</p>
+</div>
+
+<h2>4. 役員を登録する</h2>
+<p><strong>ここまで終われば、月例会は回せます。</strong>まずはこの章を済ませてください。</p>
+
+<h3>なぜ登録するのか</h3>
+<table>
+  <tr><th>入れるもの</th><th>何に効くか</th></tr>
+  <tr><td class="col">役員（誰が役員か）</td><td>参加者名簿で役員として扱われます。あわせて、テーブル割りのときに<strong>役員が同じ卓に固まらないように分散</strong>されます。</td></tr>
+  <tr><td class="col">固定テーブル</td><td>「毎回この人はこの卓」と決めておきたいときに使います。<strong>決めない場合は <span class="key">固定しない</span> のままで構いません。</strong></td></tr>
+  <tr><td class="col">毎月参加</td><td>毎月必ず参加する方に付けておくと、月例会の参加者を入れるときに手間なく入れられます。</td></tr>
+</table>
+
+<h3>開き方</h3>
+<ol>
+  <li>トップ画面の <span class="key">05</span> <span class="key">設定</span>（説明は <span class="key">会員詳細・役員設定</span>）を押します。</li>
+  <li><span class="key">設定</span> の画面が開きます。上に <span class="key">会員詳細</span> <span class="key">役員</span> <span class="key">支部の設定</span> <span class="key">過去レポート</span> のタブが並んでいます。<span class="key">役員</span> を押します。</li>
+  <li><span class="key">役員</span> のタブを押します。</li>
+</ol>
+<p>見出しの横にある <span class="btn">?</span> を押すと <span class="key">業種・役員の設定が何に効くか</span> の説明が開きます。</p>
+
+<h3>1人ずつ登録する</h3>
+<p>画面の下のほうに <span class="key">役員を追加する</span> というカードがあります。ここに入れていきます。</p>
+
+<h3><span class="step">1.</span> 名前</h3>
+<p>ここは<strong>文字を打つ欄ではありません。</strong>最初は <span class="key">（タップして会員を選ぶ）</span> と表示されています。ここを押すと <span class="key">会員を選択</span> の一覧が開くので、その中から選びます。</p>
+
+<h3><span class="step">2.</span> 役職</h3>
+<p>その方の役職を選びます。<span class="key">（タップして選ぶ）</span> と書かれたところを押すと <span class="key">役職を選ぶ</span> の一覧が開き、<span class="key">主催</span> <span class="key">事務局長</span> <span class="key">幹事</span> <span class="key">統括</span> の4つから選べます。ここで選んだ役職は参加者名簿に出ます。</p>
+<p><strong>主催の方を1人は登録してください。</strong>参加者名簿と主催レポートに印字される主催者名は、<strong>役職が <span class="key">主催</span> の方から自動で取ります</strong>（別に主催者名を入れる欄はありません）。</p>
+
+<h3><span class="step">3.</span> 固定テーブル</h3>
+<p>最初は <span class="key">固定しない</span> と表示されています。押すと <span class="key">固定テーブルを選ぶ</span> の一覧が開きます。</p>
+<table>
+  <tr><th>選ぶもの</th><th>意味</th></tr>
+  <tr><td class="col">固定しない</td><td>卓を決めません。テーブル割りのときに自動で決まります。<strong>ふだんはこれで構いません。</strong></td></tr>
+  <tr><td class="col">A 〜 Z</td><td>毎回、その記号の卓に入ります。</td></tr>
+  <tr><td class="col">後ろから1番目</td><td>いちばん後ろの卓に入ります。卓の数が回によって変わっても、いつも最後の卓になります。</td></tr>
+  <tr><td class="col">後ろから2番目</td><td>後ろから2つめの卓に入ります。</td></tr>
+</table>
+
+<h3><span class="step">4.</span> 毎月参加</h3>
+<p>左右に動く<strong>切り替えスイッチ</strong>です。毎月必ず参加する方は、ここを入にしておきます。</p>
+
+<h3><span class="step">5.</span> NM ID</h3>
+<p>欄の中には <span class="key">例: NM-1234（空欄可）</span> と薄く書かれています。<strong>わからなければ空欄のままで構いません。</strong></p>
+<p>入れる場合は「NM-」に続けて数字を入れます。形が違うと、欄の下に <span class="key">NM IDは「NM-数字」の形式か、空欄にしてください</span> と赤い文字が出ます。</p>
+
+<h3><span class="step">6.</span> 追加する</h3>
+<p>5つを入れ終えたら <span class="btn">追加する</span> を押します。カードの上にある一覧に、その方が加わります。次の方を登録するときは、また名前から入れていきます。</p>
+
+<h3>登録した人を直す・消す</h3>
+<p>一覧の各行の右に <span class="btn">編集</span> と <span class="btn">削除</span> があります。</p>
+<table>
+  <tr><th>ボタン</th><th>できること</th></tr>
+  <tr><td class="col">編集</td><td>その方の内容がカードに読み込まれます。カードの見出しが <span class="key">役員を編集する</span> に変わり、ボタンも <span class="btn">この内容で更新する</span> に変わります。直したら押してください。直すのをやめるときは <span class="btn">編集をやめる</span> です。</td></tr>
+  <tr><td class="col">削除</td><td>確認の画面が出ます。<br><span class="key">（名前）さんを役員設定から削除します。<br>削除すると参加者名簿の役員扱いが外れます。<br>よろしいですか？</span><br>よければ <span class="btn">削除する</span>、やめるときは <span class="btn">キャンセル</span> を押します。</td></tr>
+</table>
+
+<h3><span class="step">最後に</span> 保存する</h3>
+<div class="box warn">
+  <p class="box-title">保存を押さないと残りません</p>
+  <p>ここまでの追加・編集・削除は、まだ画面の中だけの状態です。<strong>いちばん下の <span class="btn">役員設定を保存する</span> を押してはじめて残ります。</strong></p>
+  <p><span class="key">役員設定を保存しました</span> と出たら、保存できています。</p>
+</div>
+
+<h2>5. 会員の情報を埋める</h2>
+<p><strong>ここは量の多い作業です。一度に全部やらなくて構いません。</strong>月例会を回しながら、少しずつ埋めていくことが可能です。</p>
+
+<div class="box">
+  <p class="box-title">一覧に他の支部の方も並ぶ理由</p>
+  <p><strong>基本は自分の支部の会員を管理する画面です。</strong>会員リストの取り込みで入るのも、自分の支部の会員だけです。</p>
+  <p>そのうえで、<strong>他の支部から月例会に参加してくださった方も、この一覧に残ります。</strong>次に来てくださったときに名前と支部がすぐ分かるようにするためです。テーブル割りでも、その方の支部と業種を見て席を決めています。</p>
+  <p>自分の支部の会員だけを見たいときは、絞り込み欄の右にある <span class="key">自支部のみ</span> の切り替えを入にしてください。</p>
+  <p>なお <span class="key">受講済み研修（自支部のみ）</span>・<span class="key">入会：</span>・<span class="key">準役：</span> の欄は、<strong>自分の支部の会員を開いたときだけ</strong>出ます。他の支部の方には出ません。</p>
+</div>
+
+<h3>なぜ埋めるのか</h3>
+<table>
+  <tr><th>入れるもの</th><th>何に効くか</th></tr>
+  <tr><td class="col">業種</td><td>テーブル割りのときに、<strong>同じ業種の方が同じ卓に固まらないように分散</strong>されます。</td></tr>
+  <tr><td class="col">カテゴリ</td><td>業種より大きなくくりでの分散に使います。<strong>カテゴリが入っていないと、この分散が効きません。</strong></td></tr>
+  <tr><td class="col">TL研修受講済み</td><td>テーブル割りのときに、TL（テーブルリーダー＝卓の進行役）として置ける方かどうかの判断に使います。1つの卓にTLは1名までです。あわせて <span class="key">星の評価</span> の <span class="key">フロント+TL研修受講率</span> の対象になります。</td></tr>
+  <tr><td class="col">TL優先度</td><td>TLを決めるときに、この方を先に選びます。<span class="key">TL研修受講済み</span> を入にすると出てきます。</td></tr>
+  <tr><td class="col">入会：</td><td><span class="key">星の評価</span> の受講率を計算する対象（<strong>入会から3か月以上たった方</strong>）を決めるのに使います。<strong>ここが空のままだと、受講率は計算できません。</strong></td></tr>
+  <tr><td class="col">受講済み研修</td><td><span class="key">SU スタートアップ</span> と <span class="key">SD 商談</span> が <span class="key">星の評価</span> の <span class="key">必須研修受講率（SU+SD）</span> に、<span class="key">FE フロントエンド</span> が <span class="key">TL研修受講済み</span> と組み合わさって <span class="key">フロント+TL研修受講率</span> になります。<span class="key">SK 集客</span> と <span class="key">UE 運営</span> は記録として残ります。</td></tr>
+  <tr><td class="col">準役：</td><td><span class="key">星の評価</span> の <span class="key">準役員就任（過去6か月）</span> の人数になります。</td></tr>
+</table>
+<p><span class="key">星の評価</span> は、トップ画面の <span class="key">06</span> <span class="key">分析を見る</span> を開いて、上のタブから <span class="key">星の評価</span> を押すと見られます。</p>
+
+<h3>開き方</h3>
+<ol>
+  <li>トップ画面の <span class="key">05</span> <span class="key">設定</span> を押します。</li>
+  <li>上のタブから <span class="key">会員詳細</span> を押します（この画面を開くと、最初からこちらが選ばれています）。</li>
+</ol>
+
+<h3>目当ての人を探す</h3>
+<table>
+  <tr><th>使うもの</th><th>できること</th></tr>
+  <tr><td class="col">名前で絞り込む</td><td>入力欄です。名前の一部を入れると、その方だけが残ります。</td></tr>
+  <tr><td class="col">自支部のみ</td><td>切り替えスイッチです。入にすると、自分の支部の方だけが並びます。</td></tr>
+</table>
+<p>一覧の上には <span class="key">残り（数）名（全体（数）名）</span> と出ます。<strong>「残り」は、カテゴリがまだ入っていない方の人数です。</strong>ここが0に近づくほど、テーブル割りの分散が効くようになります。</p>
+
+<h3>一覧に出ている印</h3>
+<p>名前の下に、色の付いた小さな印が並びます。今どこまで入っているかが、開かなくてもわかります。</p>
+<table>
+  <tr><th>印</th><th>意味</th></tr>
+  <tr><td class="col">カテゴリ未設定</td><td>カテゴリがまだ入っていません。</td></tr>
+  <tr><td class="col">TL受講済</td><td><span class="key">TL研修受講済み</span> が入になっています。</td></tr>
+  <tr><td class="col">TL受講済・優先</td><td>あわせて <span class="key">TL優先度</span> も入になっています。</td></tr>
+</table>
+
+<h3>1人ぶんを埋める</h3>
+<p>一覧の行を押すか、右の <span class="btn">編集</span> を押すと、<strong>その行のすぐ下に編集の画面が開きます。</strong>押したボタンは <span class="btn">編集中</span> に変わります。見出しは <span class="key">（名前） を編集</span> です。</p>
+
+<h3><span class="step">1.</span> 業種</h3>
+<p>入力欄です。その方の仕事の内容を入れます。</p>
+
+<h3><span class="step">2.</span> カテゴリ</h3>
+<p>まだ入っていないときは <span class="key">（未設定）</span> と表示されています。押すと <span class="key">カテゴリを選ぶ</span> の一覧が開くので、あてはまるものを選びます。<strong>どれにも当てはまらないときは、いちばん上の <span class="key">（カテゴリなし）</span> を選びます。</strong></p>
+
+<h3><span class="step">3.</span> TL研修受講済み ／ TL優先度</h3>
+<p>どちらも切り替えスイッチです。<span class="key">TL研修受講済み</span> を入にすると、その横に <span class="key">TL優先度</span> が出てきます。<span class="key">TL研修受講済み</span> を切にすると <span class="key">TL優先度</span> も一緒に切に戻ります。</p>
+
+<h3><span class="step">4.</span> 受講済み研修（自支部のみ）</h3>
+<p><strong>この区切りから下は、自分の支部の方を開いたときだけ出ます。</strong>他支部の方には出ません。</p>
+<p>切り替えスイッチが5つ並んでいます。受け終わっている研修を入にします。</p>
+<table>
+  <tr><th>表示</th><th>星の評価への効き方</th></tr>
+  <tr><td class="col">SU スタートアップ</td><td><span class="key">必須研修受講率（SU+SD）</span>。SUとSDの<strong>両方</strong>を受け終わった方が対象になります。</td></tr>
+  <tr><td class="col">SD 商談</td><td>同上。</td></tr>
+  <tr><td class="col">FE フロントエンド</td><td><span class="key">フロント+TL研修受講率</span>。FEと <span class="key">TL研修受講済み</span> の<strong>両方</strong>が入っている方が対象になります。</td></tr>
+  <tr><td class="col">SK 集客</td><td>記録として残ります。</td></tr>
+  <tr><td class="col">UE 運営</td><td>記録として残ります。</td></tr>
+</table>
+
+<h3><span class="step">5.</span> 入会： ／ 準役：</h3>
+<table>
+  <tr><th>欄</th><th>入れかた</th></tr>
+  <tr><td class="col">入会：</td><td>入会した日です。欄の中に <span class="key">YYYY-MM-DD</span> と薄く書かれています。<strong>年4けた・月2けた・日2けたを、半角のハイフンでつなぎます</strong>（2026年4月1日なら 2026-04-01）。</td></tr>
+  <tr><td class="col">準役：</td><td>準役員に就任した月です。欄の中に <span class="key">YYYY-MM</span> と薄く書かれています。<strong>日は入れません</strong>（2026年4月なら 2026-04）。就任していない方は空欄のままにします。</td></tr>
+</table>
+
+<h3><span class="step">6.</span> 1人ぶんを確定する</h3>
+<p>その方の入力が終わったら <span class="btn">この内容で更新する</span> を押します。編集の画面が閉じて、一覧に戻ります。やめるときは <span class="btn">編集をやめる</span> です。</p>
+
+<h3><span class="step">最後に</span> 保存する</h3>
+<div class="box warn">
+  <p class="box-title">保存は2段階です</p>
+  <p><span class="btn">この内容で更新する</span> は、<strong>1人ぶんを画面の中で確定するボタンです。</strong>これだけでは残りません。</p>
+  <p>その日に触った方をひととおり終えたら、<strong>いちばん下の <span class="btn">会員情報を保存する</span> を押してください。</strong><span class="key">会員情報を保存しました</span> と出れば、保存できています。</p>
+</div>
+<p>途中でやめても構いません。<strong>保存したところまでは残ります。</strong>次に開いたとき、その続きから埋めていけます。</p>
+
+<h2>6. 開催方式を入れる</h2>
+<p><strong>NM本部に提出する参加者名簿と主催レポートに印字される項目です。</strong>最初に1回入れておけば、以降は自動で入ります。</p>
+<p><strong>この章は、初めて参加者名簿を出す前までに済ませれば大丈夫です。</strong>月例会の準備やテーブル割りには関わりません。</p>
+
+<h3>やり方</h3>
+<ol>
+  <li>トップ画面の <span class="key">05</span> <span class="key">設定</span> を開き、<span class="key">支部の設定</span> のタブを押します。</li>
+  <li><span class="key">開催方式</span> の欄に入れます。欄の中には <span class="key">ネット または 都道府県名（例: 大阪府）</span> と薄く書かれています。<strong>オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名</strong>を入れてください。</li>
+  <li><span class="btn">支部の設定を保存する</span> を押します。</li>
+</ol>
+<p>うまくいくと <span class="key">保存しました</span> と出ます。</p>
+
+<div class="box warn">
+  <p class="box-title">空のままだと名簿の欄も空で出ます</p>
+  <p>開催方式は、名簿と主催レポートにそのまま印字されるだけの項目です。<strong>入れていないと、提出する書類のその欄が空欄のまま出力されます。</strong>書類を出す前に入れておいてください。</p>
+</div>
+
+<p>あとから変えることもできます。オンライン開催と会場開催が切り替わったときは同じ画面で、主催者が交代したときは <span class="key">役員</span> のタブで直してください。</p>
+
+<h2>7. 過去の主催レポートを取り込む</h2>
+<p><strong>これまでNM本部に提出してきた主催レポート（xlsx）を読み込んで、過去の参加記録として残す作業です。</strong>取り込むと、<span class="key">星の評価</span> の参加人数とゲスト割合が過去の月のぶんも出るようになります。</p>
+<p><strong>月例会の準備やテーブル割りには関わりません。</strong>お手元のレポートがそろってから行っていただければ大丈夫です。</p>
+
+<div class="box warn">
+  <p class="box-title">必ず、会員リストを取り込んだあとに行ってください</p>
+  <p><strong>主催レポートには会員番号しか入っていません。</strong>そのため、取り込むときに会員リストを見てお名前と所属支部を補っています。会員リストがまだ入っていないうちに取り込むと、<strong>お名前がレポートに書かれた姓と名をつないだ形のまま残り、所属支部の欄は空のまま</strong>になります。</p>
+  <p><strong>あとから会員リストを取り込んでも、先に取り込んだ過去の記録は直りません。</strong>順番は「会員リスト → 過去の主催レポート」です。</p>
+</div>
+
+<div class="box warn">
+  <p class="box-title">レポートのタブ名は、8桁の数字であることが必須です</p>
+  <p><strong>読み込むのは、タブ名が8桁の数字になっているタブだけです。</strong>年4桁・月2桁・日2桁を続けた形にしてください（例：2026年6月18日 → <span class="key">20260618</span>）。</p>
+  <p><strong>8桁の数字以外のタブは読み込みません。</strong>「20260618（6月）」のように後ろに文字が付いているものや、「6月」「6月18日」のようなタブ名も対象外です。数字だけの8桁にしてください。</p>
+  <p>1つのファイルに月ごとのタブが並んでいる場合も、8桁の数字になっているタブを全部読み込みます。<strong>8桁の数字のタブが1枚もないファイルは、いちばん左のタブだけを読み込みます。</strong></p>
+</div>
+
+<p>トップ画面の <span class="key">05</span> <span class="key">設定</span> を開き、<span class="key">過去レポート</span> のタブを押します。<span class="key">過去レポートの取り込み</span> という見出しの画面が出ます。</p>
+
+<h3><span class="step">ステップ1.</span> xlsxをアップロードする（複数可）</h3>
+<ol>
+  <li><span class="key">xlsxファイルをここにドロップするか、タップして選択してください</span> と書かれた枠に、主催レポートのファイルを置きます。枠を押してファイルを選んでも同じです。<strong>複数まとめて選べます。</strong></li>
+  <li>選んだファイルの名前が枠の下に並びます。</li>
+  <li><span class="btn">アップロードする</span> を押します。</li>
+</ol>
+<p>1件ずつ順にアップロードします。<strong>ファイル1件あたり数秒かかります</strong>（20件を超えると2分ほどかかります）。何件目まで終わったかが画面に出るので、そのまま待ってください。</p>
+<p>全部終わると <span class="key">（数）件をアップロードしました。ステップ2で取り込みを実行してください。</span> と出ます。</p>
+
+<div class="box warn">
+  <p class="box-title">この知らせが出てから、ステップ2に進んでください</p>
+  <p>取り込みは、押した時点でアップロードが済んでいるファイルだけを読み込みます。<strong>アップロードの途中で <span class="btn">過去レポートを取り込む</span> を押すと、まだ届いていないファイルは読み込まれません。</strong>そのぶんはスキップにもエラーにも出ないため、気づきにくくなります。</p>
+</div>
+
+<h3><span class="step">ステップ2.</span> 取り込みを実行する</h3>
+<ol>
+  <li><span class="btn">過去レポートを取り込む</span> を押します。</li>
+  <li>数十秒かかることがあります。画面が変わるまでお待ちください。</li>
+  <li>取り込めた開催日が並んで出ます。読み飛ばしたものがあれば、その理由も出ます。</li>
+</ol>
+<p><strong>途中で止まったときは、もう一度 <span class="btn">過去レポートを取り込む</span> を押してください。</strong>すでに入ったぶんが二重になることはありません。</p>
+
+<h3>あとから見つかったレポートも、あとで足せます</h3>
+<p>同じ手順で足してください。<strong>すでに取り込んだ開催日は読み飛ばされるので、二重に入ることはありません。</strong>足したぶんだけが増えます。</p>
+
+<p><strong>取り込みが終わったファイルは、控えとして別のフォルダへ自動で移ります。</strong>次に取り込むときの対象は、新しくアップロードしたぶんだけになります。</p>
+
+<h2>8. どこまで入れると何ができるようになるか</h2>
+<p>上から順に、できることが増えていきます。<strong>全部を一度に埋める必要はありません。</strong></p>
+<table>
+  <tr><th>どこまで入れたか</th><th>できるようになること</th></tr>
+  <tr><td class="col">ログインした</td><td>月例会の準備・テーブル割り・参加者名簿の出力まで、ひととおり使えます。</td></tr>
+  <tr><td class="col">＋ 役員を登録した</td><td>参加者名簿に役職が出ます。テーブル割りで役員が同じ卓に固まらないように分散されます。<strong>ここまでで、月例会は回せます。</strong></td></tr>
+  <tr><td class="col">＋ 役員の固定テーブルを決めた</td><td>決めた方が、毎回その卓に入ります。</td></tr>
+  <tr><td class="col">＋ 役員に毎月参加を付けた</td><td>毎月参加する方を、参加者を入れるときに手間なく入れられます。</td></tr>
+  <tr><td class="col">＋ 業種を入れた</td><td>同じ業種の方が同じ卓に固まらないように分散されます。</td></tr>
+  <tr><td class="col">＋ カテゴリを入れた</td><td>業種より大きなくくりでも分散されます。一覧の <span class="key">カテゴリ未設定</span> の印が消えていきます。</td></tr>
+  <tr><td class="col">＋ TL研修受講済みを入れた</td><td>TLを置ける方がはっきりします。<span class="key">TL優先度</span> も入れると、その方が先に選ばれます。</td></tr>
+  <tr><td class="col">＋ 入会：を入れた</td><td><span class="key">星の評価</span> の受講率が計算できるようになります。<strong>ここが空のうちは、受講率の欄に計算できない旨が出ます。</strong></td></tr>
+  <tr><td class="col">＋ 研修の受講を入れた</td><td><span class="key">必須研修受講率（SU+SD）</span> と <span class="key">フロント+TL研修受講率</span> の点数が出ます。</td></tr>
+  <tr><td class="col">＋ 準役：を入れた</td><td><span class="key">準役員就任（過去6か月）</span> の点数が出ます。</td></tr>
+  <tr><td class="col">＋ 過去の主催レポートを取り込んだ</td><td><span class="key">星の評価</span> の参加人数とゲスト割合が、過去の月のぶんも出ます。</td></tr>
+</table>
+
+<h2>9. こんな画面が出たときは</h2>
+<p>表示の中の <span class="key">（名前）</span> <span class="key">（数）</span> のところには、実際の名前や人数が入ります。</p>
+
+<h3>ログインするとき</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">支部名またはパスワードが違います</td><td>どちらかが登録と合っていません。「支部」の2文字を付けていないか、前後に余分な空白が入っていないか、大文字と小文字が合っているかを確かめてください。それでも入れないときはご連絡ください。</td></tr>
+  <tr><td class="col">もう一度ログインしてください</td><td>時間が経ってログインの状態が切れました。支部名とパスワードを入れ直してください。<strong>入力していた内容は残らないので、長い作業の途中では「保存」を押しながら進めてください。</strong></td></tr>
+</table>
+
+<h3>役員を登録するとき</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">名前を選択してください</td><td>名前がまだ <span class="key">（タップして会員を選ぶ）</span> のままです。押して <span class="key">会員を選択</span> の一覧から選んでから、<span class="btn">追加する</span> を押してください。</td></tr>
+  <tr><td class="col">NM IDは「NM-数字」の形式か、空欄にしてください</td><td>入れた形が違います。「NM-」に続けて数字を入れるか、わからなければ欄を空にしてください。</td></tr>
+  <tr><td class="col">先に「この内容で更新する」を押してください</td><td>1人ぶんの編集を開いたまま、保存を押しています。<span class="btn">この内容で更新する</span> で編集を閉じてから、<span class="btn">役員設定を保存する</span> を押してください。直すのをやめるなら <span class="btn">編集をやめる</span> です。</td></tr>
+  <tr><td class="col">役員設定を保存しました</td><td>保存できています。そのまま次の作業に進んで構いません。</td></tr>
+</table>
+
+<h3>会員の情報を埋めるとき</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">会員マスタにデータがありません。先に会員リストを取り込んでください</td><td>会員の一覧がまだ入っていません。「3. 会員リストを取り込む」の手順で取り込んでから、もう一度開いてください。</td></tr>
+  <tr><td class="col">先に「この内容で更新する」を押してください</td><td>1人ぶんの編集を開いたまま、保存を押しています。<span class="btn">この内容で更新する</span> で編集を閉じてから、<span class="btn">会員情報を保存する</span> を押してください。</td></tr>
+  <tr><td class="col">保存に失敗しました。もう一度試してください。</td><td>通信がうまくいきませんでした。もう一度 <span class="btn">会員情報を保存する</span> を押してください。何度も出るときは、ブラウザを再読み込みしてから開き直してください。</td></tr>
+  <tr><td class="col">会員情報を保存しました</td><td>保存できています。ここまでの内容は残りました。</td></tr>
+</table>
+
+<h3>星の評価の画面で</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">会員の入会日が登録されていないため、受講率を計算できません。会員詳細画面から入会日を登録してください</td><td>不具合ではありません。<span class="key">入会：</span> がまだ1人も入っていないと出ます。<span class="key">会員詳細</span> のタブで入会日を入れていくと、計算されるようになります。</td></tr>
+  <tr><td class="col">就任記録がありません（今後の会員リスト取り込みから自動で記録されます。会員詳細画面から手動入力もできます）</td><td>準役員の就任月がまだ入っていません。<span class="key">会員詳細</span> のタブの <span class="key">準役：</span> に入れると点数に出ます。</td></tr>
+  <tr><td class="col">入会3か月以上の人数：（数）人（受講率の計測対象）</td><td>受講率の計算に使われている人数です。<span class="key">入会：</span> を埋めていくと、この人数が増えていきます。</td></tr>
+</table>
+
+<h3>過去の主催レポートを取り込むとき</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">（数）回分を取り込みました（スキップ （数）件、エラー （数）件）</td><td>取り込みが終わった知らせです。この下に、取り込めた開催日・読み飛ばしたもの・エラーになったものが並びます。</td></tr>
+  <tr><td class="col">すでに取り込み済み</td><td>不具合ではありません。その開催日はもう入っているため、二重にならないように読み飛ばしています。</td></tr>
+  <tr><td class="col">D3から開催日を取得できませんでした</td><td>そのタブの中に書かれた開催日を読み取れませんでした。タブ名が8桁の数字になっているのにこの表示が出るときは、レポートの様式が違う可能性があります。ご連絡ください。</td></tr>
+</table>
+<p><strong>取り込んだ数が、レポートのタブの枚数と合っているかを確かめてください。</strong>数が足りないときは、タブ名が8桁の数字になっていないタブが混ざっている可能性があります。</p>
+
+<h2>10. よくあるご質問</h2>
+
+<h3>全部入れ終わらないと、月例会には使えませんか？</h3>
+<p>使えます。ログイン・会員リストの取り込み・役員の登録が終わっていれば、その日から月例会の準備に使えます。会員の情報は、使いながら少しずつ埋めていってください。</p>
+
+<h3>会員の情報は、途中でやめても大丈夫ですか？</h3>
+<p>大丈夫です。<span class="btn">会員情報を保存する</span> を押したところまでは残ります。次に開いたとき、その続きから埋めていけます。</p>
+
+<h3>役員の名前を打ち込む欄が見つかりません</h3>
+<p>名前は打ち込む形ではありません。<span class="key">（タップして会員を選ぶ）</span> と書かれたところを押すと <span class="key">会員を選択</span> の一覧が開くので、その中から選んでください。</p>
+
+<h3>役員の固定テーブルは、必ず決めないといけませんか？</h3>
+<p>決めなくて構いません。<span class="key">固定しない</span> のままにしておくと、テーブル割りのときに自動で決まります。</p>
+
+<h3><span class="key">この内容で更新する</span> と <span class="key">会員情報を保存する</span> は何が違いますか？</h3>
+<p><span class="key">この内容で更新する</span> は、1人ぶんを画面の中で確定するボタンです。これだけでは残りません。ひととおり終えたら、いちばん下の <span class="key">会員情報を保存する</span> を押してください。役員のほうも同じで、<span class="key">追加する</span> のあとに <span class="key">役員設定を保存する</span> が要ります。</p>
+
+<h3>他支部の方を開くと、研修の欄が出てきません</h3>
+<p><span class="key">受講済み研修（自支部のみ）</span> の区切りから下は、自分の支部の方を開いたときだけ出ます。他支部の方には出ません。</p>
+
+<h3>カテゴリにあてはまるものがありません</h3>
+<p><span class="key">カテゴリを選ぶ</span> のいちばん上にある <span class="key">（カテゴリなし）</span> を選んでください。</p>
+
+<h3>一覧の <span class="key">残り（数）名</span> は何の数ですか？</h3>
+<p>カテゴリがまだ入っていない方の人数です。0に近づくほど、テーブル割りの分散が効くようになります。</p>
+
+<h3>入会日がわからない人がいます</h3>
+<p>空欄のままにしておいてください。わかった時点で入れれば、そこから <span class="key">星の評価</span> の受講率に反映されます。</p>
+
+<h3>すでに取り込んだ開催日の内容を直したいときは？</h3>
+<p>ご連絡ください。<strong>同じ開催日は読み飛ばされるため、入れ直すには先に古い記録を消す必要があります。</strong>こちらで消してから、もう一度アップロードしていただきます。</p>
+
+<h3>パスワードを忘れました</h3>
+<p>ご連絡ください。お調べしてお伝えするか、新しいものを作ってお渡しします。<strong>画面から変えたり調べたりする仕組みはありません。</strong></p>
+
+<h3>あとから見つかった主催レポートは、足せますか？</h3>
+<p>足せます。<span class="key">05</span> <span class="key">設定</span> → <span class="key">過去レポート</span> のタブで、同じ手順でアップロードして取り込んでください。<strong>すでに取り込んだ開催日は読み飛ばされるので、二重に入ることはありません。</strong>まだ入れていないレポートだけをアップロードしてください。</p>
+
+<h3>過去の主催レポートを、会員リストより先に取り込んでしまいました</h3>
+<p>ご連絡ください。<strong>あとから会員リストを取り込んでも、先に入った過去の記録のお名前と所属支部は直りません。</strong>入れ直すには、古い記録を消してから取り込み直す必要があります。</p>
+
+<h3>月例会の進め方はどこに書いてありますか？</h3>
+<p>別冊の「使い方マニュアル」をご覧ください。参加者を入れるところから、テーブル割り・当日の出欠・参加者名簿の出力までが載っています。</p>
+
+<h3>次に何をすればよいかわからなくなりました</h3>
+<p>画面の上にある <span class="btn">?</span> を押してください。その画面の説明が開きます。</p>
+
+<p class="foot">
+ご不明な点は、ネコノテ 山下美樹まで Messenger または LINE でご連絡ください。<br>
+月例会ツール はじめてお使いになるとき（2026年8月版）
+</p>
+
+</body>
+</html>
