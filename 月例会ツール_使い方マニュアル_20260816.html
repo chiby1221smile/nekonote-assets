@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>月例会ツールの使い方</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    color: #333; line-height: 1.8; margin: 0;
+    padding: 32px 24px 64px; max-width: 820px; margin-inline: auto;
+    background: #fff; font-size: 15px;
+  }
+  h1 {
+    font-size: 24px; color: #fff; background: #4a6572;
+    padding: 18px 20px; border-radius: 8px; margin: 0 0 8px;
+  }
+  .lead { color: #666; font-size: 14px; margin: 0 0 32px; }
+  h2 {
+    font-size: 19px; border-left: 6px solid #4a6572;
+    padding-left: 12px; margin: 40px 0 16px;
+  }
+  h3 { font-size: 16px; margin: 24px 0 8px; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 14px; table-layout: fixed; }
+  th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; vertical-align: top; word-break: break-word; }
+  th { background: #eceff1; font-weight: bold; }
+  td.col { font-weight: bold; background: #fafafa; }
+  /* 列幅を表ごとにそろえる（3列の表は1列目を狭く・2列の表は42%） */
+  table:has(tr > *:nth-child(3)) th:first-child,
+  table:has(tr > *:nth-child(3)) td:first-child { width: 14%; }
+  table:has(tr > *:nth-child(3)) th:nth-child(2),
+  table:has(tr > *:nth-child(3)) td:nth-child(2) { width: 36%; }
+  table:not(:has(tr > *:nth-child(3))) th:first-child,
+  table:not(:has(tr > *:nth-child(3))) td:first-child { width: 42%; }
+  .box {
+    background: #f5f7f8; border: 1px solid #cfd8dc;
+    border-radius: 8px; padding: 16px 20px; margin: 20px 0;
+  }
+  .box.warn { background: #fff6ed; border-color: #f0c9a0; }
+  .box p:first-child { margin-top: 0; }
+  .box p:last-child { margin-bottom: 0; }
+  .box-title { font-weight: bold; margin-bottom: 8px; }
+  ol, ul { padding-left: 24px; }
+  li { margin-bottom: 8px; }
+  .step { font-weight: bold; color: #37474f; }
+  .ng { color: #c0392b; font-weight: bold; }
+  .key {
+    display: inline-block; border: 1px solid #4a6572; color: #37474f;
+    border-radius: 4px; padding: 0 7px; font-weight: bold; background: #fff; overflow-wrap: anywhere; line-height: 1.45;
+  }
+  .btn {
+    display: inline-block; background: #4a6572; color: #fff;
+    border-radius: 4px; padding: 0 9px; font-weight: bold; font-size: 14px; overflow-wrap: anywhere; line-height: 1.45;
+  }
+  .box table { margin: 8px 0 0; font-size: 13px; }
+  .foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 13px; color: #777; }
+  @media print {
+    body { padding: 0; font-size: 13px; }
+    h2 { page-break-after: avoid; }
+    table, .box { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>月例会ツールの使い方</h1>
+<p class="lead">各支部の運営者向け／月例会1回分の流れ（参加者を入れる → テーブル割り → 保存 → 当日の出欠 → 紹介者 → 名簿の出力）</p>
+
+<h2>1. この画面でできること</h2>
+<p>月例会1回分の準備から後片づけまでを、この1つのツールで行います。参加者を入れると自動でテーブル割りを作り、当日の出欠をつけ、最後にNM本部提出用の参加者名簿を出すところまでつながっています。</p>
+<p>役員の設定・会員の業種の入力など、<strong>最初の1回だけ行う準備</strong>は、先に「はじめてお使いになるとき」の資料をご覧ください。</p>
+<p><strong>月例会の準備を始める前に、その月の会員リストを取り込んでおいてください。</strong>やり方は下の「2. 開き方」にあります。</p>
+
+<div class="box">
+  <p class="box-title">いちばん大事なルール</p>
+  <p>テーブルは<strong>1卓4名または5名</strong>で組む決まりです。そのため、<strong>参加者が6名・7名・11名のときは自動で割り当てができず、自分でテーブルを決める画面に切り替わります。</strong></p>
+  <p>これは不具合ではありません。4名と5名の組み合わせでは、その人数をぴったり分けられないためです。切り替わったら <span class="btn">手動で決める</span> を押して、順番に振り分けてください（やり方は「4. テーブル割りをする」にあります）。</p>
+</div>
+
+<h2>2. 開き方</h2>
+<ol>
+  <li>お渡ししたURLを、パソコンやスマートフォンのブラウザで開きます。</li>
+  <li><span class="key">月例会ツール</span> という画面が出ます。</li>
+  <li><span class="key">支部名</span> の欄に支部名を入力します。<strong>「支部」の2文字は付けずに</strong>入力してください。</li>
+  <li><span class="key">パスワード</span> の欄に、お渡ししたパスワードを入力します。</li>
+  <li><span class="btn">ログイン</span> を押します。</li>
+</ol>
+<p><strong>入力するのは、その端末で最初の1回だけです。</strong>次に開いたときは自動でログインした状態に戻ります。詳しくは別冊の「はじめてお使いになるとき」の2章をご覧ください。</p>
+
+<h3>ログインしたあとの画面</h3>
+<p>メニューが7つ並んだ画面（トップ画面）が出ます。ここが出発点です。</p>
+<table>
+  <tr><th>番号</th><th>タイトル</th><th>説明文</th></tr>
+  <tr><td class="col">01</td><td class="col">新規に定例会準備をする</td><td>開催日をカレンダーで選ぶ</td></tr>
+  <tr><td class="col">02</td><td class="col">登録済みの定例会を処理する</td><td>開催日を一覧から選ぶ</td></tr>
+  <tr><td class="col">03</td><td class="col">参加者名簿を作る</td><td>開催日を選んでExcelで出力する</td></tr>
+  <tr><td class="col">04</td><td class="col">紹介者を記録する</td><td>誰が誰を連れてきたかを残す</td></tr>
+  <tr><td class="col">05</td><td class="col">設定</td><td>会員詳細・役員設定</td></tr>
+  <tr><td class="col">06</td><td class="col">分析を見る</td><td>過去の同席・業種の偏りを見る</td></tr>
+  <tr><td class="col">07</td><td class="col">姓名確認</td><td>会員マスタの姓・名のドラフトを確認・修正します</td></tr>
+</table>
+<p>画面の下のほうには <span class="btn">会員リストを取り込む</span> と <span class="btn">履歴を見る</span> のボタンがあります。</p>
+
+<h3>どの画面にも出ているもの</h3>
+<table>
+  <tr><th>表示</th><th>押すとどうなるか</th></tr>
+  <tr><td class="col">← トップに戻る</td><td>トップ画面（メニューが7つ並んだ画面）に戻ります。</td></tr>
+  <tr><td class="col">ログアウト</td><td>ログインする前の画面に戻ります。</td></tr>
+  <tr><td class="col">?</td><td><span class="key">このアプリの流れ</span> の説明が開きます。順番がわからなくなったらここを見てください。</td></tr>
+  <tr><td class="col">↑</td><td>画面の右下にあります。長い画面のいちばん上まで戻ります。</td></tr>
+</table>
+
+<h3>トップ画面の上に帯が出ることがあります</h3>
+<table>
+  <tr><th>出た帯</th><th>意味</th></tr>
+  <tr><td class="col">今月の会員リストが<br>まだ取り込まれていません</td><td>今月分の会員の一覧がまだ入っていません。<span class="btn">取り込む →</span> を押して取り込んでから、準備を始めてください。</td></tr>
+  <tr><td class="col">（日付）の定例会準備の<br>続きがあります</td><td>前回、途中でやめた準備が残っています。<span class="btn">タップして再開する</span> または <span class="btn">再開する →</span> を押すと、そこから続けられます。</td></tr>
+</table>
+
+<h3>月例会の準備を始める前に：会員リストを取り込む</h3>
+<p><strong>毎月1回、その月の会員リストを取り込みます。</strong>新しく入会した方や、属性が変わった方を反映するためです。済んでいない月は、トップ画面の上に <span class="key">今月の会員リストがまだ取り込まれていません</span> の帯が出ます。</p>
+<ol>
+  <li>トップ画面の下のほうにある <span class="btn">会員リストを取り込む</span> を押します。帯の <span class="btn">取り込む →</span> でも同じ画面が開きます。</li>
+  <li>会員一覧ページを開きます。IDとパスワードは毎月のお知らせに載っています。</li>
+  <li><span class="key">会員一覧</span> のタブを選びます。</li>
+  <li>表の上をクリックして、<strong>Ctrl を押しながら A</strong>（全部選ぶ）、続けて <strong>Ctrl を押しながら C</strong>（コピー）を押します。</li>
+  <li>ツールの画面に戻り、薄く <span class="key">ここに貼り付ける</span> と書かれた広い欄をクリックして、<strong>Ctrl を押しながら V</strong>（貼り付け）を押します。</li>
+  <li><span class="btn">取り込む</span> を押します。</li>
+</ol>
+<p>うまくいくと <span class="key">○年○月分の会員リストを取り込みました。全支部 ○名 ／ この支部 ○名</span> と出ます。</p>
+<p><strong>他の支部の方が混ざっていても構いません。取り込まれるのは自分の支部の会員だけです。</strong></p>
+<div class="box warn">
+  <p class="box-title">こんな表示が出たときは</p>
+  <table>
+    <tr><th>表示</th><th>どうするか</th></tr>
+    <tr><td class="col">貼り付けエリアにデータが入っていません</td><td>欄が空のままです。もう一度コピーからやり直してください。</td></tr>
+    <tr><td class="col">必須列（NM会員ID,姓名,フリガナ,支部,属性）が見つかりません。</td><td>表の見出しごとコピーできていません。表の上をクリックしてから Ctrl+A で選び直してください。</td></tr>
+    <tr><td class="col">基準日が読み取れませんでした。コピーした内容に「○年○月○日現在」または「【YYYY/MM/DD時点】」の表記があるかご確認ください</td><td>日付の行ごとコピーできていません。ページの上の方にある日付の表示も含めて選び直してください。</td></tr>
+    <tr><td class="col">基準日が当月ではありません。</td><td>先月以前の表を貼っています。日付を確かめて、そのままでよければ <span class="btn">取り込む</span>、貼り直すなら <span class="btn">キャンセル</span> を押します。</td></tr>
+  </table>
+</div>
+
+<h2>3. 参加者を入れる（2つのやり方）</h2>
+<p>トップ画面で <span class="btn">01</span> <span class="key">新規に定例会準備をする</span> を選び、カレンダーで開催日を選びます。すでに準備を始めた日なら <span class="btn">02</span> <span class="key">登録済みの定例会を処理する</span> から一覧で選べます。</p>
+<p><span class="key">定例会準備　開催日: （日付）</span> という画面になります。上にタブが2つあり、<strong>やりやすいほうを選んで構いません。混ぜて使えます。</strong></p>
+
+<h3><span class="step">やり方1.</span> 参加者入力（1人ずつ入れる）</h3>
+<ol>
+  <li><span class="key">名前を入力</span> と書かれた欄に、名前を入れます。</li>
+  <li><span class="btn">追加</span> を押します。</li>
+  <li>下の <span class="key">参加者リスト（N名）</span> に加わります。（Nのところには今の人数が入ります）</li>
+</ol>
+
+<h3><span class="step">やり方2.</span> まとめて貼り付け（一気に入れる）</h3>
+<p>グループチャットなどに並んでいる名前を、そのままコピーして貼り付けられます。<span class="key">名前を1行1名で貼り付けてください。</span> と説明が出ています。</p>
+<p>入力例として <span class="key">山田 太郎</span> <span class="key">鈴木 花子</span> のように、1行に1人ずつ並べます。貼り付けたら <span class="btn">一括追加</span> を押します。貼り付けた文字を消したいときは <span class="btn">クリア</span> です。</p>
+<p><strong>何人でも貼り付けられます（人数の上限はありません）。</strong></p>
+
+<h3>入れた人を直す・消す</h3>
+<table>
+  <tr><th>ボタン</th><th>できること</th></tr>
+  <tr><td class="col">変更</td><td>その行の人を、別の会員に選び直します。検索は <span class="key">2文字以上で検索します</span>。1文字だけでは出てきません。</td></tr>
+  <tr><td class="col">✕</td><td>その行の1人を、リストから消します。</td></tr>
+  <tr><td class="col">クリア（全員削除）</td><td>リストの全員を消します。押す前によく確かめてください。</td></tr>
+</table>
+
+<h3>保存の表示を必ず確かめてください</h3>
+<p>参加者は入れるたびに自動で保存されます。画面に <span class="key">⬤ 保存済み ✓</span> と出ていれば、保存できています。</p>
+<div class="box warn">
+  <p class="box-title">⚠ 未保存　 と出たとき</p>
+  <p>まだ保存できていません。<span class="btn">再試行</span> を押してください。<span class="key">⬤ 保存済み ✓</span> に変わるまで、次に進まないでください。</p>
+</div>
+<p>全員入れ終わって保存済みになったら、<span class="btn">テーブル割りへ進む</span> を押します。</p>
+
+<h2>4. テーブル割りをする</h2>
+<p><span class="key">テーブル割り　開催日: （日付）</span> の画面になります。参加者を直したくなったら <span class="btn">← 参加者入力に戻る</span> で戻れます。</p>
+
+<h3><span class="step">1.</span> テーブルに入らない人を外す</h3>
+<p>実行ボタンの上に <span class="key">テーブルに入らない運営メンバー：</span> という欄が出ることがあります（役員を登録しているときだけ出ます）。<span class="key">役職：名前</span> の形で並ぶので、<strong>受付や司会などで席に着かない方にチェックを入れます。</strong>チェックした方は割り当てから外れ、結果には <span class="key">テーブルなし（運営メンバー）</span> として並びます。</p>
+<p>席に着く方は、チェックを入れないでください。全員にチェックを入れると割り当てるものが無くなり、エラーになります。</p>
+
+<h3><span class="step">2.</span> 自動で割り当てる</h3>
+<table>
+  <tr><th>ボタン</th><th>できること</th></tr>
+  <tr><td class="col">▶ テーブル割り実行</td><td>1回だけ割り当てを作ります。</td></tr>
+  <tr><td class="col">3回試行・ベスト採用</td><td>3回試して、そのうちいちばん良い結果を採用します。時間に余裕があるときはこちらがおすすめです。</td></tr>
+  <tr><td class="col">手動で決める</td><td>自動を使わず、自分で1人ずつ振り分けます。</td></tr>
+</table>
+
+<h3><span class="step">3.</span> 割り当ての決まり</h3>
+<table>
+  <tr><th>決まり</th><th>中身</th></tr>
+  <tr><td class="col">1卓の人数</td><td><strong>4名または5名です。</strong>参加者を4名と5名に分けきれない人数のときは、自動では割り当てず、自分で決める画面に切り替わります。</td></tr>
+  <tr><td class="col">自動にできない人数</td><td><strong>6名・7名・11名</strong>は、4名と5名の組み合わせで分けられないため自動ではできません。手動で決める画面に切り替わります。</td></tr>
+  <tr><td class="col">参加者が3名以下</td><td>全員で1卓になります。<strong>この場合だけは3名以下の卓ができます。</strong></td></tr>
+  <tr><td class="col">役割</td><td>1つのテーブルにTL（テーブルリーダー）は1名まで、SL（サブリーダー）も1名までです。</td></tr>
+</table>
+
+<h3><span class="step">4.</span> 手動で決める</h3>
+<p><span class="btn">手動で決める</span> を押すと <span class="key">手動テーブル割り</span> のパネルが開きます。</p>
+<ol>
+  <li><span class="key">卓数:</span> の横の <span class="btn">－</span> <span class="btn">＋</span> で、テーブルの数を決めます。</li>
+  <li>参加者ごとに <span class="key">テーブルを選ぶ</span> を押して、入るテーブルを選びます。選べるのは <span class="key">テーブル A</span> から順に並んだテーブルと、<span class="key">（割り当てなし）</span> です。</li>
+  <li>役割をつける人は <span class="key">役割を選ぶ</span> を押して、<span class="key">TL（テーブルリーダー）</span> <span class="key">SL（サブリーダー）</span> <span class="key">なし</span> から選びます。</li>
+  <li>全員を振り分けたら <span class="btn">この内容で保存する</span> を押します。やめるときは <span class="btn">閉じる</span> です。</li>
+</ol>
+<p><strong>1人でも残っていると保存できません。</strong><span class="key">（割り当てなし）</span> のままの人がいないか確かめてください。</p>
+
+<h2>5. 結果を共有する</h2>
+<p>割り当てができると <span class="key">テーブル割り結果</span> が表示され、その下に <span class="key">共有用テキスト</span> が出ます。これは、そのままグループチャットなどに貼れる形になっています。</p>
+<ol>
+  <li><span class="btn">共有テキストをコピー</span> を押します。</li>
+  <li><span class="key">コピーしました</span> と出たら、コピーできています。</li>
+  <li>連絡に使っているチャットやメールに、そのまま貼り付けて送ります。</li>
+</ol>
+
+<h2>6. 履歴に保存する</h2>
+<p>割り当てが決まったら、<span class="btn">履歴に保存して定例会当日へ</span> を押します。これで、この開催日の記録が残ります。</p>
+<div class="box warn">
+  <p class="box-title">保存は1つの開催日につき1回だけです</p>
+  <p>同じ開催日でもう一度保存しようとすると <span class="key">この日付のデータは既に存在します（日付）。上書きする場合は既存データを削除してから再実行してください</span> と出ます。作り直したいときは、先に前の記録を消す必要があります。</p>
+</div>
+<p>保存した記録は、トップ画面の <span class="btn">履歴を見る</span> から確かめられます。<span class="key">履歴</span> の一覧で <span class="btn">詳細を見る</span> を押すと中身が出ます。一覧に戻るときは <span class="btn">← 履歴に戻る</span> です。</p>
+<p><strong>直せるのは3ヶ月以内の記録だけです。</strong>それより前を直そうとすると <span class="key">3ヶ月より前の履歴は修正できません（日付）</span> と出ます。</p>
+
+<h2>7. 月例会当日（出欠をつける）</h2>
+<p>当日は <span class="key">定例会当日　開催日: （日付）</span> の画面を開きます。ここで、実際に来た人・来なかった人を反映します。</p>
+
+<h3>欠席の人をつける</h3>
+<p><span class="key">出欠変更</span> の欄に <span class="key">欠席の人は、名前の横の「出席 ✓」を押すと欠席に変わります。</span> と書かれています。</p>
+<ol>
+  <li>来なかった人の名前の横の <span class="btn">出席 ✓</span> を押します。</li>
+  <li>表示が <span class="btn">欠席</span> に変わります。もう一度押すと出席に戻ります。</li>
+</ol>
+<p>全員が欠席になるような操作はできません。<span class="key">参加者が0名になります。少なくとも1名の参加者が必要です</span> と出ます。</p>
+
+<h3>当日に来た人を追加する</h3>
+<ol>
+  <li><span class="key">テーブルを選択</span> を押して、入ってもらうテーブルを選びます。</li>
+  <li><span class="key">名前を入力...</span> の欄に名前を入れます。</li>
+  <li><span class="btn">＋ 参加者を追加</span> を押します。</li>
+</ol>
+
+<h3>最後に保存する</h3>
+<p>出欠と追加が終わったら <span class="btn">確定して保存</span> を押します。これを押さないと、当日の変更が残りません。</p>
+
+<h2>8. 紹介者を記録する</h2>
+<p>誰が誰を連れてきたかを残す画面です。トップ画面の <span class="btn">04</span> <span class="key">紹介者を記録する</span> から開けます。テーブル割りの画面にある <span class="btn">紹介者を記録する</span> からも開けます。</p>
+<p>見出しは <span class="key">紹介者を記録</span>、説明は <span class="key">ゲストや新会員の紹介者を記録します。</span> です。</p>
+<ol>
+  <li>紹介した人を <span class="key">NM会員IDまたは氏名</span> の欄に入れます。IDでも名前でも構いません。</li>
+  <li><span class="btn">💾 紹介者を保存</span> を押します。</li>
+</ol>
+<p>この画面は、先にテーブル割りを履歴に保存してから使います。保存していないと <span class="key">先にテーブル割りを履歴に保存してください</span> と出ます。</p>
+
+<h2>9. 参加者名簿（NM本部提出用）を出す</h2>
+<p>月例会が終わったあと、NM本部に出す参加者名簿を作ります。トップ画面の <span class="btn">03</span> <span class="key">参加者名簿を作る</span> から開きます。</p>
+<p>見出しは <span class="key">参加者名簿出力</span>、説明は <span class="key">月例会終了後、NM本部提出用の参加者名簿xlsxを自動生成します。</span> です。xlsxとは、Excelで開ける表のファイルのことです。</p>
+<ol>
+  <li><span class="key">レポートを出力する開催日を選んでください</span> と書かれた下の <span class="key">出力する開催日を選択</span> を押します。まだ選んでいないときは <span class="key">タップして開催日を選ぶ</span> と表示されています。</li>
+  <li>開催日を選んだら <span class="btn">読み込む</span> を押します。</li>
+  <li><span class="key">開催日</span> と <span class="key">支部名</span> の確認表が出ます。合っているか見てください。</li>
+  <li><span class="btn">レポート生成</span> を押します。</li>
+  <li><span class="key">レポートを生成中...（数十秒かかる場合があります）</span> と出ます。<strong>途中で画面を閉じずに待ってください。</strong></li>
+  <li>できあがると <span class="key">ダウンロード</span> と <span class="key">フォルダを開く</span> が出ます。<span class="key">ダウンロード</span> を押すとファイルが手元に保存されます。</li>
+</ol>
+<p><strong>名簿を出せるのは、直近3ヶ月以内の開催日だけです。</strong>それより前しかないときは <span class="key">直近3ヶ月以内の履歴がありません。先に「履歴に保存」を実行してください</span> と出ます。</p>
+
+<h2>10. 入力するとどうなりますか</h2>
+<table>
+  <tr><th>操作</th><th>そのあとどうなるか</th></tr>
+  <tr><td class="col">参加者を入れる</td><td>入れるたびに自動で保存されます。<span class="key">⬤ 保存済み ✓</span> が出ていれば、途中でブラウザを閉じても消えません。次に開いたとき、トップ画面に <span class="key">（日付）の定例会準備の続きがあります</span> と出て、そこから続けられます。</td></tr>
+  <tr><td class="col">テーブル割りを実行する</td><td>その場で結果が画面に出ます。この時点ではまだ記録として残っていません。<span class="btn">履歴に保存して定例会当日へ</span> を押して、はじめて残ります。</td></tr>
+  <tr><td class="col">履歴に保存する</td><td>この開催日の記録として残ります。トップ画面の <span class="btn">履歴を見る</span> から <span class="btn">詳細を見る</span> でいつでも見返せます。この記録が、あとの紹介者の記録と参加者名簿のもとになります。</td></tr>
+  <tr><td class="col">当日の出欠をつける</td><td><span class="btn">確定して保存</span> を押した時点で、履歴の内容が当日の実際の顔ぶれに書き換わります。参加者名簿にもこの内容が出ます。</td></tr>
+  <tr><td class="col">紹介者を保存する</td><td>誰が誰を連れてきたかが記録に残ります。</td></tr>
+  <tr><td class="col">名簿を出す</td><td>Excelで開けるファイルが自動で作られます。できあがったものは <span class="key">ダウンロード</span> から手元に保存できます。</td></tr>
+  <tr><td class="col">回を重ねる</td><td>保存した履歴がたまっていくと、トップ画面の <span class="btn">06</span> <span class="key">分析を見る</span> で、過去の同席や業種の偏りが見られるようになります。</td></tr>
+</table>
+
+<h2>11. こんな画面が出たときは</h2>
+<p>表示の中の <span class="key">（名前）</span> <span class="key">（日付）</span> <span class="key">N</span> のところには、実際の名前・日付・人数が入ります。</p>
+
+<h3>参加者を入れるとき</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">支部名を入力してください</td><td>支部名の欄が空のままです。支部名を入れてから <span class="btn">ログイン</span> を押してください。</td></tr>
+  <tr><td class="col">支部名またはパスワードが違います</td><td>どちらかが登録と合っていません。「支部」の2文字を付けていないか、余分な空白が入っていないか、大文字と小文字が合っているか確かめてください。それでも入れないときはご連絡ください。</td></tr>
+  <tr><td class="col">もう一度ログインしてください</td><td>時間が経ってログインの状態が切れました。支部名とパスワードを入れ直してください。</td></tr>
+  <tr><td class="col">「（名前）」は既に追加されています</td><td>その人はもうリストに入っています。そのまま次の人を入れてください。</td></tr>
+  <tr><td class="col">テキストを入力してください</td><td>貼り付ける欄が空のままです。名前を貼り付けてから <span class="btn">一括追加</span> を押してください。</td></tr>
+  <tr><td class="col">有効な名前が見つかりません</td><td>貼り付けた文字から名前を読み取れませんでした。1行に1人ずつ、名前だけになるように直してから貼り直してください。</td></tr>
+  <tr><td class="col">全て既に登録済みです</td><td>貼り付けた人が全員すでにリストに入っています。そのまま次に進んで構いません。</td></tr>
+  <tr><td class="col">所属支部が未設定の参加者が N 名います（名前）。<br>このままテーブル割りを実行しますか？</td><td>どの支部の方かがわかっていない人がいます。他支部からのゲストならそのまま進めて構いません。自支部の会員のはずなら、いったん止めて <span class="btn">変更</span> から選び直してください。</td></tr>
+</table>
+
+<h3>テーブル割りのとき</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">参加者が登録されていません</td><td>参加者が1人も入っていません。<span class="btn">← 参加者入力に戻る</span> で戻って、参加者を入れてください。</td></tr>
+  <tr><td class="col">保存が完了していない参加者がいます。保存完了を待ってから再試行してください。</td><td>自動保存がまだ終わっていません。<span class="key">⬤ 保存済み ✓</span> に変わってから、もう一度押してください。</td></tr>
+  <tr><td class="col">参加者が N 名のため、4〜5名卓の自動割り当てができません。<br>手動でテーブル割りを行いますか？</td><td>不具合ではありません。6名・7名・11名のときに出ます。<span class="btn">手動で決める</span> を押して、自分で振り分けてください。やめるときは <span class="btn">閉じる</span> です。</td></tr>
+  <tr><td class="col">参加者リストに重複した名前があります：（名前）</td><td>同じ名前が2つ入っています。<span class="btn">← 参加者入力に戻る</span> で戻り、片方を <span class="btn">✕</span> で消してください。</td></tr>
+  <tr><td class="col">除外後の参加者が0名です。「テーブルに入らない運営メンバー」の選択を見直してください</td><td>参加者全員が「テーブルに入らない」扱いになっています。テーブル割りの画面で <span class="key">テーブルに入らない運営メンバー：</span> の欄を見て、席に着く方のチェックを外してください。</td></tr>
+  <tr><td class="col">TLの「（名前）」さんを配置できるテーブルがありません。固定テーブルの構成を見直すか、TL不在のテーブルの参加者にTLを手動指定してください</td><td>1つのテーブルにTL（テーブルリーダー）は1名までのため、置き場所がなくなっています。<strong>「固定テーブル」は役員ごとの設定で、トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">役員</span> タブで変えられます</strong>（手順は「はじめてお使いになるとき」の役員の章）。固定を <span class="key">固定しない</span> に戻すか、TLがいないテーブルの人に <span class="key">手動で決める</span> でTLを指定してください。</td></tr>
+  <tr><td class="col">テーブル（記号）に固定された人数（N名）がテーブル定員（N名）を超えています</td><td>そのテーブルに人を固定しすぎています。固定する人数を、定員の中に収まるまで減らしてください。</td></tr>
+  <tr><td class="col">N名が未割り当てです。全員を割り当ててから保存してください</td><td>手動で決める画面で、まだ <span class="key">（割り当てなし）</span> の人が残っています。全員のテーブルを選んでから <span class="btn">この内容で保存する</span> を押してください。</td></tr>
+</table>
+
+<h3>保存するとき・当日</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">この日付のデータは既に存在します（日付）。上書きする場合は既存データを削除してから再実行してください</td><td>その開催日はすでに保存済みです。同じ日で作り直したいときは、先に前の記録を消してから、もう一度保存してください。</td></tr>
+  <tr><td class="col">参加者が0名になります。少なくとも1名の参加者が必要です</td><td>全員を欠席にはできません。少なくとも1名は出席のままにしてください。</td></tr>
+  <tr><td class="col">「（名前）」さんには紹介者記録があります。<br>欠席にすると紹介記録も削除されます。欠席にしますか？</td><td>その人を欠席にすると、あわせて紹介の記録も消えます。本当に欠席なら進めてください。押し間違いならやめてください。</td></tr>
+  <tr><td class="col">3ヶ月より前の履歴は修正できません（日付）</td><td>直せるのは3ヶ月以内の記録だけです。この開催日はもう直せません。</td></tr>
+</table>
+
+<h3>紹介者・名簿のとき</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">先にテーブル割りを履歴に保存してください</td><td>まだ履歴に保存していません。テーブル割りの画面で <span class="btn">履歴に保存して定例会当日へ</span> を押してから、もう一度開いてください。</td></tr>
+  <tr><td class="col">該当する会員が見つかりません。NM会員IDを直接入力するか、欄を空欄にしてください</td><td>入れた名前で会員が見つかりませんでした。NM会員IDを入れ直すか、わからないときは空欄のままにしてください。</td></tr>
+  <tr><td class="col">直近3ヶ月以内の履歴がありません。先に「履歴に保存」を実行してください</td><td>名簿を出せるのは直近3ヶ月以内の開催日だけです。まだ履歴に保存していない開催日なら、先に保存してください。</td></tr>
+  <tr><td class="col">⚠ 会員マスタ未登録のためゲスト判定になった参加者がいます（確認してください）：（名前）</td><td>会員として登録がない人が、ゲスト扱いで名簿に載っています。本当にゲストならそのままで構いません。会員のはずなら、名前の表記が合っているか確かめてください。</td></tr>
+  <tr><td class="col">⚠ 姓名の確認が必要な参加者がいます（姓名確認画面から確定してください）：（名前）</td><td>姓と名の区切りがはっきりしない人がいます。トップ画面の <span class="btn">07</span> <span class="key">姓名確認</span> を開いて、正しい区切りを確定してください。</td></tr>
+</table>
+
+<h3>どの画面でも出ることがあるもの</h3>
+<table>
+  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
+  <tr><td class="col">他の操作が実行中です。しばらく待ってから再試行してください</td><td>前の処理がまだ動いています。ボタンを連打せず、少し待ってからもう一度押してください。</td></tr>
+  <tr><td class="col">通信エラーが続いています。ページをリロードして再度お試しください。</td><td>通信がうまくいっていません。ブラウザの再読み込み（更新）をして、開き直してください。入れた参加者は自動保存されているので、消えていません。</td></tr>
+</table>
+
+<h2>12. やらないでいただきたいこと</h2>
+<ul>
+  <li><span class="ng">同じ開催日で2回「履歴に保存」をしない</span>　<span class="key">この日付のデータは既に存在します</span> と出ます。作り直すには、先に前の記録を消す手間がかかります。</li>
+  <li><span class="ng">参加者リストが <span class="key">⬤ 保存済み ✓</span> になる前に、テーブル割りへ進まない</span>　保存が終わっていない人が抜け落ちることがあります。表示が変わるまで待ってください。</li>
+  <li><span class="ng">準備中のデータがあるまま、別の日付で新しく準備を始めない</span>　前の日付で入れていたデータが破棄されます。続きがあるときは、トップ画面の <span class="key">（日付）の定例会準備の続きがあります</span> から <span class="btn">再開する →</span> を押して、先に終わらせてください。</li>
+  <li><span class="ng">月例会から3ヶ月以上たってから直そうとしない</span>　3ヶ月より前の記録は直せません。直しは月例会のあと、早めに済ませてください。</li>
+</ul>
+
+<h2>13. よくあるご質問</h2>
+
+<h3>参加者が6名なのに、テーブル割りができません。壊れていますか？</h3>
+<p>壊れていません。テーブルは4名または5名で組む決まりなので、6名・7名・11名は自動で分けられません。<span class="btn">手動で決める</span> を押して、自分で振り分けてください。</p>
+
+<h3>参加者が3名以下のときはどうなりますか？</h3>
+<p>全員で1卓になります。ふだんは4名または5名で組む決まりですが、<strong>この場合だけは3名以下の卓ができます。</strong></p>
+
+<h3><span class="key">▶ テーブル割り実行</span> と <span class="key">3回試行・ベスト採用</span> は何が違いますか？</h3>
+<p><span class="key">▶ テーブル割り実行</span> は1回だけ作ります。<span class="key">3回試行・ベスト採用</span> は3回試して、そのうちいちばん良い結果を採用します。</p>
+
+<h3><span class="key">変更</span> を押して名前を探しても、何も出てきません</h3>
+<p>検索は <span class="key">2文字以上で検索します</span>。1文字だけでは出てきません。2文字以上入れてみてください。</p>
+
+<h3>「まとめて貼り付け」は何人まで貼れますか？</h3>
+<p>人数の上限はありません。何人でも貼り付けられます。</p>
+
+<h3>途中でやめてしまいました。最初からやり直しですか？</h3>
+<p>やり直しではありません。参加者は自動で保存されています。トップ画面に <span class="key">（日付）の定例会準備の続きがあります</span> と出るので、<span class="btn">タップして再開する</span> または <span class="btn">再開する →</span> を押してください。</p>
+
+<h3>先月の分を直したいのですが</h3>
+<p>3ヶ月以内であれば直せます。トップ画面の <span class="btn">履歴を見る</span> から <span class="btn">詳細を見る</span> で開いてください。3ヶ月より前は <span class="key">3ヶ月より前の履歴は修正できません（日付）</span> と出て、直せません。</p>
+
+<h3>参加者名簿はいつまで出せますか？</h3>
+<p>直近3ヶ月以内の開催日まで出せます。月例会が終わったら、早めに出しておくと安心です。</p>
+
+<h3>次に何をすればよいかわからなくなりました</h3>
+<p>画面の上にある <span class="btn">?</span> を押してください。<span class="key">このアプリの流れ</span> の説明が開きます。</p>
+
+<h3>会員リストの取り込みや役員の設定はどこでやりますか？</h3>
+<p>どちらもトップ画面から行います。<strong>会員リストの取り込みは毎月</strong>、役員の設定は最初の1回だけです（役員が変わったときは直します）。手順は「はじめてお使いになるとき」の資料にあります。</p>
+
+<p class="foot">
+ご不明な点は、ネコノテ 山下美樹まで Messenger または LINE でご連絡ください。<br>
+月例会ツール 使い方マニュアル（2026年8月版）
+</p>
+
+</body>
+</html>
