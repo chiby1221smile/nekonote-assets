@@ -2,454 +2,1330 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>月例会ツールの使い方</title>
 <style>
-  @page { size: A4; margin: 16mm 14mm; }
-  * { box-sizing: border-box; }
-  body {
-    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
-    color: #333; line-height: 1.8; margin: 0;
-    padding: 32px 24px 64px; max-width: 820px; margin-inline: auto;
-    background: #fff; font-size: 15px;
-  }
-  h1 {
-    font-size: 24px; color: #fff; background: #4a6572;
-    padding: 18px 20px; border-radius: 8px; margin: 0 0 8px;
-  }
-  .lead { color: #666; font-size: 14px; margin: 0 0 32px; }
-  h2 {
-    font-size: 19px; border-left: 6px solid #4a6572;
-    padding-left: 12px; margin: 40px 0 16px;
-  }
-  h3 { font-size: 16px; margin: 24px 0 8px; }
-  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 14px; table-layout: fixed; }
-  th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; vertical-align: top; word-break: break-word; }
-  th { background: #eceff1; font-weight: bold; }
-  td.col { font-weight: bold; background: #fafafa; }
-  /* 列幅を表ごとにそろえる（3列の表は1列目を狭く・2列の表は42%） */
-  table:has(tr > *:nth-child(3)) th:first-child,
-  table:has(tr > *:nth-child(3)) td:first-child { width: 14%; }
-  table:has(tr > *:nth-child(3)) th:nth-child(2),
-  table:has(tr > *:nth-child(3)) td:nth-child(2) { width: 36%; }
-  table:not(:has(tr > *:nth-child(3))) th:first-child,
-  table:not(:has(tr > *:nth-child(3))) td:first-child { width: 42%; }
-  .box {
-    background: #f5f7f8; border: 1px solid #cfd8dc;
-    border-radius: 8px; padding: 16px 20px; margin: 20px 0;
-  }
-  .box.warn { background: #fff6ed; border-color: #f0c9a0; }
-  .box p:first-child { margin-top: 0; }
-  .box p:last-child { margin-bottom: 0; }
-  .box-title { font-weight: bold; margin-bottom: 8px; }
-  ol, ul { padding-left: 24px; }
-  li { margin-bottom: 8px; }
-  .step { font-weight: bold; color: #37474f; }
-  .ng { color: #c0392b; font-weight: bold; }
-  .key {
-    display: inline-block; border: 1px solid #4a6572; color: #37474f;
-    border-radius: 4px; padding: 0 7px; font-weight: bold; background: #fff; overflow-wrap: anywhere; line-height: 1.45;
-  }
-  .btn {
-    display: inline-block; background: #4a6572; color: #fff;
-    border-radius: 4px; padding: 0 9px; font-weight: bold; font-size: 14px; overflow-wrap: anywhere; line-height: 1.45;
-  }
-  .box table { margin: 8px 0 0; font-size: 13px; }
-  .foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 13px; color: #777; }
-  @media print {
-    body { padding: 0; font-size: 13px; }
-    h2 { page-break-after: avoid; }
-    table, .box { page-break-inside: avoid; }
-  }
+/* ============================================================
+   マニュアル本体
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;
+  background:#fff;color:#1f2328;line-height:1.8;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+
+.doc-title{font-size:38px;font-weight:700;text-align:center;letter-spacing:.02em}
+.doc-sub{text-align:center;color:#5b6270;font-size:15px;margin:8px 0 40px}
+
+/* 目次 */
+.toc{border:2px solid #1f2328;padding:24px 28px;margin-bottom:56px}
+.toc h2{font-size:24px;font-weight:700;margin-bottom:2px}
+.toc .toc-note{font-size:14px;color:#5b6270;margin-bottom:14px}
+.toc ol{list-style:none;counter-reset:toc}
+.toc li{counter-increment:toc;border-top:1px solid #e3e6ea}
+.toc li:first-child{border-top:none}
+.toc a{display:flex;gap:14px;align-items:baseline;padding:11px 4px;color:#1f2328;text-decoration:none;font-size:17px;font-weight:600}
+.toc a::before{content:counter(toc);color:#e53935;font-weight:700;width:20px;flex:none}
+.toc a:hover{background:#fdf3f2}
+.toc .toc-s{font-size:13px;color:#5b6270;font-weight:400;margin-left:auto;text-align:right}
+
+/* 各ページ */
+.page{padding-top:24px;margin-bottom:64px;border-top:4px solid #1f2328}
+.page-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.page-n{font-size:15px;font-weight:700;color:#e53935;flex:none}
+h1{font-size:31px;font-weight:700;letter-spacing:.02em}
+.page-lead{color:#5b6270;font-size:15px;margin-bottom:26px}
+.back{display:inline-block;margin-top:18px;font-size:13px;color:#5b6270;text-decoration:none;border-bottom:1px solid #c9ced6}
+.back:hover{color:#1f2328}
+
+.step{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;padding:26px 0;border-top:1px solid #e3e6ea}
+.step:first-of-type{border-top:none}
+.step-text{min-width:0}
+.step-shot{min-width:0}
+.step-n{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;
+  background:#e53935;color:#fff;font-size:17px;font-weight:700;margin-right:10px;flex:none}
+.step-h{font-size:21px;font-weight:700;margin-bottom:12px;display:flex;align-items:center}
+.step-h span.t{flex:1}
+.step p{font-size:16px;margin-bottom:10px}
+.step p:last-child{margin-bottom:0}
+.key{color:#e53935;font-weight:700}
+
+.note{background:#fff8e1;border-left:4px solid #f9ab00;padding:12px 16px;font-size:15px;margin-top:14px}
+.note b{color:#b26a00}
+.tbl{width:100%;border-collapse:collapse;font-size:15px;margin-top:12px}
+.tbl th,.tbl td{border:1px solid #d7dbe0;padding:8px 10px;text-align:left;vertical-align:top}
+.tbl th{background:#f4f6f8;font-weight:600;white-space:nowrap}
+
+@media (max-width:860px){
+  .step{grid-template-columns:1fr;gap:16px}
+  .doc-title{font-size:27px}
+  h1{font-size:24px}
+}
+
+/* ============================================================
+   赤枠マーカー
+   ============================================================ */
+.mark{position:relative;display:block}
+.mark::after{content:'';position:absolute;pointer-events:none;z-index:4;
+  inset:5px 12px;border:3px solid #e53935;border-radius:5px}
+.mark-out::after{inset:-6px}
+.mark-inline{display:inline-block}
+
+/* ============================================================
+   月例会ツールの画面の再現（アプリの index.html から写したCSS）
+   ============================================================ */
+.app-shot{
+  --bg:#1e2028;--surface:#252830;--hover-bg:#303440;--border:#393d4a;--header-bg:#13151c;
+  --text:#e4e6f0;--text-secondary:#9096a8;--on-fill:#1e2028;
+  --primary:#d4a017;--primary-dark:#b8860b;--primary-light:#2b2410;--primary-text:#f0c060;
+  --danger:#ff6666;--danger-light:#2d1010;--success:#34c472;--success-light:#0c2a1c;
+  --warn:#f9ab00;--warn-light:#2d2208;--help:#ec6d71;--help-light:#33191a;
+  --shadow:0 2px 4px rgba(0,0,0,.50);--radius:8px;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;
+  border:1px solid #c9ced6;border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.app-shot .app-header{background:var(--header-bg);padding:12px 20px;display:flex;align-items:center;gap:12px}
+.app-shot .app-header .ttl{font-size:15px;font-weight:600;flex:1;line-height:1.25}
+.app-shot .app-header .ttl small{display:block;font-size:9px;letter-spacing:.18em;color:var(--text-secondary);font-weight:400}
+.app-shot .app-header .branch-label{font-size:12px;color:var(--primary-text);font-weight:700}
+.app-shot .app-header .logout-btn{background:none;border:none;border-bottom:1px solid var(--text-secondary);color:var(--text);padding:0 0 1px;font-size:12px}
+.app-shot .container{padding:14px}
+.app-shot .scr-title{font-size:15px;font-weight:700;margin-bottom:10px}
+
+.app-shot .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border:none;border-radius:var(--radius);font-size:15px;font-weight:500;min-height:42px}
+.app-shot .btn-primary{background:var(--primary);color:var(--on-fill)}
+.app-shot .btn-outline{background:var(--surface);color:var(--primary);border:1px solid var(--primary)}
+.app-shot .btn-success{background:var(--success);color:var(--on-fill)}
+.app-shot .btn-block{width:100%}
+.app-shot .btn-sm{padding:6px 14px;font-size:13px;min-height:34px}
+
+.app-shot input[type="text"],.app-shot textarea{font-size:15px;padding:10px 12px;border:1px solid var(--border);
+  border-radius:var(--radius);width:100%;background:var(--surface);color:var(--text);font-family:inherit}
+.app-shot ::placeholder{color:var(--text-secondary)}
+
+.app-shot .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.app-shot .card-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.app-shot .muted{font-size:13px;color:var(--text-secondary);margin-bottom:8px}
+
+.app-shot .tab-nav{display:flex;border-bottom:2px solid var(--border);margin-bottom:14px}
+.app-shot .tab-btn{padding:10px 16px;font-size:14px;font-weight:500;color:var(--text-secondary);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.app-shot .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+
+.app-shot .participant-list .p-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.app-shot .p-item .p-name{flex:1;font-weight:500}
+.app-shot .p-item .p-branch{color:var(--text-secondary);font-size:13px}
+.app-shot .p-item .p-remove{color:var(--danger);font-size:16px;background:none;border:none;padding:4px 8px}
+.app-shot .p-item .p-assign{color:var(--primary);padding:4px 8px;font-size:12px;background:none;border:1px solid var(--primary);border-radius:4px;line-height:1.2}
+
+.app-shot .alert{padding:10px 14px;border-radius:var(--radius);margin-bottom:12px;font-size:13px}
+.app-shot .alert-warn{background:var(--warn-light);color:var(--warn);border:1px solid var(--warn)}
+.app-shot .alert-success{background:var(--success-light);color:var(--success);border:1px solid var(--success)}
+
+.app-shot .help-btn{display:inline-flex;align-items:center;justify-content:center;width:1.35em;height:1.35em;
+  border-radius:50%;border:1px solid var(--help);color:var(--help);font-size:.7em;font-weight:700;background:none;line-height:1;flex:none;padding:0}
+.app-shot .action-bar{background:var(--bg);border-top:1px solid var(--border);padding:12px 0;margin-top:14px;display:flex;align-items:center;gap:12px}
+.app-shot .saved{font-size:13px;color:var(--success);margin-bottom:12px}
+
+/* トップ画面 */
+.app-shot .hub-grp{font-size:10px;color:var(--text-secondary);letter-spacing:.2em;padding:18px 20px 4px;display:flex;align-items:center;gap:8px}
+.app-shot .hub-menu{border-top:1px solid var(--border)}
+.app-shot .hub-item{display:flex;align-items:baseline;gap:16px;padding:14px 20px;border-bottom:1px solid var(--border)}
+.app-shot .hub-item-n{font-size:10px;color:var(--text-secondary);letter-spacing:.1em;width:20px;flex:none}
+.app-shot .hub-item-body{flex:1}
+.app-shot .hub-item-title{font-size:15px;font-weight:700}
+.app-shot .hub-item-sub{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.app-shot .hub-item-arr{font-size:13px;color:var(--text-secondary);flex:none}
+.app-shot .hub-item--primary .hub-item-title{color:var(--primary-text)}
+.app-shot .hub-banner{border-left:2px solid var(--warn);padding:10px 18px;margin:12px 20px;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.app-shot .hub-banner-body{flex:1}
+.app-shot .hub-banner-t{font-size:13px;font-weight:700}
+.app-shot .hub-banner-s{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.app-shot .hub-banner-a{flex:none;font-size:12px;font-weight:700;color:var(--primary-text);border-bottom:1px solid var(--primary-text);padding-bottom:1px}
+
+/* カレンダー */
+.app-shot .cal-head{display:flex;align-items:center;justify-content:center;gap:40px;margin:8px 0 12px}
+.app-shot .cal-arrow{border:1px solid var(--primary);color:var(--primary);background:none;padding:4px 12px;border-radius:4px;font-size:12px}
+.app-shot .cal-month{font-size:15px;font-weight:700}
+.app-shot .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:13px}
+.app-shot .cal-grid .dow{color:var(--text-secondary);font-size:11px;padding:4px 0}
+.app-shot .cal-grid .dow.sun{color:#ff8080}
+.app-shot .cal-grid .dow.sat{color:#8ab4f8}
+.app-shot .cal-grid .d{padding:7px 0}
+.app-shot .cal-grid .d.off{color:#4a4f5e}
+.app-shot .cal-grid .d.today{border:1px solid var(--primary);border-radius:50%}
+
+/* 役割の印・テーブル */
+.app-shot .rb{display:inline-flex;align-items:center;justify-content:center;min-width:26px;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700;color:#fff;flex:none}
+.app-shot .rb-tl{background:#3b6fd4}
+.app-shot .rb-sl{background:#2c8f5a}
+.app-shot .t-card{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+.app-shot .t-card h4{background:var(--primary-light);padding:8px 12px;font-size:13px;font-weight:700}
+.app-shot .t-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-top:1px solid var(--border);font-size:14px}
+.app-shot .t-row .nm{flex:1}
+.app-shot .t-row .st{font-size:12px;color:var(--text-secondary)}
+.app-shot .att{background:var(--success);color:var(--on-fill);border:none;border-radius:6px;padding:5px 12px;font-size:13px;font-weight:600}
+.app-shot .att.off{background:#4a4f5e;color:#c3c7d2}
+.app-shot .share{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12px;line-height:1.7;color:var(--text);white-space:pre-wrap;font-family:'Courier New',monospace}
+
+/* チェック・スイッチ・貼り付け欄 */
+.app-shot .chk{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:14px}
+.app-shot .chk i{width:16px;height:16px;border:1px solid var(--text-secondary);border-radius:3px;display:inline-block;flex:none}
+.app-shot .sw{width:34px;height:19px;border-radius:10px;background:#4a4f5e;position:relative;display:inline-block;flex:none}
+.app-shot .sw.on{background:var(--primary)}
+.app-shot .sw::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff}
+.app-shot .sw.on::after{left:auto;right:2px}
+.app-shot .drop{border:2px dashed var(--border);border-radius:var(--radius);background:var(--primary-light);
+  padding:26px 12px;text-align:center;color:var(--text-secondary);font-size:13px}
+.app-shot .picker{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+.app-shot .picker .ph{padding:10px 12px;font-size:14px;font-weight:700;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.app-shot .picker .pr{padding:9px 12px;font-size:14px;border-top:1px solid var(--border)}
+.app-shot .sel{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:10px 12px;font-size:14px;color:var(--text-secondary)}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<h1>月例会ツールの使い方</h1>
-<p class="lead">各支部の運営者向け／月例会1回分の流れ（参加者を入れる → テーブル割り → 調整 → 保存 → 当日の出欠 → 紹介者 → 名簿の出力）</p>
+<div class="doc-title">月例会ツールの使い方</div>
+<p class="doc-sub">画面と見比べながらお使いください。押す場所は赤い枠で囲んでいます。</p>
 
-<h2>1. この画面でできること</h2>
-<p>月例会1回分の準備から後片づけまでを、この1つのツールで行います。参加者を入れると自動でテーブル割りを作り、当日の出欠をつけ、最後にNM本部提出用の参加者名簿を出すところまでつながっています。</p>
-<p>役員の設定・会員の業種の入力など、<strong>最初の1回だけ行う準備</strong>は、先に「はじめてお使いになるとき」の資料をご覧ください。</p>
-<p><strong>月例会の準備を始める前に、その月の会員リストを取り込んでおいてください。</strong>やり方は下の「2. 開き方」にあります。</p>
-
-<div class="box">
-  <p class="box-title">いちばん大事なルール</p>
-  <p>テーブルは<strong>1テーブル4名または5名</strong>で組む決まりです。そのため、<strong>参加者が6名・7名・11名のときは自動で割り当てができず、自分でテーブルを決める画面に切り替わります。</strong></p>
-  <p>これは不具合ではありません。4名と5名の組み合わせでは、その人数をぴったり分けられないためです。切り替わったら <span class="btn">手動で決める</span> を押して、順番に振り分けてください（やり方は「4. テーブル割りをする」にあります）。</p>
+<!-- ============ 目次 ============ -->
+<div class="toc" id="top">
+  <h2>目次</h2>
+  <p class="toc-note">見たいところへリンクします</p>
+  <ol>
+    <li><a href="#p1">参加者を入れる方法<span class="toc-s">月例会の前に</span></a></li>
+    <li><a href="#p2">業種とTLを確認する方法<span class="toc-s">月例会の前に</span></a></li>
+    <li><a href="#p3">テーブル割りをする方法<span class="toc-s">月例会の前に</span></a></li>
+    <li><a href="#p4">手動でテーブルを決める方法<span class="toc-s">月例会の前に</span></a></li>
+    <li><a href="#p5">テーブル割りを調整する方法<span class="toc-s">月例会の前に</span></a></li>
+    <li><a href="#p6">紹介者を記録する方法<span class="toc-s">月例会の前後</span></a></li>
+    <li><a href="#p7">出欠をつける方法<span class="toc-s">月例会の当日</span></a></li>
+    <li><a href="#p8">参加者名簿を出す方法<span class="toc-s">月例会のあと</span></a></li>
+    <li><a href="#p9">過去のテーブル割りを見る方法<span class="toc-s">いつでも</span></a></li>
+    <li><a href="#p10">分析を見る方法<span class="toc-s">いつでも</span></a></li>
+    <li><a href="#p11">会員リストを取り込む方法<span class="toc-s">毎月1回</span></a></li>
+    <li><a href="#p12">姓名を確認する方法<span class="toc-s">毎月1回</span></a></li>
+    <li><a href="#p13">役員を登録する方法<span class="toc-s">最初に1回</span></a></li>
+  </ol>
 </div>
 
-<h2>2. 開き方</h2>
-<ol>
-  <li>お渡ししたURLを、パソコンやスマートフォンのブラウザで開きます。</li>
-  <li><span class="key">月例会ツール</span> という画面が出ます。</li>
-  <li><span class="key">支部名</span> の欄に支部名を入力します。<strong>「支部」の2文字は付けずに</strong>入力してください。</li>
-  <li><span class="key">パスワード</span> の欄に、お渡ししたパスワードを入力します。</li>
-  <li><span class="btn">ログイン</span> を押します。</li>
-</ol>
-<p><strong>入力するのは、その端末で最初の1回だけです。</strong>次に開いたときは自動でログインした状態に戻ります。詳しくは別冊の「はじめてお使いになるとき」の2章をご覧ください。</p>
+<!-- ============================================================
+     1. 参加者を入れる方法
+     ============================================================ -->
+<section class="page" id="p1">
+  <div class="page-head"><span class="page-n">1</span><h1>参加者を入れる方法</h1></div>
+  <p class="page-lead">月例会の前に、その日に来る方をツールへ入れます。ここまでできれば、あとはテーブル割りを押すだけです。</p>
 
-<h3>ログインしたあとの画面</h3>
-<p>メニューが7つ並んだ画面（トップ画面）が出ます。ここが出発点です。</p>
-<table>
-  <tr><th>番号</th><th>タイトル</th><th>説明文</th></tr>
-  <tr><td class="col">01</td><td class="col">新規に定例会準備をする</td><td>開催日をカレンダーで選ぶ</td></tr>
-  <tr><td class="col">02</td><td class="col">登録済みの定例会を処理する</td><td>開催日を一覧から選ぶ</td></tr>
-  <tr><td class="col">03</td><td class="col">参加者名簿を作る</td><td>開催日を選んでExcelで出力する</td></tr>
-  <tr><td class="col">04</td><td class="col">紹介者を記録する</td><td>誰が誰を連れてきたかを残す</td></tr>
-  <tr><td class="col">05</td><td class="col">設定</td><td>会員詳細・役員設定</td></tr>
-  <tr><td class="col">06</td><td class="col">分析を見る</td><td>過去の同席・業種の偏りを見る</td></tr>
-  <tr><td class="col">07</td><td class="col">姓名確認</td><td>会員マスタの姓・名のドラフトを確認・修正します</td></tr>
-</table>
-<p>画面の下のほうには <span class="btn">会員リストを取り込む</span> と <span class="btn">履歴を見る</span> のボタンがあります。</p>
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">トップ画面から始める</span></div>
+      <p>ツールを開くと、この画面が出ます。<span class="key">「新規に定例会準備をする」</span>を押してください。</p>
+      <p>前に途中まで作った回があるときは、上に帯が出ます。その続きをやるときは<span class="key">「再開する」</span>を押します。</p>
+      <p>すでに開催日を登録してある回を開くときは、<span class="key">「02 登録済みの定例会を処理する」</span>です。一覧から日付を選ぶと、その回の参加者入力に入れます。</p>
+      <div class="note"><b>迷ったら</b>　見出しの横にある「?」を押すと、その場で説明が出ます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="app-header"><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div><button class="logout-btn">使い方マニュアル</button><button class="logout-btn">ログアウト</button><button class="help-btn" style="font-size:13px;width:20px;height:20px">?</button></div>
+        <div class="hub-banner"><div class="hub-banner-body"><div class="hub-banner-t">△ 2026年8月28日（金）の定例会準備の続きがあります</div><div class="hub-banner-s">タップして再開する</div></div><div class="hub-banner-a">再開する →</div></div>
+        <div class="hub-grp">定例会 <button class="help-btn">?</button></div>
+        <div class="hub-menu">
+          <span class="mark">
+            <div class="hub-item hub-item--primary"><div class="hub-item-n">01</div><div class="hub-item-body"><div class="hub-item-title">新規に定例会準備をする</div><div class="hub-item-sub">開催日をカレンダーで選ぶ</div></div><div class="hub-item-arr">→</div></div>
+          </span>
+          <div class="hub-item"><div class="hub-item-n">02</div><div class="hub-item-body"><div class="hub-item-title">登録済みの定例会を処理する</div><div class="hub-item-sub">開催日を一覧から選ぶ</div></div><div class="hub-item-arr">→</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h3>どの画面にも出ているもの</h3>
-<table>
-  <tr><th>表示</th><th>押すとどうなるか</th></tr>
-  <tr><td class="col">← トップに戻る</td><td>トップ画面（メニューが7つ並んだ画面）に戻ります。</td></tr>
-  <tr><td class="col">ログアウト</td><td>ログインする前の画面に戻ります。</td></tr>
-  <tr><td class="col">?</td><td><span class="key">このアプリの流れ</span> の説明が開きます。順番がわからなくなったらここを見てください。</td></tr>
-  <tr><td class="col">↑</td><td>画面の右下にあります。長い画面のいちばん上まで戻ります。</td></tr>
-</table>
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">開催日を選ぶ</span></div>
+      <p>カレンダーが出ます。<span class="key">その月の開催日</span>を押してください。過ぎた日は選べません。</p>
+      <p>別の月を出すときは、左右の矢印を押します。</p>
+      <div class="note"><b>気をつけること</b>　すでに別の日で準備の途中だと、「前のデータは破棄されます」と確認が出ます。<b>前の準備をやめてよいときだけ</b>「OK」を押してください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="app-header"><button class="logout-btn">← トップに戻る</button><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div></div>
+        <div class="container"><div class="card">
+          <div class="card-title">新規に定例会準備をする</div>
+          <p class="muted">開催日をカレンダーで選んでください</p>
+          <div class="cal-head"><button class="cal-arrow">◀</button><div class="cal-month">2026年 8月</div><button class="cal-arrow">▶</button></div>
+          <div class="cal-grid">
+            <div class="dow sun">日</div><div class="dow">月</div><div class="dow">火</div><div class="dow">水</div><div class="dow">木</div><div class="dow">金</div><div class="dow sat">土</div>
+            <div class="d off">16</div><div class="d off">17</div><div class="d off">18</div><div class="d off">19</div><div class="d off">20</div><div class="d off">21</div><div class="d today">22</div>
+            <div class="d">23</div><div class="d">24</div><div class="d">25</div><div class="d">26</div><div class="d">27</div>
+            <span class="mark mark-out mark-inline"><div class="d">28</div></span>
+            <div class="d">29</div>
+            <div class="d">30</div><div class="d">31</div><div class="d off">1</div><div class="d off">2</div><div class="d off">3</div><div class="d off">4</div><div class="d off">5</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
 
-<h3>トップ画面の上に帯が出ることがあります</h3>
-<table>
-  <tr><th>出た帯</th><th>意味</th></tr>
-  <tr><td class="col">今月の会員リストが<br>まだ取り込まれていません</td><td>今月分の会員の一覧がまだ入っていません。<span class="btn">取り込む →</span> を押して取り込んでから、準備を始めてください。</td></tr>
-  <tr><td class="col">（日付）の定例会準備の<br>続きがあります</td><td>前回、途中でやめた準備が残っています。<span class="btn">タップして再開する</span> または <span class="btn">再開する →</span> を押すと、そこから続けられます。</td></tr>
-  <tr><td class="col">（日付）の<br>テーブル割りの調整</td><td>テーブル割りまで終わっていて、まだ履歴に保存していない準備が残っています。<span class="btn">タップして再開する</span> または <span class="btn">再開する →</span> を押すと、調整の画面から続けられます（やり方は「5. テーブル割りを調整する」にあります）。</td></tr>
-</table>
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">1人ずつ入れる</span></div>
+      <p>名前を打ち込んで<span class="key">「追加」</span>を押すと、その名前の会員が候補として出てきます。選ぶと参加者リストに入ります。</p>
+      <p>姓と名の間のスペースは、<span class="key">あってもなくても構いません</span>。全角・半角のどちらでも同じ人として探します。</p>
+      <p>毎月参加の役員は、<span class="key">最初から自動で入っています</span>。来ない月は右の「×」で消してください。</p>
+      <p>間違えて入れた人は「×」、別の人だったときは「変更」で選び直せます。</p>
+      <div class="note"><b>候補が出ないとき</b>　会員リストが古い可能性があります。<a href="#p11">11. 会員リストを取り込む方法</a>を見てください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="app-header"><button class="logout-btn">← トップに戻る</button><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div></div>
+        <div class="container">
+          <div class="scr-title">定例会準備　開催日: 2026年8月28日（金）</div>
+          <div class="tab-nav"><button class="tab-btn active">参加者入力</button><button class="tab-btn">まとめて貼り付け</button></div>
+          <div class="saved">⬤ 保存済み ✓ 18:03</div>
+          <div class="card"><div class="card-title">参加者を追加</div>
+            <div style="display:flex;gap:10px">
+              <span class="mark mark-out" style="flex:1"><input type="text" placeholder="名前を入力"></span>
+              <button class="btn btn-primary" style="flex:none">追加</button>
+            </div>
+          </div>
+          <div class="card"><div class="card-title">参加者リスト（1名）</div>
+            <div class="alert alert-warn">毎月参加の役員 1名を自動で追加しました。参加しない場合は削除してください。</div>
+            <div class="participant-list"><div class="p-item"><span>1</span><span class="p-name">佐々木 涼介</span><span class="p-branch">デモ</span><button class="p-assign">変更</button><button class="p-remove">✕</button></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<h3>月例会の準備を始める前に：会員リストを取り込む</h3>
-<p><strong>毎月1回、その月の会員リストを取り込みます。</strong>新しく入会した方や、属性が変わった方を反映するためです。済んでいない月は、トップ画面の上に <span class="key">今月の会員リストがまだ取り込まれていません</span> の帯が出ます。</p>
-<ol>
-  <li>トップ画面の下のほうにある <span class="btn">会員リストを取り込む</span> を押します。帯の <span class="btn">取り込む →</span> でも同じ画面が開きます。</li>
-  <li>会員一覧ページを開きます。IDとパスワードは毎月のお知らせに載っています。</li>
-  <li><span class="key">会員一覧</span> のタブを選びます。</li>
-  <li>表の上をクリックして、<strong>Ctrl を押しながら A</strong>（全部選ぶ）、続けて <strong>Ctrl を押しながら C</strong>（コピー）を押します。</li>
-  <li>ツールの画面に戻り、薄く <span class="key">ここに貼り付ける</span> と書かれた広い欄をクリックして、<strong>Ctrl を押しながら V</strong>（貼り付け）を押します。</li>
-  <li><span class="btn">取り込む</span> を押します。</li>
-</ol>
-<p>うまくいくと <span class="key">○年○月分の会員リストを取り込みました。全支部 ○名 ／ この支部 ○名</span> と出ます。</p>
-<p><strong>他の支部の方が混ざっていても構いません。取り込まれるのは自分の支部の会員だけです。</strong></p>
-<div class="box warn">
-  <p class="box-title">こんな表示が出たときは</p>
-  <table>
-    <tr><th>表示</th><th>どうするか</th></tr>
-    <tr><td class="col">貼り付けエリアにデータが入っていません</td><td>欄が空のままです。もう一度コピーからやり直してください。</td></tr>
-    <tr><td class="col">必須列（NM会員ID,姓名,フリガナ,支部,属性）が見つかりません。</td><td>表の見出しごとコピーできていません。表の上をクリックしてから Ctrl+A で選び直してください。</td></tr>
-    <tr><td class="col">基準日が読み取れませんでした。コピーした内容に「○年○月○日現在」または「【YYYY/MM/DD時点】」の表記があるかご確認ください</td><td>日付の行ごとコピーできていません。ページの上の方にある日付の表示も含めて選び直してください。</td></tr>
-    <tr><td class="col">基準日が当月ではありません。</td><td>先月以前の表を貼っています。日付を確かめて、そのままでよければ <span class="btn">取り込む</span>、貼り直すなら <span class="btn">キャンセル</span> を押します。</td></tr>
-  </table>
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">まとめて入れる</span></div>
+      <p>人数が多いときは<span class="key">「まとめて貼り付け」</span>のタブを使います。</p>
+      <p>名前を<span class="key">1行に1名</span>で貼り付けて、<span class="key">「一括追加」</span>を押してください。「○名を追加しました」と出れば入っています。</p>
+      <p>姓と名の間のスペースは、あってもなくても構いません。貼り付けたままで大丈夫です。</p>
+      <p>出欠を取ったシートの名前をそのまま貼るときに便利です。</p>
+      <div class="note"><b>名前が見つからなかったとき</b>　その人だけ候補を選ぶ画面が出ます。同じ名前の方がいる支部では、支部名を見て選んでください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="app-header"><button class="logout-btn">← トップに戻る</button><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div></div>
+        <div class="container">
+          <div class="scr-title">定例会準備　開催日: 2026年8月28日（金）</div>
+          <div class="tab-nav"><button class="tab-btn">参加者入力</button><span class="mark mark-out mark-inline"><button class="tab-btn active">まとめて貼り付け</button></span></div>
+          <div class="saved">⬤ 保存済み ✓ 18:03</div>
+          <div class="card"><div class="card-title">まとめて貼り付け</div>
+            <p class="muted">名前を1行1名で貼り付けてください。</p>
+            <textarea rows="4">早瀬 千夏
+蔵本 健吾
+峰岸 由里
+立花 三郎</textarea>
+            <div style="display:flex;gap:10px;margin-top:12px">
+              <span class="mark mark-out mark-inline"><button class="btn btn-primary">一括追加</button></span>
+              <button class="btn btn-outline">クリア</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">5</span><span class="t">全員そろったら次へ</span></div>
+      <p>入れ終わったら、画面のいちばん下にある<span class="key">「テーブル割りへ進む」</span>を押します。</p>
+      <p>このボタンは<span class="key">スクロールしても画面の下に残ります</span>。探さなくて大丈夫です。</p>
+      <p>入れ直したいときは「クリア（全員削除）」で全部消せます。</p>
+      <div class="note"><b>保存について</b>　入れた人は自動で保存されます。画面の上に「保存済み ✓」と出ていれば入っています。<b>ここで閉じても消えません。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">参加者リスト（5名）</div>
+        <div class="participant-list">
+          <div class="p-item"><span>1</span><span class="p-name">佐々木 涼介</span><span class="p-branch">デモ</span><button class="p-assign">変更</button><button class="p-remove">✕</button></div>
+          <div class="p-item"><span>2</span><span class="p-name">早瀬 千夏</span><span class="p-branch">デモ</span><button class="p-assign">変更</button><button class="p-remove">✕</button></div>
+          <div class="p-item"><span>3</span><span class="p-name">蔵本 健吾</span><span class="p-branch">デモ</span><button class="p-assign">変更</button><button class="p-remove">✕</button></div>
+          <div class="p-item"><span>4</span><span class="p-name">峰岸 由里</span><span class="p-branch">デモ</span><button class="p-assign">変更</button><button class="p-remove">✕</button></div>
+          <div class="p-item"><span>5</span><span class="p-name">立花 三郎</span><span class="p-branch">デモ</span><button class="p-assign">変更</button><button class="p-remove">✕</button></div>
+        </div>
+        <div class="action-bar">
+          <button class="help-btn" style="font-size:14px">?</button>
+          <button class="btn btn-outline" style="color:#ff6666;border-color:#ff6666">クリア（全員削除）</button>
+          <span class="mark mark-out" style="flex:1"><button class="btn btn-success btn-block">テーブル割りへ進む</button></span>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     2. 業種とTLを確認する方法
+     ============================================================ -->
+<section class="page" id="p2">
+  <div class="page-head"><span class="page-n">2</span><h1>業種とTLを確認する方法</h1></div>
+  <p class="page-lead">「テーブル割りへ」に進むと、いちばん上に確認のカードが出ることがあります。ここを済ませてからテーブル割りを実行します。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">出てくるときと、出てこないとき</span></div>
+      <p>参加者の中に、<span class="key">業種カテゴリ</span>か<span class="key">TL可否</span>がまだ決まっていない方がいると、<span class="key">「参加者の業種とTLの確認」</span>のカードが出ます。</p>
+      <p>足りないものが無ければ、代わりに緑の帯で<span class="key">「参加者の業種とTLは確認できました」</span>と出ます。そのまま実行して構いません。</p>
+      <div class="note"><b>毎回は出ません</b>　ここで保存した内容は会員の情報として残ります。同じ方が来月また出てくることはありません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="scr-title">テーブル割り　開催日: 2026年8月28日（金）</div>
+        <span class="mark"><div class="card">
+          <div class="card-title">参加者の業種とTLの確認</div>
+          <p class="muted">以下の方の業種カテゴリまたはTL可否が未設定です。確認してから保存してください。</p>
+          <div style="background:#fff;color:#1f2328;border:1px solid #ccc;border-radius:4px;padding:10px;font-size:13px">
+            <div style="font-weight:700;margin-bottom:8px">岩隈 さやか (NM-9007)</div>
+            <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+              <span>業種カテゴリ: <button class="btn btn-sm btn-outline" style="background:#fff;color:#b8860b;border-color:#b8860b">未設定</button></span>
+              <span style="display:flex;align-items:center;gap:8px"><span class="sw"></span>TL（テーブルリーダー）可能</span>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-block" style="margin-top:12px">保存する</button>
+        </div></span>
+        <div class="alert" style="background:#2a7a2a;color:#fff">参加者の業種とTLは確認できました</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">業種カテゴリを選ぶ</span></div>
+      <p>名前の下の<span class="key">「業種カテゴリ:」</span>のボタンを押すと、選ぶ一覧が開きます。その方の業種を選んでください。</p>
+      <p>業種を入れておくと、テーブル割りのときに<span class="key">同じ業種の方が同じテーブルに固まらない</span>ように分かれます。</p>
+      <div class="note"><b>決められないとき</b>　いちばん上の「（カテゴリなし）」を選んでも先に進めます。あとから「設定 → 会員詳細」で直せます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="picker">
+          <div class="ph"><span>カテゴリを選ぶ</span><span style="color:var(--text-secondary)">✕</span></div>
+          <div class="pr">（カテゴリなし）</div>
+          <div class="pr">建設・不動産</div>
+          <div class="pr">IT・通信</div>
+          <div class="pr">飲食・サービス</div>
+          <div class="pr">士業・コンサル</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">TLのスイッチを入れる</span></div>
+      <p><span class="key">「TL（テーブルリーダー）可能」</span>のスイッチを、テーブルリーダーをお願いできる方だけ入にします。</p>
+      <p>TLができる方が<span class="key">1人もいないと、テーブル割りは実行できません</span>。赤い帯が出て、実行のボタンが押せなくなります。</p>
+      <p>TLはいるけれどテーブルの数より少ないときも、赤い帯が出ます。<b>このまま実行はできます</b>が、TLのいないテーブルができます。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button class="btn btn-primary" style="flex:1;opacity:.45">▶ テーブル割り実行</button>
+          <button class="btn btn-outline" style="opacity:.45">3回試行・ベスト採用</button>
+        </div>
+        <div class="alert" style="background:var(--danger-light);color:var(--danger);border:1px solid var(--danger)">テーブルリーダーができる人が1人もいません。上の一覧でTLにチェックを入れてください。</div>
+        <div class="alert" style="background:var(--danger-light);color:var(--danger);border:1px solid var(--danger);margin-bottom:0">テーブルが4つできますが、TLができる人は2人です。このままだとTLのいないテーブルが2つできます。上の一覧でTLにチェックを入れてください。</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">保存する</span></div>
+      <p>直し終えたら、カードの下の<span class="key">「保存する」</span>を押します。<span class="key">「業種とTL可否を保存しました」</span>と出れば保存できています。</p>
+      <p>保存すると画面が読み直され、まだ足りないところがあればもう一度カードが出ます。何も無くなれば緑の帯に変わります。</p>
+      <div class="note"><b>押さないと残りません</b>　カテゴリを選んだだけ・スイッチを動かしただけでは残りません。必ず「保存する」を押してください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <span class="mark mark-out"><button class="btn btn-primary btn-block">保存する</button></span>
+        <div class="alert alert-success" style="margin:22px 0 0">業種とTL可否を保存しました</div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     3. テーブル割りをする方法
+     ============================================================ -->
+<section class="page" id="p3">
+  <div class="page-head"><span class="page-n">3</span><h1>テーブル割りをする方法</h1></div>
+  <p class="page-lead">参加者を入れ終わったら、席を決めます。ボタンを押すだけで組み上がります。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">席に着かない人を外す</span></div>
+      <p>役員を登録していると、実行ボタンの上に<span class="key">「テーブルに入らない運営メンバー：」</span>が出ます。</p>
+      <p>受付や司会で<span class="key">席に着かない方だけ</span>チェックを入れてください。チェックした方は割り当てから外れ、結果には「テーブルなし（運営メンバー）」と並びます。</p>
+      <div class="note"><b>気をつけること</b>　席に着く方にはチェックを入れないでください。全員に入れると割り当てるものが無くなり、エラーになります。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="scr-title">テーブル割り　開催日: 2026年8月28日（金）</div>
+        <div class="card">
+          <span class="mark">
+            <div style="padding:4px 0">
+              <p class="muted">テーブルに入らない運営メンバー：</p>
+              <div class="chk"><i></i><span>主催：佐々木 涼介</span></div>
+              <div class="chk"><i></i><span>事務局長：早瀬 千夏</span></div>
+            </div>
+          </span>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">割り当てを実行する</span></div>
+      <p>ボタンは3つあります。ふだんは<span class="key">「▶ テーブル割り実行」</span>で構いません。</p>
+      <table class="tbl">
+        <tr><th>▶ テーブル割り実行</th><td>1回だけ割り当てを作ります</td></tr>
+        <tr><th>3回試行・ベスト採用</th><td>3回試して、いちばん良い結果を採用します。時間に余裕があるときはこちら</td></tr>
+        <tr><th>手動で決める</th><td>自動を使わず、自分で1人ずつ振り分けます</td></tr>
+      </table>
+      <div class="note"><b>人数の決まり</b>　1テーブルは4名か5名です。<b>6名・7名・11名は4名と5名に分けられない</b>ため、自動ではできず「手動で決める」画面に切り替わります。3名以下のときは全員で1テーブルになります。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="display:flex;gap:10px;margin-bottom:10px">
+          <span class="mark mark-out" style="flex:1"><button class="btn btn-primary btn-block">▶ テーブル割り実行</button></span>
+          <button class="btn btn-outline" style="flex:none">3回試行・ベスト採用</button>
+        </div>
+        <button class="btn btn-outline btn-block">手動で決める</button>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">結果を見る・共有する</span></div>
+      <p>テーブルごとに、誰がどこに入ったかが並びます。名前の横の印は役割です。</p>
+      <table class="tbl">
+        <tr><th>TL</th><td>テーブルリーダー。1テーブルに1名まで</td></tr>
+        <tr><th>SL</th><td>サブリーダー。1テーブルに1名まで</td></tr>
+      </table>
+      <p style="margin-top:12px">下のほうに<span class="key">「共有用テキスト」</span>があります。<span class="key">「共有テキストをコピー」</span>を押すと、そのままLINEなどに貼り付けられます。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="card">
+          <div class="card-title">テーブル割り結果　<span class="muted" style="display:inline">スコア: 720</span></div>
+          <div class="t-card"><h4>テーブル A（4名）</h4>
+            <div class="t-row"><span class="rb rb-tl">TL</span><span class="nm">佐々木 涼介</span><span class="st">自動（優先度順）</span></div>
+            <div class="t-row"><span class="rb rb-sl">SL</span><span class="nm">諏訪 陽一</span><span class="st">自動（参加回数順）</span></div>
+            <div class="t-row"><span style="width:26px"></span><span class="nm">岩隈 さやか</span><span class="st"></span></div>
+            <div class="t-row"><span style="width:26px"></span><span class="nm">楠木 隆之</span><span class="st"></span></div>
+          </div>
+          <p class="muted" style="margin-top:12px">共有用テキスト</p>
+          <span class="mark mark-out"><div class="share">【テーブル割り結果】
+参加者数: 16名　テーブル数: 4
+テーブルA（4名）： ★TL 佐々木 涼介, ◆SL 諏訪 陽一, 岩隈 さやか, 楠木 隆之</div></span>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">履歴に保存する</span></div>
+      <p>これでよければ、いちばん下の<span class="key">「履歴に保存して定例会当日へ」</span>を押します。</p>
+      <p>確認が出るので「OK」を押すと、「○名を履歴に保存しました」と出て、当日の画面に進みます。</p>
+      <div class="note"><b>押すまでは残りません</b>　このボタンを押すまで履歴には入りません。<b>それまでは何度やり直しても大丈夫です。</b>席を少しだけ直したいときは、押す前に<a href="#p5">5. テーブル割りを調整する方法</a>へ。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-outline btn-block">共有テキストをコピー</button>
+          <button class="btn btn-outline btn-block">紹介者を記録する</button>
+          <button class="btn btn-outline btn-block">調整する</button>
+          <span class="mark mark-out"><button class="btn btn-success btn-block">履歴に保存して定例会当日へ</button></span>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     4. 手動でテーブルを決める方法
+     ============================================================ -->
+<section class="page" id="p4">
+  <div class="page-head"><span class="page-n">4</span><h1>手動でテーブルを決める方法</h1></div>
+  <p class="page-lead">自動で割り当てられない人数のときと、はじめから自分で決めたいときに使います。1人ずつ、テーブルと役割を選んでいきます。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">「手動で決める」を押す</span></div>
+      <p>テーブル割りの画面で、実行ボタンの下にある<span class="key">「手動で決める」</span>を押します。</p>
+      <p>参加者が<span class="key">6名・7名・11名</span>のときは自動で組めません。「▶ テーブル割り実行」を押すと確認が出るので、<span class="key">「手動で決める」</span>を選ぶとこの画面に入れます。</p>
+      <div class="note"><b>出てくる確認の文</b>　「参加者が 7 名のため、4〜5名のテーブルでは自動割り当てができません。手動でテーブル割りを行いますか？」</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button class="btn btn-primary" style="flex:1">▶ テーブル割り実行</button>
+          <button class="btn btn-outline">3回試行・ベスト採用</button>
+        </div>
+        <span class="mark mark-out"><button class="btn btn-outline btn-block">手動で決める</button></span>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">テーブルの数を決める</span></div>
+      <p>いちばん上の<span class="key">「テーブル数:」</span>を、<span class="key">＋</span>と<span class="key">－</span>で増やしたり減らしたりします。</p>
+      <p>開いたときは、参加者の人数から<span class="key">おおよその数が最初から入っています</span>。そのままで良ければ触らなくて構いません。</p>
+      <div class="note"><b>減らすと戻ります</b>　テーブルを減らすと、そこに入れていた方は「（未割り当て）」に戻ります。入れ直してください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">手動テーブル割り</div>
+        <span class="mark"><div style="display:flex;align-items:center;gap:12px;padding:4px 0">
+          <span>テーブル数:</span>
+          <button class="btn btn-sm btn-outline">－</button>
+          <span style="font-size:19px;font-weight:700">2</span>
+          <button class="btn btn-sm btn-outline">＋</button>
+        </div></span>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">1人ずつ、テーブルと役割を選ぶ</span></div>
+      <p>名前の右にボタンが2つ並びます。<span class="key">左がテーブル</span>、<span class="key">右が役割</span>です。</p>
+      <p>左の<span class="key">「（未割り当て）」</span>を押すと「テーブルを選ぶ」が開きます。右の<span class="key">「なし」</span>を押すと「役割を選ぶ」が開き、TL・SL・なし から選べます。</p>
+      <div class="note"><b>4〜5名から外れると注意が出ます</b>　「⚠ テーブル B は 3名（推奨：4〜5名）」のように赤い字で出ます。<b>この注意が出ていても保存はできます。</b>そうしたい事情があるときは、そのまま進めてください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="color:var(--danger);font-size:13px;margin-bottom:8px">⚠ テーブル B は 3名（推奨：4〜5名）</div>
+        <div style="display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">
+          <span style="flex:1">佐々木 涼介</span>
+          <button class="btn btn-sm btn-outline">テーブル A</button>
+          <button class="btn btn-sm btn-outline">TL</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">
+          <span style="flex:1">岩隈 さやか</span>
+          <span class="mark mark-inline"><button class="btn btn-sm btn-outline">（未割り当て）</button></span>
+          <button class="btn btn-sm btn-outline">なし</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;padding:8px 0;font-size:14px">
+          <span style="flex:1">楠木 隆之</span>
+          <button class="btn btn-sm btn-outline">テーブル B</button>
+          <button class="btn btn-sm btn-outline">なし</button>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">保存する</span></div>
+      <p>全員のテーブルを決めたら<span class="key">「この内容で保存する」</span>を押します。いつものテーブル割り結果の画面に変わります。</p>
+      <p>やめるときは<span class="key">「閉じる」</span>です。</p>
+      <div class="note"><b>1人でも残っていると保存できません</b>　「3名が未割り当てです。全員を割り当ててから保存してください」と出ます。「（未割り当て）」のままの方を探して入れてください。</div>
+      <p>このあとは自動で組んだときと同じです。<a href="#p5">5. テーブル割りを調整する方法</a>で直したり、そのまま「履歴に保存して定例会当日へ」に進めます。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="display:flex;gap:8px">
+          <span class="mark mark-inline" style="flex:1"><button class="btn btn-primary btn-block">この内容で保存する</button></span>
+          <button class="btn btn-outline" style="flex:1">閉じる</button>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     5. テーブル割りを調整する方法
+     ============================================================ -->
+<section class="page" id="p5">
+  <div class="page-head"><span class="page-n">5</span><h1>テーブル割りを調整する方法</h1></div>
+  <p class="page-lead">組み上がったあと、一部だけ手で直せます。全部を組み直さなくても、1人だけ席を移したり、2人を入れ替えたりできます。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">「調整する」を押す</span></div>
+      <p>テーブル割り結果の下にボタンが並んでいます。<span class="key">「調整する」</span>を押してください。</p>
+      <p>「テーブル割りの調整」の画面が開きます。結果の画面に戻るときは「＜ 結果に戻る」です。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-outline btn-block">共有テキストをコピー</button>
+          <button class="btn btn-outline btn-block">紹介者を記録する</button>
+          <span class="mark mark-out"><button class="btn btn-outline btn-block">調整する</button></span>
+          <button class="btn btn-success btn-block">履歴に保存して定例会当日へ</button>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">人を動かす</span></div>
+      <p>動かしたい人の<span class="key">名前を押します</span>。「どうしますか？」と出て、2つから選べます。</p>
+      <table class="tbl">
+        <tr><th>別のテーブルへ移す</th><td>移動先を選ぶと、その人が移ります。移った先は人数が増え、元のテーブルは減ります</td></tr>
+        <tr><th>ほかの人と入れ替える</th><td>相手を選ぶと2人が入れ替わります。どのテーブルも人数は変わりません</td></tr>
+      </table>
+      <p style="margin-top:12px">押し間違えたときは「キャンセル」を選んでください。</p>
+      <div class="note"><b>並びについて</b>　名前は<b>TL → SL → 一般</b>の順に並びます。見出しには「テーブル A（5名）」のように人数が出ます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="scr-title">テーブル割りの調整</div>
+        <div class="t-card"><h4>テーブル A（4名）</h4>
+          <span class="mark"><div class="t-row"><span class="rb rb-tl">TL</span><span class="nm">佐々木 涼介</span></div></span>
+          <div class="t-row"><span class="rb rb-sl">SL</span><span class="nm">諏訪 陽一</span></div>
+          <div class="t-row"><span style="width:26px"></span><span class="nm">岩隈 さやか</span></div>
+          <div class="t-row"><span style="width:26px"></span><span class="nm">楠木 隆之</span></div>
+        </div>
+        <div class="t-card"><h4>テーブル B（4名）</h4>
+          <div class="t-row"><span class="rb rb-tl">TL</span><span class="nm">峰岸 由里</span></div>
+          <div class="t-row"><span style="width:26px"></span><span class="nm">日野 実咲</span></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">人を追加する・保存する</span></div>
+      <p>あとから来る方が分かったときは、いちばん下の<span class="key">「人を追加する」</span>を押して、名前で探して選び、入るテーブルを選びます。</p>
+      <p>直し終わったら<span class="key">「この内容で保存する」</span>を押します。「調整結果を保存しました」と出れば保存できています。</p>
+      <div class="note"><b>保存せずに画面を離れると消えます</b>　移した人・入れ替えた人・追加した人は、<b>「この内容で保存する」を押すまで残りません。</b></div>
+      <div class="note"><b>人を消すボタンはありません</b>　来なかった方は、当日の画面で欠席をつけてください（<a href="#p7">7. 出欠をつける方法</a>）。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <span class="mark mark-out"><button class="btn btn-outline btn-block">人を追加する</button></span>
+          <span class="mark mark-out"><button class="btn btn-primary btn-block">この内容で保存する</button></span>
+        </div>
+        <div class="alert alert-success" style="margin-top:14px">調整結果を保存しました</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">あとから続きをする</span></div>
+      <p>保存したあとトップ画面に戻ると、上に<span class="key">「（日付）のテーブル割りの調整」</span>の帯が出ます。</p>
+      <p><span class="key">「再開する →」</span>を押すと、続きから開けます。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="app-header"><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div></div>
+        <span class="mark"><div class="hub-banner"><div class="hub-banner-body"><div class="hub-banner-t">2026年8月28日（金）のテーブル割りの調整</div><div class="hub-banner-s">タップして再開する</div></div><div class="hub-banner-a">再開する →</div></div></span>
+      </div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     6. 紹介者を記録する方法
+     ============================================================ -->
+<section class="page" id="p6">
+  <div class="page-head"><span class="page-n">6</span><h1>紹介者を記録する方法</h1></div>
+  <p class="page-lead">ゲストで来られた方について、誰が連れてきたかを残します。会員の方は出てきません。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">画面を開く</span></div>
+      <p>入口は2つあります。どちらから入っても同じ画面です。</p>
+      <table class="tbl">
+        <tr><th>トップ画面から</th><td>「04 紹介者を記録する」を押す</td></tr>
+        <tr><th>テーブル割りから</th><td>結果の下の「紹介者を記録する」を押す</td></tr>
+      </table>
+      <div class="note"><b>先に履歴へ保存を</b>　テーブル割りを履歴に保存する前だと、「先にテーブル割りを履歴に保存してください」と出て入力できません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="hub-grp">記録・出力 <button class="help-btn">?</button></div>
+        <div class="hub-menu">
+          <div class="hub-item"><div class="hub-item-n">03</div><div class="hub-item-body"><div class="hub-item-title">参加者名簿を作る</div><div class="hub-item-sub">開催日を選んでExcelで出力する</div></div><div class="hub-item-arr">→</div></div>
+          <span class="mark">
+            <div class="hub-item"><div class="hub-item-n">04</div><div class="hub-item-body"><div class="hub-item-title">紹介者を記録する</div><div class="hub-item-sub">誰が誰を連れてきたかを残す</div></div><div class="hub-item-arr">→</div></div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">紹介者を入れる</span></div>
+      <p>左に並ぶのが<span class="key">ゲストの名前</span>です。右の欄に、その方を連れてきた会員の<span class="key">名前かNM会員ID</span>（例: NM-1234）を入れます。</p>
+      <p><b>名前で入れたとき</b>　欄から出るか <span class="key">Enter</span> を押すと照合が始まります。「確認中...」と出ている間はほかの欄も触れません。終わると自動で戻ります。</p>
+      <p><b>NM会員IDで入れたとき</b>　待たずにすぐ確定します。名前が分からないときや、他支部の方を入れるときはこちらが早いです。</p>
+      <div class="note"><b>同じ名前の方がいるとき</b>　選ぶ画面が出ます。支部名を見て選んでください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">紹介者を記録 <button class="help-btn">?</button></div>
+        <p class="muted">ゲストや新会員の紹介者を記録します。</p>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px">
+          <span style="min-width:88px">立花 三郎</span>
+          <span class="mark mark-inline" style="flex:1"><input type="text" placeholder="紹介者の名前 または NM-1234"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px">
+          <span style="min-width:88px">日野 実咲</span>
+          <span style="flex:1"><input type="text" value="早瀬 千夏"></span>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">保存する</span></div>
+      <p>入れ終わったら<span class="key">「💾 紹介者を保存」</span>を押します。</p>
+      <div class="note"><b>ゲストがいない日</b>　「ゲストの参加者がいません」と出ます。そのままで問題ありません。この画面ですることは無いので、トップに戻ってください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <span class="mark mark-out"><button class="btn btn-success">💾 紹介者を保存</button></span>
+        <p class="muted" style="margin:26px 0 0">ゲストの参加者がいません</p>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     7. 出欠をつける方法
+     ============================================================ -->
+<section class="page" id="p7">
+  <div class="page-head"><span class="page-n">7</span><h1>出欠をつける方法</h1></div>
+  <p class="page-lead">当日は「定例会当日」の画面を開きます。実際に来た人・来なかった人をここで反映します。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">欠席の人をつける</span></div>
+      <p>来なかった人の名前の横にある<span class="key">「出席 ✓」</span>を押します。表示が<span class="key">「欠席」</span>に変わります。</p>
+      <p>もう一度押すと出席に戻ります。テーブルの人数も自動で減ります。</p>
+      <div class="note"><b>全員を欠席にはできません</b>　「参加者が0名になります。少なくとも1名の参加者が必要です」と出ます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="scr-title">定例会当日　開催日: 2026年8月28日（金）</div>
+        <div class="t-card"><h4>テーブル A（3名 / TL: 佐々木 涼介）</h4>
+          <div class="t-row"><span class="rb rb-tl">TL</span><span class="nm">佐々木 涼介</span><button class="att">出席 ✓</button></div>
+          <div class="t-row"><span class="rb rb-sl">SL</span><span class="nm">諏訪 陽一</span><button class="att">出席 ✓</button></div>
+          <div class="t-row"><span style="width:26px"></span><span class="nm" style="color:#9096a8">岩隈 さやか</span><span class="mark mark-out mark-inline"><button class="att off">欠席</button></span></div>
+          <div class="t-row"><span style="width:26px"></span><span class="nm">楠木 隆之</span><button class="att">出席 ✓</button></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">当日に来た人を追加する</span></div>
+      <p>連絡なしで来られた方は、画面の上の<span class="key">「出欠変更」</span>の欄から足せます。</p>
+      <p>「テーブルを選択」で入ってもらうテーブルを選び、名前を入れて<span class="key">「＋ 参加者を追加」</span>を押します。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">出欠変更</div>
+        <p class="muted">欠席の人は、名前の横の「出席 ✓」を押すと欠席に変わります。</p>
+        <div style="display:flex;gap:10px;margin-bottom:12px">
+          <input type="text" placeholder="名前を入力..." style="flex:1">
+          <span class="mark mark-out mark-inline"><button class="btn btn-outline" style="flex:none">テーブルを選択</button></span>
+        </div>
+        <span class="mark mark-out mark-inline"><button class="btn btn-primary">＋ 参加者を追加</button></span>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">確定して保存する</span></div>
+      <p>出欠と追加が終わったら、いちばん下の<span class="key">「確定して保存」</span>を押します。</p>
+      <p>確認が出て、「OK」を押すと「○月○日分の出欠を確定しました」と出ます。</p>
+      <div class="note"><b>押さないと残りません</b>　このボタンを押さないと、当日の変更は保存されません。<b>押したあとで参加者名簿が出せるようになります。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="action-bar">
+          <button class="help-btn" style="font-size:14px">?</button>
+          <span class="mark mark-out" style="flex:1"><button class="btn btn-success btn-block">確定して保存</button></span>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">やり直したいとき</span></div>
+      <p>履歴に保存したあとでも、テーブル割りはやり直せます。</p>
+      <p>この画面の<span class="key">右上にある「調整に戻る」</span>を押してください。「○件を履歴から外して調整に戻ります。よろしいですか？」と出るので「調整に戻る」を押します。</p>
+      <div class="note"><b>影響する範囲</b>　やり直せるのは<b>その開催日のぶんだけ</b>です。ほかの開催日の履歴は変わりません。直したら「この内容で保存する」を押してください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="scr-title" style="margin:0">定例会当日　開催日: 2026年8月28日（金）</div>
+          <span class="mark mark-out mark-inline"><button class="btn btn-outline btn-sm">調整に戻る</button></span>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     8. 参加者名簿を出す方法
+     ============================================================ -->
+<section class="page" id="p8">
+  <div class="page-head"><span class="page-n">8</span><h1>参加者名簿を出す方法</h1></div>
+  <p class="page-lead">月例会が終わったあと、NM本部に出す参加者名簿を作ります。Excelで開ける表のファイルができます。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">名簿の画面を開く</span></div>
+      <p>トップ画面の<span class="key">「03 参加者名簿を作る」</span>を押します。</p>
+      <div class="note"><b>先に出欠の確定を</b>　出欠を確定していないと名簿は出せません。<a href="#p7">7. 出欠をつける方法</a>を先に済ませてください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="hub-grp">記録・出力 <button class="help-btn">?</button></div>
+        <div class="hub-menu">
+          <span class="mark"><div class="hub-item"><div class="hub-item-n">03</div><div class="hub-item-body"><div class="hub-item-title">参加者名簿を作る</div><div class="hub-item-sub">開催日を選んでExcelで出力する</div></div><div class="hub-item-arr">→</div></div></span>
+          <div class="hub-item"><div class="hub-item-n">04</div><div class="hub-item-body"><div class="hub-item-title">紹介者を記録する</div><div class="hub-item-sub">誰が誰を連れてきたかを残す</div></div><div class="hub-item-arr">→</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">開催日を選んで読み込む</span></div>
+      <p><span class="key">「タップして開催日を選ぶ」</span>を押して、出したい開催日を選びます。</p>
+      <p>選んだら<span class="key">「読み込む」</span>を押します。開催日と支部名の確認が出るので、合っているか見てください。</p>
+      <div class="note"><b>出せる範囲</b>　名簿を出せるのは<b>直近3ヶ月以内の開催日だけ</b>です。それより前しかないときは「直近3ヶ月以内の履歴がありません」と出ます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">参加者名簿出力</div>
+        <p class="muted">月例会終了後、NM本部提出用の参加者名簿xlsxを自動生成します。</p>
+        <p class="muted">レポートを出力する開催日を選んでください</p>
+        <div style="display:flex;gap:10px">
+          <span class="mark mark-out" style="flex:1"><div class="sel">タップして開催日を選ぶ</div></span>
+          <span class="mark mark-out mark-inline"><button class="btn btn-primary" style="flex:none">読み込む</button></span>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">作って受け取る</span></div>
+      <p><span class="key">「レポート生成」</span>を押します。「レポートを生成中...」と出るので、<span class="key">途中で画面を閉じずに待ってください</span>（数十秒かかることがあります）。</p>
+      <p>できあがると「ダウンロード」と「フォルダを開く」が出ます。<span class="key">「ダウンロード」</span>を押すとファイルが手元に保存されます。</p>
+      <div class="note"><b>ファイルの名前</b>　保存されるファイルは <b>主催レポート_日付.xlsx</b> という名前です。画面の呼び名（参加者名簿）とは違いますが、これで合っています。NM本部の様式に合わせた名前です。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">2026年8月28日（金）／ デモ支部</div>
+        <span class="mark mark-out"><button class="btn btn-primary btn-block">レポート生成</button></span>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn btn-success" style="flex:1">ダウンロード</button>
+          <button class="btn btn-outline" style="flex:1">フォルダを開く</button>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     9. 過去のテーブル割りを見る方法
+     ============================================================ -->
+<section class="page" id="p9">
+  <div class="page-head"><span class="page-n">9</span><h1>過去のテーブル割りを見る方法</h1></div>
+  <p class="page-lead">前回どこに座ったかを見たいときに使います。見るだけの画面で、ここから直すことはできません。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">「履歴を見る」を押す</span></div>
+      <p>トップ画面の<span class="key">いちばん下</span>にあります。01〜07のような番号のついたメニューではなく、<span class="key">文字のリンク</span>です。</p>
+      <div class="note"><b>見つからないとき</b>　トップ画面をいちばん下までスクロールしてください。「会員リストを取り込む」の隣に並んでいます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div style="display:flex;gap:20px;padding:14px 6px;font-size:13px">
+          <span style="border-bottom:1px solid var(--text-secondary)">会員リストを取り込む</span>
+          <span class="mark mark-inline"><span style="border-bottom:1px solid var(--text-secondary)">履歴を見る</span></span>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">開催日を選ぶ</span></div>
+      <p>開催日と参加者数が並びます。見たい日の<span class="key">「詳細を見る」</span>を押してください。</p>
+      <div class="note"><b>出てくるのは保存した日だけ</b>　テーブル割りのあとに<b>「履歴に保存して定例会当日へ」を押した日</b>だけが並びます。1件も無いときは「まだ定例会の履歴がありません」と出ます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">履歴</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:15px;font-weight:600">2026年8月28日（金）</div><div style="font-size:12px;color:var(--text-secondary)">参加者: 16名</div></div>
+          <span class="mark mark-inline"><button class="btn btn-sm btn-outline">詳細を見る</button></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0">
+          <div><div style="font-size:15px;font-weight:600">2026年7月24日（金）</div><div style="font-size:12px;color:var(--text-secondary)">参加者: 14名</div></div>
+          <button class="btn btn-sm btn-outline">詳細を見る</button>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">中身を見る・戻る</span></div>
+      <p>テーブルごとに、その日どなたがどこに座ったかが並びます。<span class="key">TL・SLの印</span>もそのまま残っています。</p>
+      <p>席に着かなかった運営メンバーは<span class="key">「テーブルなし（運営メンバー）」</span>にまとまります。</p>
+      <p>戻るときは、この画面は<span class="key">「← 履歴に戻る」</span>、一覧からは画面のいちばん上の<span class="key">「← トップに戻る」</span>です。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div style="font-size:12px;border-bottom:1px solid var(--text-secondary);display:inline-block;margin-bottom:10px">← 履歴に戻る</div>
+        <div class="card">
+          <div class="card-title">履歴詳細</div>
+          <p class="muted">2026年8月28日（金）　16名</p>
+          <div class="t-card">
+            <h4>テーブル A（4名）</h4>
+            <div class="t-row"><span class="rb rb-tl">TL</span><span class="nm">佐々木 涼介</span></div>
+            <div class="t-row"><span class="rb rb-sl">SL</span><span class="nm">諏訪 陽一</span></div>
+            <div class="t-row"><span class="nm">岩隈 さやか</span></div>
+          </div>
+          <div class="t-card">
+            <h4>テーブルなし（運営メンバー）</h4>
+            <div class="t-row"><span class="nm">早瀬 千夏</span></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     10. 分析を見る方法
+     ============================================================ -->
+<section class="page" id="p10">
+  <div class="page-head"><span class="page-n">10</span><h1>分析を見る方法</h1></div>
+  <p class="page-lead">参加の傾向や業種の内訳、誰と誰が同席したかを見られます。見るだけの画面です。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">期間を選んで「集計実行」を押す</span></div>
+      <p>トップ画面の<span class="key">「06 分析を見る」</span>を押します。</p>
+      <p>開いただけでは何も出ません。<span class="key">「集計実行を押してください」</span>と出ているので、左の期間を確かめてから<span class="key">「集計実行」</span>を押します。</p>
+      <div class="note"><b>期間は最初「全期間」です</b>　これまでの全部が対象です。ある月だけを見たいときは、期間のところを押して選び直してください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">分析ダッシュボード <button class="help-btn">?</button></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="sel" style="flex:1">全期間</div>
+          <span class="mark mark-inline"><button class="btn btn-primary">集計実行</button></span>
+        </div>
+        <p class="muted" style="text-align:center;margin:26px 0 0">集計実行を押してください</p>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">出てくるもの</span></div>
+      <p>タブが2つあります。<span class="key">「集計指標」</span>には4つの表が出ます。</p>
+      <table class="tbl">
+        <tr><th>リピート参加率</th><td>続けて参加している方の割合</td></tr>
+        <tr><th>他支部参加分布</th><td>ほかの支部からどれくらい来ているか。累計と月別を切り替えられます</td></tr>
+        <tr><th>月次参加者数推移</th><td>月ごとの参加者数の移り変わり</td></tr>
+        <tr><th>業種分布</th><td>その期間の業種の内訳</td></tr>
+      </table>
+      <p><span class="key">「星の評価」</span>はもう1つのタブです。押すと切り替わります。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="tab-nav">
+          <button class="tab-btn active">集計指標</button>
+          <span class="mark mark-inline"><button class="tab-btn">星の評価</button></span>
+        </div>
+        <div class="card" style="margin-bottom:8px"><div class="card-title" style="margin:0">リピート参加率</div></div>
+        <div class="card" style="margin-bottom:8px"><div class="card-title" style="margin:0">他支部参加分布</div></div>
+        <div class="card" style="margin-bottom:8px"><div class="card-title" style="margin:0">月次参加者数推移</div></div>
+        <div class="card" style="margin-bottom:0"><div class="card-title" style="margin:0">業種分布</div></div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">同席確認を使う</span></div>
+      <p>画面のいちばん下に<span class="key">「同席確認」</span>があります。<b>「集計実行」とは別に動きます</b>ので、集計を押していなくても使えます。</p>
+      <p>名前を打ち込むと候補が出ます。選ぶと、その方が<span class="key">過去に同じテーブルだった相手</span>の一覧が出ます。</p>
+      <div class="note"><b>いつ使うか</b>　「この2人、前も同じテーブルだったかな」と迷ったときに使います。テーブル割りの前に見ておくと調整しやすくなります。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">同席確認</div>
+        <p class="muted">集計実行ボタンとは独立して動きます</p>
+        <span class="mark mark-out"><input type="text" placeholder="名前を入力して検索"></span>
+        <div class="picker" style="margin-top:18px">
+          <div class="pr" style="border-top:none">佐々木 涼介</div>
+          <div class="pr">諏訪 陽一</div>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     11. 会員リストを取り込む方法
+     ============================================================ -->
+<section class="page" id="p11">
+  <div class="page-head"><span class="page-n">11</span><h1>会員リストを取り込む方法</h1></div>
+  <p class="page-lead">毎月1回、その月の会員リストを取り込みます。新しく入会した方や、属性が変わった方を反映するためです。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">取り込みの画面を開く</span></div>
+      <p>トップ画面の下のほうにある<span class="key">「会員リストを取り込む」</span>を押します。</p>
+      <p>済んでいない月は、トップ画面の上に<span class="key">「今月の会員リストがまだ取り込まれていません」</span>の帯が出ます。帯の「取り込む →」でも同じ画面が開きます。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="app-header"><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div></div>
+        <span class="mark"><div class="hub-banner"><div class="hub-banner-body"><div class="hub-banner-t">今月の会員リストがまだ取り込まれていません</div><div class="hub-banner-s">タップして取り込む</div></div><div class="hub-banner-a">取り込む →</div></div></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">会員一覧をコピーする</span></div>
+      <p>会員一覧のページを開きます。IDとパスワードは毎月のお知らせに載っています。</p>
+      <p><span class="key">「会員一覧」</span>のタブを選び、<span class="key">表の上をクリック</span>してから、</p>
+      <table class="tbl">
+        <tr><th>Ctrl を押しながら A</th><td>全部を選ぶ</td></tr>
+        <tr><th>Ctrl を押しながら C</th><td>コピーする</td></tr>
+      </table>
+      <div class="note"><b>見出しごとコピーしてください</b>　表の見出し（NM会員ID・姓名・フリガナ・支部・属性）と、ページの上のほうにある日付の表示も入るように選んでください。どちらかが抜けると取り込めません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">会員リストを取り込む</div>
+        <p class="muted">会員一覧の表を、見出しごとコピーして貼り付けてください。</p>
+        <div class="drop">ここに貼り付ける</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">貼り付けて取り込む</span></div>
+      <p>ツールの画面に戻り、薄く<span class="key">「ここに貼り付ける」</span>と書かれた広い欄をクリックして、<span class="key">Ctrl を押しながら V</span>（貼り付け）を押します。</p>
+      <p>そのあと<span class="key">「取り込む」</span>を押します。</p>
+      <p>うまくいくと「○年○月分の会員リストを取り込みました。全支部 ○名 ／ この支部 ○名」と出ます。</p>
+      <div class="note"><b>他の支部が混ざっていても大丈夫</b>　取り込まれるのは自分の支部の会員だけです。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="drop" style="text-align:left;color:#e4e6f0;font-size:12px;padding:12px">NM会員ID　姓名　フリガナ　支部　属性<br>NM-9001　佐々木 涼介　ササキ リョウスケ　デモ　役員<br>NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
+        <div style="margin-top:12px"><span class="mark mark-out mark-inline"><button class="btn btn-primary">取り込む</button></span></div>
+        <div class="alert alert-success" style="margin-top:16px">2026年8月分の会員リストを取り込みました。全支部 1,842名 ／ この支部 24名</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">うまくいかないとき</span></div>
+      <table class="tbl">
+        <tr><th style="width:44%">出た表示</th><th>どうするか</th></tr>
+        <tr><td>貼り付けエリアにデータが入っていません</td><td>欄が空のままです。もう一度コピーからやり直してください</td></tr>
+        <tr><td>必須列（NM会員ID,姓名,フリガナ,支部,属性）が見つかりません</td><td>表の見出しごとコピーできていません。表の上をクリックしてから Ctrl+A で選び直してください</td></tr>
+        <tr><td>基準日が読み取れませんでした</td><td>日付の行ごとコピーできていません。ページの上のほうの日付の表示も含めて選び直してください</td></tr>
+        <tr><td>基準日が当月ではありません</td><td>先月以前の表を貼っています。そのままでよければ「取り込む」、貼り直すなら「キャンセル」</td></tr>
+      </table>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="alert" style="background:#2d1010;color:#ff6666;border:1px solid #ff6666">必須列（NM会員ID,姓名,フリガナ,支部,属性）が見つかりません。</div>
+        <div class="alert" style="background:#2d1010;color:#ff6666;border:1px solid #ff6666">基準日が読み取れませんでした。コピーした内容に「○年○月○日現在」または「【YYYY/MM/DD時点】」の表記があるかご確認ください</div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     12. 姓名を確認する方法
+     ============================================================ -->
+<section class="page" id="p12">
+  <div class="page-head"><span class="page-n">12</span><h1>姓名を確認する方法</h1></div>
+  <p class="page-lead">会員リストを取り込むと、フルネームを「姓」と「名」に自動で分けます。その分け方が合っているかを見る画面です。<b>参加者名簿を出す前に一度見ておいてください。</b></p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">「07 姓名確認」を押す</span></div>
+      <p>トップ画面の「そのほか」の中にあります。<span class="key">会員リストを取り込んだあと</span>に開いてください。</p>
+      <div class="note"><b>なぜ必要か</b>　区切りが読みにくい名前（「田中由美子」のようなお名前や、カタカナのお名前）は、自動で分けると間違えることがあります。<b>区切りが違うと、NM本部に出す参加者名簿が正しく作れません。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="hub-grp">そのほか <button class="help-btn">?</button></div>
+        <div class="hub-menu">
+          <div class="hub-item"><div class="hub-item-n">05</div><div class="hub-item-body"><div class="hub-item-title">設定</div><div class="hub-item-sub">会員詳細・役員設定</div></div><div class="hub-item-arr">→</div></div>
+          <div class="hub-item"><div class="hub-item-n">06</div><div class="hub-item-body"><div class="hub-item-title">分析を見る</div><div class="hub-item-sub">過去の同席・業種の偏りを見る</div></div><div class="hub-item-arr">→</div></div>
+          <span class="mark">
+            <div class="hub-item"><div class="hub-item-n">07</div><div class="hub-item-body"><div class="hub-item-title">姓名確認</div><div class="hub-item-sub">会員マスタの姓・名のドラフトを確認・修正します</div></div><div class="hub-item-arr">→</div></div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">違うところだけ直す</span></div>
+      <p>上に<span class="key">「○ 件の確認が必要です」</span>と出ます。名前・フリガナ・<span class="key">姓の欄</span>・<span class="key">名の欄</span>が横に並びます。</p>
+      <p><b>合っていれば何もしなくて構いません。</b>違うところだけ、欄の字を書き換えてください。</p>
+      <div class="note"><b>誰が出てくるのか</b>　まだ一度も確認していない方だけです。退会した方は出てきません。何も無いときは「確認が必要な姓名はありません」と出ます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div style="font-size:15px;font-weight:700;margin-bottom:8px">姓名確認 <button class="help-btn">?</button></div>
+        <p class="muted">以下の氏名の姓・名をご確認ください。間違いがある場合のみ修正してください。</p>
+        <p class="muted">3 件の確認が必要です</p>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:14px">
+          <span style="min-width:76px;font-weight:600">田中由美子</span>
+          <span style="min-width:74px;font-size:12px;color:var(--text-secondary)">タナカユミコ</span>
+          <span class="mark mark-inline" style="flex:1"><input type="text" value="田中"></span>
+          <span style="flex:1"><input type="text" value="由美子"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:14px">
+          <span style="min-width:76px;font-weight:600">諏訪 陽一</span>
+          <span style="min-width:74px;font-size:12px;color:var(--text-secondary)">スワ ヨウイチ</span>
+          <span style="flex:1"><input type="text" value="諏訪"></span>
+          <span style="flex:1"><input type="text" value="陽一"></span>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">「すべて確定して保存」を押す</span></div>
+      <p>見終わったら、いちばん下の<span class="key">「すべて確定して保存」</span>を押します。</p>
+      <p>一度押した方は、<span class="key">次からこの画面に出てきません</span>。毎月出てくるのは、新しく入った方だけです。</p>
+      <div class="note"><b>直さなかった人も確定します</b>　「合っているから触らなかった」方も、このボタンで確定します。<b>ざっと見て、違うものが無ければ押してください。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <span class="mark mark-out"><button class="btn btn-primary">すべて確定して保存</button></span>
+      </div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     13. 役員を登録する方法
+     ============================================================ -->
+<section class="page" id="p13">
+  <div class="page-head"><span class="page-n">13</span><h1>役員を登録する方法</h1></div>
+  <p class="page-lead">最初に1回だけ登録します。参加者名簿の役員欄と、テーブル割りの分け方に効きます。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">役員のタブを開く</span></div>
+      <p>トップ画面の<span class="key">「05 設定」</span>を押します。上に「会員詳細／役員／支部の設定／過去レポート」のタブが並ぶので、<span class="key">「役員」</span>を押します。</p>
+      <table class="tbl">
+        <tr><th>役員</th><td>参加者名簿で役員として扱われます。テーブル割りでは役員が同じテーブルに固まらないように分かれます</td></tr>
+        <tr><th>固定テーブル</th><td>「毎回この人はこのテーブル」と決めたいときに使います</td></tr>
+        <tr><th>毎月参加</th><td>入にしておくと、参加者を入れるときに自動で入ります</td></tr>
+      </table>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="scr-title">設定</div>
+        <div class="tab-nav">
+          <button class="tab-btn">会員詳細</button>
+          <span class="mark mark-out mark-inline"><button class="tab-btn active">役員</button></span>
+          <button class="tab-btn">支部の設定</button>
+          <button class="tab-btn">過去レポート</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">5つを入れる</span></div>
+      <p>「役員を追加する」のカードに、上から順に入れていきます。</p>
+      <table class="tbl">
+        <tr><th>名前</th><td><b>打ち込む欄ではありません。</b>「（タップして会員を選ぶ）」を押すと一覧が開くので、その中から選びます</td></tr>
+        <tr><th>役職</th><td>主催／事務局長／幹事／統括 の4つから選びます</td></tr>
+        <tr><th>固定テーブル</th><td>テーブル番号を常に固定したいときに、その番号を選びます。決めていなければ「固定しない」のままで構いません</td></tr>
+        <tr><th>毎月参加</th><td>毎月必ず参加する方は入にします</td></tr>
+        <tr><th>NM ID</th><td>わからなければ空欄で構いません</td></tr>
+      </table>
+      <div class="note"><b>主催の方を1人は登録してください</b>　参加者名簿に出る主催者名は、<b>役職が「主催」の方から自動で取ります。</b>別に名前を入れる欄はありません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">役員を追加する</div>
+        <p class="muted">名前</p>
+        <span class="mark mark-out"><div class="sel">（タップして会員を選ぶ）</div></span>
+        <p class="muted" style="margin-top:12px">役職</p>
+        <div class="sel">（タップして選ぶ）</div>
+        <p class="muted" style="margin-top:12px">固定テーブル</p>
+        <div class="sel">固定しない</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:14px;font-size:14px"><span class="sw"></span><span>毎月参加</span></div>
+        <div style="margin-top:14px"><input type="text" placeholder="例: NM-1234（空欄可）"></div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">追加して、保存する</span></div>
+      <p>5つを入れ終えたら<span class="key">「追加する」</span>を押します。カードの上の一覧に、その方が加わります。次の方を登録するときは、また名前から入れていきます。</p>
+      <p>直すときは一覧の右の「編集」、消すときは「削除」です。</p>
+      <div class="note"><b>いちばん大事なこと</b>　追加・編集・削除は、まだ画面の中だけの状態です。<b>いちばん下の「役員設定を保存する」を押してはじめて残ります。</b>「役員設定を保存しました」と出たら保存できています。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="participant-list">
+          <div class="p-item"><span class="p-name">佐々木 涼介</span><span class="p-branch">主催</span><button class="p-assign">編集</button><button class="p-remove">削除</button></div>
+          <div class="p-item"><span class="p-name">早瀬 千夏</span><span class="p-branch">事務局長</span><button class="p-assign">編集</button><button class="p-remove">削除</button></div>
+        </div>
+        <div style="margin-top:14px"><span class="mark mark-out mark-inline"><button class="btn btn-primary">追加する</button></span></div>
+        <div style="margin-top:20px"><span class="mark mark-out"><button class="btn btn-success btn-block">役員設定を保存する</button></span></div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
 </div>
-
-<h2>3. 参加者を入れる（2つのやり方）</h2>
-<p>トップ画面で <span class="btn">01</span> <span class="key">新規に定例会準備をする</span> を選び、カレンダーで開催日を選びます。すでに準備を始めた日なら <span class="btn">02</span> <span class="key">登録済みの定例会を処理する</span> から一覧で選べます。</p>
-<p><span class="key">定例会準備　開催日: （日付）</span> という画面になります。上にタブが2つあり、<strong>やりやすいほうを選んで構いません。混ぜて使えます。</strong></p>
-
-<h3><span class="step">やり方1.</span> 参加者入力（1人ずつ入れる）</h3>
-<ol>
-  <li><span class="key">名前を入力</span> と書かれた欄に、名前を入れます。</li>
-  <li><span class="btn">追加</span> を押します。</li>
-  <li>下の <span class="key">参加者リスト（N名）</span> に加わります。（Nのところには今の人数が入ります）</li>
-</ol>
-
-<h3><span class="step">やり方2.</span> まとめて貼り付け（一気に入れる）</h3>
-<p>グループチャットなどに並んでいる名前を、そのままコピーして貼り付けられます。<span class="key">名前を1行1名で貼り付けてください。</span> と説明が出ています。</p>
-<p>入力例として <span class="key">山田 太郎</span> <span class="key">鈴木 花子</span> のように、1行に1人ずつ並べます。貼り付けたら <span class="btn">一括追加</span> を押します。貼り付けた文字を消したいときは <span class="btn">クリア</span> です。</p>
-<p><strong>何人でも貼り付けられます（人数の上限はありません）。</strong></p>
-
-<h3>入れた人を直す・消す</h3>
-<table>
-  <tr><th>ボタン</th><th>できること</th></tr>
-  <tr><td class="col">変更</td><td>その行の人を、別の会員に選び直します。検索は <span class="key">2文字以上で検索します</span>。1文字だけでは出てきません。</td></tr>
-  <tr><td class="col">✕</td><td>その行の1人を、リストから消します。</td></tr>
-  <tr><td class="col">クリア（全員削除）</td><td>リストの全員を消します。押す前によく確かめてください。</td></tr>
-</table>
-
-<h3>保存の表示を必ず確かめてください</h3>
-<p>参加者は入れるたびに自動で保存されます。画面に <span class="key">⬤ 保存済み ✓</span> と出ていれば、保存できています。</p>
-<div class="box warn">
-  <p class="box-title">⚠ 未保存　 と出たとき</p>
-  <p>まだ保存できていません。<span class="btn">再試行</span> を押してください。<span class="key">⬤ 保存済み ✓</span> に変わるまで、次に進まないでください。</p>
-</div>
-<p>全員入れ終わって保存済みになったら、<span class="btn">テーブル割りへ進む</span> を押します。</p>
-
-<h2>4. テーブル割りをする</h2>
-<p><span class="key">テーブル割り　開催日: （日付）</span> の画面になります。参加者を直したくなったら <span class="btn">← 参加者入力に戻る</span> で戻れます。</p>
-
-<h3><span class="step">1.</span> テーブルに入らない人を外す</h3>
-<p>実行ボタンの上に <span class="key">テーブルに入らない運営メンバー：</span> という欄が出ることがあります（役員を登録しているときだけ出ます）。<span class="key">役職：名前</span> の形で並ぶので、<strong>受付や司会などで席に着かない方にチェックを入れます。</strong>チェックした方は割り当てから外れ、結果には <span class="key">テーブルなし（運営メンバー）</span> として並びます。</p>
-<p>席に着く方は、チェックを入れないでください。全員にチェックを入れると割り当てるものが無くなり、エラーになります。</p>
-
-<h3><span class="step">2.</span> 自動で割り当てる</h3>
-<table>
-  <tr><th>ボタン</th><th>できること</th></tr>
-  <tr><td class="col">▶ テーブル割り実行</td><td>1回だけ割り当てを作ります。</td></tr>
-  <tr><td class="col">3回試行・ベスト採用</td><td>3回試して、そのうちいちばん良い結果を採用します。時間に余裕があるときはこちらがおすすめです。</td></tr>
-  <tr><td class="col">手動で決める</td><td>自動を使わず、自分で1人ずつ振り分けます。</td></tr>
-</table>
-
-<h3><span class="step">3.</span> 割り当ての決まり</h3>
-<table>
-  <tr><th>決まり</th><th>中身</th></tr>
-  <tr><td class="col">1テーブルの人数</td><td><strong>4名または5名です。</strong>参加者を4名と5名に分けきれない人数のときは、自動では割り当てず、自分で決める画面に切り替わります。</td></tr>
-  <tr><td class="col">自動にできない人数</td><td><strong>6名・7名・11名</strong>は、4名と5名の組み合わせで分けられないため自動ではできません。手動で決める画面に切り替わります。</td></tr>
-  <tr><td class="col">参加者が3名以下</td><td>全員で1テーブルになります。<strong>この場合だけは3名以下のテーブルができます。</strong></td></tr>
-  <tr><td class="col">役割</td><td>1つのテーブルにTL（テーブルリーダー）は1名まで、SL（サブリーダー）も1名までです。</td></tr>
-</table>
-
-<h3><span class="step">4.</span> 手動で決める</h3>
-<p><span class="btn">手動で決める</span> を押すと <span class="key">手動テーブル割り</span> のパネルが開きます。</p>
-<ol>
-  <li><span class="key">テーブル数:</span> の横の <span class="btn">－</span> <span class="btn">＋</span> で、テーブルの数を決めます。</li>
-  <li>参加者ごとに <span class="key">テーブルを選ぶ</span> を押して、入るテーブルを選びます。選べるのは <span class="key">テーブル A</span> から順に並んだテーブルと、<span class="key">（割り当てなし）</span> です。</li>
-  <li>役割をつける人は <span class="key">役割を選ぶ</span> を押して、<span class="key">TL（テーブルリーダー）</span> <span class="key">SL（サブリーダー）</span> <span class="key">なし</span> から選びます。</li>
-  <li>全員を振り分けたら <span class="btn">この内容で保存する</span> を押します。やめるときは <span class="btn">閉じる</span> です。</li>
-</ol>
-<p><strong>1人でも残っていると保存できません。</strong><span class="key">（割り当てなし）</span> のままの人がいないか確かめてください。</p>
-
-<h2>5. テーブル割りを調整する</h2>
-<p>テーブル割りができたあと、<strong>一部だけを手で直せます。</strong>全部を組み直さなくても、1人だけ席を移したり、2人を入れ替えたりできます。</p>
-<p><span class="key">テーブル割り結果</span> の下にボタンが並んでいます。<span class="btn">共有テキストをコピー</span> <span class="btn">紹介者を記録する</span> の下、<span class="btn">履歴に保存して定例会当日へ</span> の上にある <span class="btn">調整する</span> を押してください。</p>
-<p><span class="key">テーブル割りの調整</span> の画面が開きます。結果の画面に戻るときは <span class="btn">＜ 結果に戻る</span> です。</p>
-
-<h3>画面の見かた</h3>
-<p>テーブルごとに人が並びます。見出しには <span class="key">テーブル A（5名）</span> のように、そのテーブルの人数が出ます。名前の右には <span class="key">TL</span> <span class="key">SL</span> <span class="key">一般</span> の印が付き、<strong>並びは TL → SL → 一般 の順</strong>です。</p>
-
-<h3><span class="step">1.</span> 人を動かす</h3>
-<p>動かしたい人の<strong>名前を押します。</strong><span class="key">どうしますか？</span> と出て、2つから選べます。</p>
-<table>
-  <tr><th>選ぶもの</th><th>どうなるか</th></tr>
-  <tr><td class="col">別のテーブルへ移す</td><td>移動先のテーブルを選ぶと、その人が移ります。<strong>移った先のテーブルは人数が増え、元のテーブルは減ります。</strong></td></tr>
-  <tr><td class="col">ほかの人と入れ替える</td><td>相手を選ぶと、2人が入れ替わります。<strong>どのテーブルも人数は変わりません。</strong></td></tr>
-</table>
-<p>押し間違えたときは <span class="key">キャンセル</span> を選んでください。</p>
-
-<h3><span class="step">2.</span> 人を追加する</h3>
-<ol>
-  <li>画面のいちばん下にある <span class="btn">人を追加する</span> を押します。</li>
-  <li>会員を名前で探して選びます。</li>
-  <li>追加先のテーブルを選びます。</li>
-  <li><span class="key">（名前）さんをテーブル（記号）に追加します。よろしいですか？</span> と出ます。<span class="btn">追加する</span> を押すと、その方が入ります。やめるときは <span class="btn">キャンセル</span> です。</li>
-</ol>
-
-<div class="box warn">
-  <p class="box-title">人を消すボタンはありません</p>
-  <p>この画面には、人をテーブルから外すボタンはありません。<strong>来なかった方は、当日の画面で欠席をつけてください</strong>（やり方は「8. 月例会当日（出欠をつける）」にあります）。</p>
-</div>
-
-<h3><span class="step">3.</span> 共有用テキストも書き変わります</h3>
-<p>調整すると、画面の下にある <span class="key">共有用テキスト</span> も自動で書き変わります。ここにある <span class="btn">共有テキストをコピー</span> を押せば、調整したあとの内容をそのまま貼り付けられます。</p>
-
-<h3><span class="step">4.</span> 保存する</h3>
-<p>直し終わったら <span class="btn">この内容で保存する</span> を押します。<span class="key">調整結果を保存しました</span> と出れば、保存できています。</p>
-<div class="box warn">
-  <p class="box-title">保存せずに画面を離れると、調整した内容は消えます</p>
-  <p>移した人・入れ替えた人・追加した人は、<span class="btn">この内容で保存する</span> を押すまで残りません。<strong>調整が終わったら、必ず押してください。</strong></p>
-</div>
-
-<h3>あとから調整の続きをする</h3>
-<p>保存したあとトップ画面に戻ると、画面の上に <span class="key">（日付）のテーブル割りの調整</span> という帯が出ます。<span class="btn">再開する →</span> を押すと、続きから開けます。</p>
-
-<h2>6. 結果を共有する</h2>
-<p>割り当てができると <span class="key">テーブル割り結果</span> が表示され、その下に <span class="key">共有用テキスト</span> が出ます。これは、そのままグループチャットなどに貼れる形になっています。</p>
-<ol>
-  <li><span class="btn">共有テキストをコピー</span> を押します。</li>
-  <li><span class="key">コピーしました</span> と出たら、コピーできています。</li>
-  <li>連絡に使っているチャットやメールに、そのまま貼り付けて送ります。</li>
-</ol>
-
-<h2>7. 履歴に保存する</h2>
-<p>割り当てが決まったら、<span class="btn">履歴に保存して定例会当日へ</span> を押します。これで、この開催日の記録が残ります。</p>
-<div class="box warn">
-  <p class="box-title">保存は1つの開催日につき1回だけです</p>
-  <p>同じ開催日でもう一度保存しようとすると <span class="key">この日付のデータは既に存在します（日付）。上書きする場合は既存データを削除してから再実行してください</span> と出ます。作り直したいときは、先に前の記録を消す必要があります。</p>
-</div>
-<p>保存した記録は、トップ画面の <span class="btn">履歴を見る</span> から確かめられます。<span class="key">履歴</span> の一覧で <span class="btn">詳細を見る</span> を押すと中身が出ます。一覧に戻るときは <span class="btn">← 履歴に戻る</span> です。</p>
-<p><strong>直せるのは3ヶ月以内の記録だけです。</strong>それより前を直そうとすると <span class="key">3ヶ月より前の履歴は修正できません（日付）</span> と出ます。</p>
-
-<h2>8. 月例会当日（出欠をつける）</h2>
-<p>当日は <span class="key">定例会当日　開催日: （日付）</span> の画面を開きます。ここで、実際に来た人・来なかった人を反映します。</p>
-
-<h3>欠席の人をつける</h3>
-<p><span class="key">出欠変更</span> の欄に <span class="key">欠席の人は、名前の横の「出席 ✓」を押すと欠席に変わります。</span> と書かれています。</p>
-<ol>
-  <li>来なかった人の名前の横の <span class="btn">出席 ✓</span> を押します。</li>
-  <li>表示が <span class="btn">欠席</span> に変わります。もう一度押すと出席に戻ります。</li>
-</ol>
-<p>全員が欠席になるような操作はできません。<span class="key">参加者が0名になります。少なくとも1名の参加者が必要です</span> と出ます。</p>
-
-<h3>当日に来た人を追加する</h3>
-<ol>
-  <li><span class="key">テーブルを選択</span> を押して、入ってもらうテーブルを選びます。</li>
-  <li><span class="key">名前を入力...</span> の欄に名前を入れます。</li>
-  <li><span class="btn">＋ 参加者を追加</span> を押します。</li>
-</ol>
-
-<h3>最後に保存する</h3>
-<p>出欠と追加が終わったら <span class="btn">確定して保存</span> を押します。これを押さないと、当日の変更が残りません。</p>
-
-<h3>テーブル割りをやり直したいとき</h3>
-<p><span class="btn">履歴に保存して定例会当日へ</span> を押したあとでも、テーブル割りをやり直せます。</p>
-<ol>
-  <li>この画面の<strong>右上</strong>にある <span class="btn">調整に戻る</span> を押します。</li>
-  <li><span class="key">（数）件を履歴から外して調整に戻ります。よろしいですか？</span> と出ます。</li>
-  <li><span class="btn">調整に戻る</span> を押すと <span class="key">（数）件を履歴から外しました</span> と出て、調整の画面に戻ります。やめるときは <span class="btn">キャンセル</span> です。</li>
-</ol>
-<p><strong>並びは、保存したときのままです。</strong>やり直せるのは、その開催日のぶんだけです。ほかの開催日の履歴には影響しません。</p>
-<p>調整の画面の使い方は「5. テーブル割りを調整する」にあります。直したら <span class="btn">この内容で保存する</span> を押してください。</p>
-
-<h2>9. 紹介者を記録する</h2>
-<p>誰が誰を連れてきたかを残す画面です。トップ画面の <span class="btn">04</span> <span class="key">紹介者を記録する</span> から開けます。テーブル割りの画面にある <span class="btn">紹介者を記録する</span> からも開けます。</p>
-<p>見出しは <span class="key">紹介者を記録</span>、説明は <span class="key">ゲストや新会員の紹介者を記録します。</span> です。</p>
-<ol>
-  <li>紹介した人を <span class="key">NM会員IDまたは氏名</span> の欄に入れます。IDでも名前でも構いません。</li>
-  <li><span class="btn">💾 紹介者を保存</span> を押します。</li>
-</ol>
-<p>この画面は、先にテーブル割りを履歴に保存してから使います。保存していないと <span class="key">先にテーブル割りを履歴に保存してください</span> と出ます。</p>
-
-<h2>10. 参加者名簿（NM本部提出用）を出す</h2>
-<p>月例会が終わったあと、NM本部に出す参加者名簿を作ります。トップ画面の <span class="btn">03</span> <span class="key">参加者名簿を作る</span> から開きます。</p>
-<p>見出しは <span class="key">参加者名簿出力</span>、説明は <span class="key">月例会終了後、NM本部提出用の参加者名簿xlsxを自動生成します。</span> です。xlsxとは、Excelで開ける表のファイルのことです。</p>
-<ol>
-  <li><span class="key">レポートを出力する開催日を選んでください</span> と書かれた下の <span class="key">出力する開催日を選択</span> を押します。まだ選んでいないときは <span class="key">タップして開催日を選ぶ</span> と表示されています。</li>
-  <li>開催日を選んだら <span class="btn">読み込む</span> を押します。</li>
-  <li><span class="key">開催日</span> と <span class="key">支部名</span> の確認表が出ます。合っているか見てください。</li>
-  <li><span class="btn">レポート生成</span> を押します。</li>
-  <li><span class="key">レポートを生成中...（数十秒かかる場合があります）</span> と出ます。<strong>途中で画面を閉じずに待ってください。</strong></li>
-  <li>できあがると <span class="key">ダウンロード</span> と <span class="key">フォルダを開く</span> が出ます。<span class="key">ダウンロード</span> を押すとファイルが手元に保存されます。</li>
-</ol>
-<p><strong>名簿を出せるのは、直近3ヶ月以内の開催日だけです。</strong>それより前しかないときは <span class="key">直近3ヶ月以内の履歴がありません。先に「履歴に保存」を実行してください</span> と出ます。</p>
-
-<h2>11. 入力するとどうなりますか</h2>
-<table>
-  <tr><th>操作</th><th>そのあとどうなるか</th></tr>
-  <tr><td class="col">参加者を入れる</td><td>入れるたびに自動で保存されます。<span class="key">⬤ 保存済み ✓</span> が出ていれば、途中でブラウザを閉じても消えません。次に開いたとき、トップ画面に <span class="key">（日付）の定例会準備の続きがあります</span> と出て、そこから続けられます。</td></tr>
-  <tr><td class="col">テーブル割りを実行する</td><td>その場で結果が画面に出ます。この時点ではまだ記録として残っていません。<span class="btn">履歴に保存して定例会当日へ</span> を押して、はじめて残ります。</td></tr>
-  <tr><td class="col">履歴に保存する</td><td>この開催日の記録として残ります。トップ画面の <span class="btn">履歴を見る</span> から <span class="btn">詳細を見る</span> でいつでも見返せます。この記録が、あとの紹介者の記録と参加者名簿のもとになります。</td></tr>
-  <tr><td class="col">当日の出欠をつける</td><td><span class="btn">確定して保存</span> を押した時点で、履歴の内容が当日の実際の顔ぶれに書き換わります。参加者名簿にもこの内容が出ます。</td></tr>
-  <tr><td class="col">紹介者を保存する</td><td>誰が誰を連れてきたかが記録に残ります。</td></tr>
-  <tr><td class="col">名簿を出す</td><td>Excelで開けるファイルが自動で作られます。できあがったものは <span class="key">ダウンロード</span> から手元に保存できます。</td></tr>
-  <tr><td class="col">回を重ねる</td><td>保存した履歴がたまっていくと、トップ画面の <span class="btn">06</span> <span class="key">分析を見る</span> で、過去の同席や業種の偏りが見られるようになります。</td></tr>
-</table>
-
-<h2>12. こんな画面が出たときは</h2>
-<p>表示の中の <span class="key">（名前）</span> <span class="key">（日付）</span> <span class="key">N</span> のところには、実際の名前・日付・人数が入ります。</p>
-
-<h3>参加者を入れるとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">支部名を入力してください</td><td>支部名の欄が空のままです。支部名を入れてから <span class="btn">ログイン</span> を押してください。</td></tr>
-  <tr><td class="col">支部名またはパスワードが違います</td><td>どちらかが登録と合っていません。「支部」の2文字を付けていないか、余分な空白が入っていないか、大文字と小文字が合っているか確かめてください。それでも入れないときはご連絡ください。</td></tr>
-  <tr><td class="col">もう一度ログインしてください</td><td>時間が経ってログインの状態が切れました。支部名とパスワードを入れ直してください。</td></tr>
-  <tr><td class="col">「（名前）」は既に追加されています</td><td>その人はもうリストに入っています。そのまま次の人を入れてください。</td></tr>
-  <tr><td class="col">テキストを入力してください</td><td>貼り付ける欄が空のままです。名前を貼り付けてから <span class="btn">一括追加</span> を押してください。</td></tr>
-  <tr><td class="col">有効な名前が見つかりません</td><td>貼り付けた文字から名前を読み取れませんでした。1行に1人ずつ、名前だけになるように直してから貼り直してください。</td></tr>
-  <tr><td class="col">全て既に登録済みです</td><td>貼り付けた人が全員すでにリストに入っています。そのまま次に進んで構いません。</td></tr>
-  <tr><td class="col">所属支部が未設定の参加者が N 名います（名前）。<br>このままテーブル割りを実行しますか？</td><td>どの支部の方かがわかっていない人がいます。他支部からのゲストならそのまま進めて構いません。自支部の会員のはずなら、いったん止めて <span class="btn">変更</span> から選び直してください。</td></tr>
-</table>
-
-<h3>テーブル割りのとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">参加者が登録されていません</td><td>参加者が1人も入っていません。<span class="btn">← 参加者入力に戻る</span> で戻って、参加者を入れてください。</td></tr>
-  <tr><td class="col">保存が完了していない参加者がいます。保存完了を待ってから再試行してください。</td><td>自動保存がまだ終わっていません。<span class="key">⬤ 保存済み ✓</span> に変わってから、もう一度押してください。</td></tr>
-  <tr><td class="col">参加者が N 名のため、4〜5名のテーブルでは自動割り当てができません。<br>手動でテーブル割りを行いますか？</td><td>不具合ではありません。6名・7名・11名のときに出ます。<span class="btn">手動で決める</span> を押して、自分で振り分けてください。やめるときは <span class="btn">閉じる</span> です。</td></tr>
-  <tr><td class="col">参加者リストに重複した名前があります：（名前）</td><td>同じ名前が2つ入っています。<span class="btn">← 参加者入力に戻る</span> で戻り、片方を <span class="btn">✕</span> で消してください。</td></tr>
-  <tr><td class="col">除外後の参加者が0名です。「テーブルに入らない運営メンバー」の選択を見直してください</td><td>参加者全員が「テーブルに入らない」扱いになっています。テーブル割りの画面で <span class="key">テーブルに入らない運営メンバー：</span> の欄を見て、席に着く方のチェックを外してください。</td></tr>
-  <tr><td class="col">TLの「（名前）」さんを配置できるテーブルがありません。固定テーブルの構成を見直すか、TL不在のテーブルの参加者にTLを手動指定してください</td><td>1つのテーブルにTL（テーブルリーダー）は1名までのため、置き場所がなくなっています。<strong>「固定テーブル」は役員ごとの設定で、トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">役員</span> タブで変えられます</strong>（手順は「はじめてお使いになるとき」の役員の章）。固定を <span class="key">固定しない</span> に戻すか、TLがいないテーブルの人に <span class="key">手動で決める</span> でTLを指定してください。</td></tr>
-  <tr><td class="col">テーブル（記号）に固定された人数（N名）がテーブル定員（N名）を超えています</td><td>そのテーブルに人を固定しすぎています。固定する人数を、定員の中に収まるまで減らしてください。</td></tr>
-  <tr><td class="col">SL可否がONの参加者が不足しています。一部のテーブルにSLがいない場合があります。</td><td>不具合ではありません。<span class="key">SL可否</span> が入になっている方が、テーブルの数に足りていません。そのまま進めて構いません。<strong><span class="key">SL可否</span> は、トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">会員詳細</span> タブで変えられます</strong>（手順は「はじめてお使いになるとき」の会員の情報の章）。</td></tr>
-  <tr><td class="col">N名が未割り当てです。全員を割り当ててから保存してください</td><td>手動で決める画面で、まだ <span class="key">（割り当てなし）</span> の人が残っています。全員のテーブルを選んでから <span class="btn">この内容で保存する</span> を押してください。</td></tr>
-</table>
-
-<h3>テーブル割りを調整するとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">（名前）さんをテーブル（記号）に追加します。よろしいですか？</td><td>調整の画面で <span class="btn">人を追加する</span> から会員とテーブルを選ぶと出ます。合っていれば <span class="btn">追加する</span>、違っていれば <span class="btn">キャンセル</span> を押してください。</td></tr>
-  <tr><td class="col">この人は既にテーブルにいます</td><td>選んだ方は、すでにどれかのテーブルに入っています。移したいだけなら、その方の名前を押して <span class="key">別のテーブルへ移す</span> を選んでください。</td></tr>
-  <tr><td class="col">調整結果を保存しました</td><td>保存できています。このあと <span class="btn">履歴に保存して定例会当日へ</span> に進んで構いません。</td></tr>
-  <tr><td class="col">（数）件を履歴から外して調整に戻ります。よろしいですか？</td><td>当日の画面で <span class="btn">調整に戻る</span> を押すと出ます。<strong>外れるのは、その開催日のぶんだけです。</strong>やり直すなら <span class="btn">調整に戻る</span>、やめるなら <span class="btn">キャンセル</span> を押してください。</td></tr>
-</table>
-
-<h3>保存するとき・当日</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">この日付のデータは既に存在します（日付）。上書きする場合は既存データを削除してから再実行してください</td><td>その開催日はすでに保存済みです。同じ日で作り直したいときは、先に前の記録を消してから、もう一度保存してください。</td></tr>
-  <tr><td class="col">参加者が0名になります。少なくとも1名の参加者が必要です</td><td>全員を欠席にはできません。少なくとも1名は出席のままにしてください。</td></tr>
-  <tr><td class="col">「（名前）」さんには紹介者記録があります。<br>欠席にすると紹介記録も削除されます。欠席にしますか？</td><td>その人を欠席にすると、あわせて紹介の記録も消えます。本当に欠席なら進めてください。押し間違いならやめてください。</td></tr>
-  <tr><td class="col">3ヶ月より前の履歴は修正できません（日付）</td><td>直せるのは3ヶ月以内の記録だけです。この開催日はもう直せません。</td></tr>
-</table>
-
-<h3>紹介者・名簿のとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">先にテーブル割りを履歴に保存してください</td><td>まだ履歴に保存していません。テーブル割りの画面で <span class="btn">履歴に保存して定例会当日へ</span> を押してから、もう一度開いてください。</td></tr>
-  <tr><td class="col">該当する会員が見つかりません。NM会員IDを直接入力するか、欄を空欄にしてください</td><td>入れた名前で会員が見つかりませんでした。NM会員IDを入れ直すか、わからないときは空欄のままにしてください。</td></tr>
-  <tr><td class="col">直近3ヶ月以内の履歴がありません。先に「履歴に保存」を実行してください</td><td>名簿を出せるのは直近3ヶ月以内の開催日だけです。まだ履歴に保存していない開催日なら、先に保存してください。</td></tr>
-  <tr><td class="col">⚠ 会員マスタ未登録のためゲスト判定になった参加者がいます（確認してください）：（名前）</td><td>会員として登録がない人が、ゲスト扱いで名簿に載っています。本当にゲストならそのままで構いません。会員のはずなら、名前の表記が合っているか確かめてください。</td></tr>
-  <tr><td class="col">⚠ 姓名の確認が必要な参加者がいます（姓名確認画面から確定してください）：（名前）</td><td>姓と名の区切りがはっきりしない人がいます。トップ画面の <span class="btn">07</span> <span class="key">姓名確認</span> を開いて、正しい区切りを確定してください。</td></tr>
-</table>
-
-<h3>どの画面でも出ることがあるもの</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">他の操作が実行中です。しばらく待ってから再試行してください</td><td>前の処理がまだ動いています。ボタンを連打せず、少し待ってからもう一度押してください。</td></tr>
-  <tr><td class="col">通信エラーが続いています。ページをリロードして再度お試しください。</td><td>通信がうまくいっていません。ブラウザの再読み込み（更新）をして、開き直してください。入れた参加者は自動保存されているので、消えていません。</td></tr>
-</table>
-
-<h2>13. やらないでいただきたいこと</h2>
-<ul>
-  <li><span class="ng">同じ開催日で2回「履歴に保存」をしない</span>　<span class="key">この日付のデータは既に存在します</span> と出ます。作り直すには、先に前の記録を消す手間がかかります。</li>
-  <li><span class="ng">参加者リストが <span class="key">⬤ 保存済み ✓</span> になる前に、テーブル割りへ進まない</span>　保存が終わっていない人が抜け落ちることがあります。表示が変わるまで待ってください。</li>
-  <li><span class="ng">準備中のデータがあるまま、別の日付で新しく準備を始めない</span>　前の日付で入れていたデータが破棄されます。続きがあるときは、トップ画面の <span class="key">（日付）の定例会準備の続きがあります</span> から <span class="btn">再開する →</span> を押して、先に終わらせてください。</li>
-  <li><span class="ng">月例会から3ヶ月以上たってから直そうとしない</span>　3ヶ月より前の記録は直せません。直しは月例会のあと、早めに済ませてください。</li>
-</ul>
-
-<h2>14. よくあるご質問</h2>
-
-<h3>参加者が6名なのに、テーブル割りができません。壊れていますか？</h3>
-<p>壊れていません。テーブルは4名または5名で組む決まりなので、6名・7名・11名は自動で分けられません。<span class="btn">手動で決める</span> を押して、自分で振り分けてください。</p>
-
-<h3>テーブル割りのあと、1人だけ席を変えたいときは？</h3>
-<p><span class="key">テーブル割り結果</span> の下にある <span class="btn">調整する</span> を押してください。動かしたい人の名前を押すと <span class="key">別のテーブルへ移す</span> と <span class="key">ほかの人と入れ替える</span> が選べます。全部を組み直す必要はありません。直したら <span class="btn">この内容で保存する</span> を押してください（やり方は「5. テーブル割りを調整する」にあります）。</p>
-
-<h3>調整したあとで、やっぱり元に戻したいときは？</h3>
-<p>まだ <span class="btn">この内容で保存する</span> を押していなければ、<span class="btn">＜ 結果に戻る</span> で画面を離れてください。調整した内容は残らず、押す前のままです。</p>
-<p>すでに <span class="btn">履歴に保存して定例会当日へ</span> まで押したあとなら、当日の画面の右上にある <span class="btn">調整に戻る</span> から調整の画面に戻れます。<strong>ただし戻るのは、保存したときの並びまでです。</strong></p>
-
-<h3>参加者が3名以下のときはどうなりますか？</h3>
-<p>全員で1テーブルになります。ふだんは4名または5名で組む決まりですが、<strong>この場合だけは3名以下のテーブルができます。</strong></p>
-
-<h3><span class="key">▶ テーブル割り実行</span> と <span class="key">3回試行・ベスト採用</span> は何が違いますか？</h3>
-<p><span class="key">▶ テーブル割り実行</span> は1回だけ作ります。<span class="key">3回試行・ベスト採用</span> は3回試して、そのうちいちばん良い結果を採用します。</p>
-
-<h3><span class="key">変更</span> を押して名前を探しても、何も出てきません</h3>
-<p>検索は <span class="key">2文字以上で検索します</span>。1文字だけでは出てきません。2文字以上入れてみてください。</p>
-
-<h3>「まとめて貼り付け」は何人まで貼れますか？</h3>
-<p>人数の上限はありません。何人でも貼り付けられます。</p>
-
-<h3>途中でやめてしまいました。最初からやり直しですか？</h3>
-<p>やり直しではありません。参加者は自動で保存されています。トップ画面に <span class="key">（日付）の定例会準備の続きがあります</span> と出るので、<span class="btn">タップして再開する</span> または <span class="btn">再開する →</span> を押してください。</p>
-
-<h3>先月の分を直したいのですが</h3>
-<p>3ヶ月以内であれば直せます。トップ画面の <span class="btn">履歴を見る</span> から <span class="btn">詳細を見る</span> で開いてください。3ヶ月より前は <span class="key">3ヶ月より前の履歴は修正できません（日付）</span> と出て、直せません。</p>
-
-<h3>参加者名簿はいつまで出せますか？</h3>
-<p>直近3ヶ月以内の開催日まで出せます。月例会が終わったら、早めに出しておくと安心です。</p>
-
-<h3>次に何をすればよいかわからなくなりました</h3>
-<p>画面の上にある <span class="btn">?</span> を押してください。<span class="key">このアプリの流れ</span> の説明が開きます。</p>
-
-<h3>会員リストの取り込みや役員の設定はどこでやりますか？</h3>
-<p>どちらもトップ画面から行います。<strong>会員リストの取り込みは毎月</strong>、役員の設定は最初の1回だけです（役員が変わったときは直します）。手順は「はじめてお使いになるとき」の資料にあります。</p>
-
-<p class="foot">
-ご不明な点は、ネコノテ 山下美樹まで Messenger または LINE でご連絡ください。<br>
-月例会ツール 使い方マニュアル（2026年8月21日版）
-</p>
-
 </body>
 </html>
