@@ -2,576 +2,975 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>月例会ツール はじめてお使いになるとき</title>
 <style>
-  @page { size: A4; margin: 16mm 14mm; }
-  * { box-sizing: border-box; }
-  body {
-    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
-    color: #333; line-height: 1.8; margin: 0;
-    padding: 32px 24px 64px; max-width: 820px; margin-inline: auto;
-    background: #fff; font-size: 15px;
-  }
-  h1 {
-    font-size: 24px; color: #fff; background: #4a6572;
-    padding: 18px 20px; border-radius: 8px; margin: 0 0 8px;
-  }
-  .lead { color: #666; font-size: 14px; margin: 0 0 32px; }
-  h2 {
-    font-size: 19px; border-left: 6px solid #4a6572;
-    padding-left: 12px; margin: 40px 0 16px;
-  }
-  h3 { font-size: 16px; margin: 24px 0 8px; }
-  table { border-collapse: collapse; width: 100%; margin: 12px 0 20px; font-size: 14px; table-layout: fixed; }
-  th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; vertical-align: top; word-break: break-word; }
-  th { background: #eceff1; font-weight: bold; }
-  td.col { font-weight: bold; background: #fafafa; }
-  /* 列幅を表ごとにそろえる（3列の表は1列目を狭く・2列の表は42%） */
-  table:has(tr > *:nth-child(3)) th:first-child,
-  table:has(tr > *:nth-child(3)) td:first-child { width: 14%; }
-  table:has(tr > *:nth-child(3)) th:nth-child(2),
-  table:has(tr > *:nth-child(3)) td:nth-child(2) { width: 36%; }
-  table:not(:has(tr > *:nth-child(3))) th:first-child,
-  table:not(:has(tr > *:nth-child(3))) td:first-child { width: 42%; }
-  .box {
-    background: #f5f7f8; border: 1px solid #cfd8dc;
-    border-radius: 8px; padding: 16px 20px; margin: 20px 0;
-  }
-  .box.warn { background: #fff6ed; border-color: #f0c9a0; }
-  .box p:first-child { margin-top: 0; }
-  .box p:last-child { margin-bottom: 0; }
-  .box-title { font-weight: bold; margin-bottom: 8px; }
-  ol, ul { padding-left: 24px; }
-  li { margin-bottom: 8px; }
-  .step { font-weight: bold; color: #37474f; }
-  .ng { color: #c0392b; font-weight: bold; }
-  .key {
-    display: inline-block; border: 1px solid #4a6572; color: #37474f;
-    border-radius: 4px; padding: 0 7px; font-weight: bold; background: #fff; overflow-wrap: anywhere; line-height: 1.45;
-  }
-  .btn {
-    display: inline-block; background: #4a6572; color: #fff;
-    border-radius: 4px; padding: 0 9px; font-weight: bold; font-size: 14px; overflow-wrap: anywhere; line-height: 1.45;
-  }
-  .box table { margin: 8px 0 0; font-size: 13px; }
-  .foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 13px; color: #777; }
-  @media print {
-    body { padding: 0; font-size: 13px; }
-    h2 { page-break-after: avoid; }
-    table, .box { page-break-inside: avoid; }
-  }
+/* ============================================================
+   マニュアル本体
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;
+  background:#fff;color:#1f2328;line-height:1.8;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+
+.doc-title{font-size:38px;font-weight:700;text-align:center;letter-spacing:.02em}
+.doc-sub{text-align:center;color:#5b6270;font-size:15px;margin:8px 0 40px}
+
+/* 目次 */
+.toc{border:2px solid #1f2328;padding:24px 28px;margin-bottom:56px}
+.toc h2{font-size:24px;font-weight:700;margin-bottom:2px}
+.toc .toc-note{font-size:14px;color:#5b6270;margin-bottom:14px}
+.toc ol{list-style:none;counter-reset:toc}
+.toc li{counter-increment:toc;border-top:1px solid #e3e6ea}
+.toc li:first-child{border-top:none}
+.toc a{display:flex;gap:14px;align-items:baseline;padding:11px 4px;color:#1f2328;text-decoration:none;font-size:17px;font-weight:600}
+.toc a::before{content:counter(toc);color:#e53935;font-weight:700;width:20px;flex:none}
+.toc a:hover{background:#fdf3f2}
+.toc .toc-s{font-size:13px;color:#5b6270;font-weight:400;margin-left:auto;text-align:right}
+
+/* 各ページ */
+.page{padding-top:24px;margin-bottom:64px;border-top:4px solid #1f2328}
+.page-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.page-n{font-size:15px;font-weight:700;color:#e53935;flex:none}
+h1{font-size:31px;font-weight:700;letter-spacing:.02em}
+.page-lead{color:#5b6270;font-size:15px;margin-bottom:26px}
+.back{display:inline-block;margin-top:18px;font-size:13px;color:#5b6270;text-decoration:none;border-bottom:1px solid #c9ced6}
+.back:hover{color:#1f2328}
+
+.step{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;padding:26px 0;border-top:1px solid #e3e6ea}
+.step:first-of-type{border-top:none}
+.step-text{min-width:0}
+.step-shot{min-width:0}
+.step-n{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;
+  background:#e53935;color:#fff;font-size:17px;font-weight:700;margin-right:10px;flex:none}
+.step-h{font-size:21px;font-weight:700;margin-bottom:12px;display:flex;align-items:center}
+.step-h span.t{flex:1}
+.step p{font-size:16px;margin-bottom:10px}
+.step p:last-child{margin-bottom:0}
+.key{color:#e53935;font-weight:700}
+
+.note{background:#fff8e1;border-left:4px solid #f9ab00;padding:12px 16px;font-size:15px;margin-top:14px}
+.note b{color:#b26a00}
+.tbl{width:100%;border-collapse:collapse;font-size:15px;margin-top:12px}
+.tbl th,.tbl td{border:1px solid #d7dbe0;padding:8px 10px;text-align:left;vertical-align:top}
+.tbl th{background:#f4f6f8;font-weight:600;white-space:nowrap}
+
+@media (max-width:860px){
+  .step{grid-template-columns:1fr;gap:16px}
+  .doc-title{font-size:27px}
+  h1{font-size:24px}
+}
+
+/* ============================================================
+   赤枠マーカー
+   ============================================================ */
+.mark{position:relative;display:block}
+.mark::after{content:'';position:absolute;pointer-events:none;z-index:4;
+  inset:5px 12px;border:3px solid #e53935;border-radius:5px}
+.mark-out::after{inset:-6px}
+.mark-inline{display:inline-block}
+
+/* ============================================================
+   月例会ツールの画面の再現（アプリの index.html から写したCSS）
+   ============================================================ */
+.app-shot{
+  --bg:#1e2028;--surface:#252830;--hover-bg:#303440;--border:#393d4a;--header-bg:#13151c;
+  --text:#e4e6f0;--text-secondary:#9096a8;--on-fill:#1e2028;
+  --primary:#d4a017;--primary-dark:#b8860b;--primary-light:#2b2410;--primary-text:#f0c060;
+  --danger:#ff6666;--danger-light:#2d1010;--success:#34c472;--success-light:#0c2a1c;
+  --warn:#f9ab00;--warn-light:#2d2208;--help:#ec6d71;--help-light:#33191a;
+  --shadow:0 2px 4px rgba(0,0,0,.50);--radius:8px;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;
+  border:1px solid #c9ced6;border-radius:6px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.app-shot .app-header{background:var(--header-bg);padding:12px 20px;display:flex;align-items:center;gap:12px}
+.app-shot .app-header .ttl{font-size:15px;font-weight:600;flex:1;line-height:1.25}
+.app-shot .app-header .ttl small{display:block;font-size:9px;letter-spacing:.18em;color:var(--text-secondary);font-weight:400}
+.app-shot .app-header .branch-label{font-size:12px;color:var(--primary-text);font-weight:700}
+.app-shot .app-header .logout-btn{background:none;border:none;border-bottom:1px solid var(--text-secondary);color:var(--text);padding:0 0 1px;font-size:12px}
+.app-shot .container{padding:14px}
+.app-shot .scr-title{font-size:15px;font-weight:700;margin-bottom:10px}
+
+.app-shot .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border:none;border-radius:var(--radius);font-size:15px;font-weight:500;min-height:42px}
+.app-shot .btn-primary{background:var(--primary);color:var(--on-fill)}
+.app-shot .btn-outline{background:var(--surface);color:var(--primary);border:1px solid var(--primary)}
+.app-shot .btn-success{background:var(--success);color:var(--on-fill)}
+.app-shot .btn-block{width:100%}
+.app-shot .btn-sm{padding:6px 14px;font-size:13px;min-height:34px}
+
+.app-shot input[type="text"],.app-shot textarea{font-size:15px;padding:10px 12px;border:1px solid var(--border);
+  border-radius:var(--radius);width:100%;background:var(--surface);color:var(--text);font-family:inherit}
+.app-shot ::placeholder{color:var(--text-secondary)}
+
+.app-shot .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow)}
+.app-shot .card-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.app-shot .muted{font-size:13px;color:var(--text-secondary);margin-bottom:8px}
+
+.app-shot .tab-nav{display:flex;border-bottom:2px solid var(--border);margin-bottom:14px}
+.app-shot .tab-btn{padding:10px 16px;font-size:14px;font-weight:500;color:var(--text-secondary);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.app-shot .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
+
+.app-shot .participant-list .p-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.app-shot .p-item .p-name{flex:1;font-weight:500}
+.app-shot .p-item .p-branch{color:var(--text-secondary);font-size:13px}
+.app-shot .p-item .p-remove{color:var(--danger);font-size:16px;background:none;border:none;padding:4px 8px}
+.app-shot .p-item .p-assign{color:var(--primary);padding:4px 8px;font-size:12px;background:none;border:1px solid var(--primary);border-radius:4px;line-height:1.2}
+
+.app-shot .alert{padding:10px 14px;border-radius:var(--radius);margin-bottom:12px;font-size:13px}
+.app-shot .alert-warn{background:var(--warn-light);color:var(--warn);border:1px solid var(--warn)}
+.app-shot .alert-success{background:var(--success-light);color:var(--success);border:1px solid var(--success)}
+
+.app-shot .help-btn{display:inline-flex;align-items:center;justify-content:center;width:1.35em;height:1.35em;
+  border-radius:50%;border:1px solid var(--help);color:var(--help);font-size:.7em;font-weight:700;background:none;line-height:1;flex:none;padding:0}
+.app-shot .action-bar{background:var(--bg);border-top:1px solid var(--border);padding:12px 0;margin-top:14px;display:flex;align-items:center;gap:12px}
+.app-shot .saved{font-size:13px;color:var(--success);margin-bottom:12px}
+
+/* トップ画面 */
+.app-shot .hub-grp{font-size:10px;color:var(--text-secondary);letter-spacing:.2em;padding:18px 20px 4px;display:flex;align-items:center;gap:8px}
+.app-shot .hub-menu{border-top:1px solid var(--border)}
+.app-shot .hub-item{display:flex;align-items:baseline;gap:16px;padding:14px 20px;border-bottom:1px solid var(--border)}
+.app-shot .hub-item-n{font-size:10px;color:var(--text-secondary);letter-spacing:.1em;width:20px;flex:none}
+.app-shot .hub-item-body{flex:1}
+.app-shot .hub-item-title{font-size:15px;font-weight:700}
+.app-shot .hub-item-sub{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.app-shot .hub-item-arr{font-size:13px;color:var(--text-secondary);flex:none}
+.app-shot .hub-item--primary .hub-item-title{color:var(--primary-text)}
+.app-shot .hub-banner{border-left:2px solid var(--warn);padding:10px 18px;margin:12px 20px;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.app-shot .hub-banner-body{flex:1}
+.app-shot .hub-banner-t{font-size:13px;font-weight:700}
+.app-shot .hub-banner-s{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.app-shot .hub-banner-a{flex:none;font-size:12px;font-weight:700;color:var(--primary-text);border-bottom:1px solid var(--primary-text);padding-bottom:1px}
+
+/* カレンダー */
+.app-shot .cal-head{display:flex;align-items:center;justify-content:center;gap:40px;margin:8px 0 12px}
+.app-shot .cal-arrow{border:1px solid var(--primary);color:var(--primary);background:none;padding:4px 12px;border-radius:4px;font-size:12px}
+.app-shot .cal-month{font-size:15px;font-weight:700}
+.app-shot .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:13px}
+.app-shot .cal-grid .dow{color:var(--text-secondary);font-size:11px;padding:4px 0}
+.app-shot .cal-grid .dow.sun{color:#ff8080}
+.app-shot .cal-grid .dow.sat{color:#8ab4f8}
+.app-shot .cal-grid .d{padding:7px 0}
+.app-shot .cal-grid .d.off{color:#4a4f5e}
+.app-shot .cal-grid .d.today{border:1px solid var(--primary);border-radius:50%}
+
+/* 役割の印・テーブル */
+.app-shot .rb{display:inline-flex;align-items:center;justify-content:center;min-width:26px;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700;color:#fff;flex:none}
+.app-shot .rb-tl{background:#3b6fd4}
+.app-shot .rb-sl{background:#2c8f5a}
+.app-shot .t-card{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+.app-shot .t-card h4{background:var(--primary-light);padding:8px 12px;font-size:13px;font-weight:700}
+.app-shot .t-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-top:1px solid var(--border);font-size:14px}
+.app-shot .t-row .nm{flex:1}
+.app-shot .t-row .st{font-size:12px;color:var(--text-secondary)}
+.app-shot .att{background:var(--success);color:var(--on-fill);border:none;border-radius:6px;padding:5px 12px;font-size:13px;font-weight:600}
+.app-shot .att.off{background:#4a4f5e;color:#c3c7d2}
+.app-shot .share{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:12px;line-height:1.7;color:var(--text);white-space:pre-wrap;font-family:'Courier New',monospace}
+
+/* チェック・スイッチ・貼り付け欄 */
+.app-shot .chk{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:14px}
+.app-shot .chk i{width:16px;height:16px;border:1px solid var(--text-secondary);border-radius:3px;display:inline-block;flex:none}
+.app-shot .sw{width:34px;height:19px;border-radius:10px;background:#4a4f5e;position:relative;display:inline-block;flex:none}
+.app-shot .sw.on{background:var(--primary)}
+.app-shot .sw::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff}
+.app-shot .sw.on::after{left:auto;right:2px}
+.app-shot .drop{border:2px dashed var(--border);border-radius:var(--radius);background:var(--primary-light);
+  padding:26px 12px;text-align:center;color:var(--text-secondary);font-size:13px}
+.app-shot .picker{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+.app-shot .picker .ph{padding:10px 12px;font-size:14px;font-weight:700;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.app-shot .picker .pr{padding:9px 12px;font-size:14px;border-top:1px solid var(--border)}
+.app-shot .sel{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:10px 12px;font-size:14px;color:var(--text-secondary)}
+
+/* ============================================================
+   この資料だけで使う追加分
+   ============================================================ */
+.intro{border:1px solid #d7dbe0;border-left:4px solid #e53935;padding:20px 24px;margin-bottom:44px;background:#fcfcfd}
+.intro h2{font-size:20px;font-weight:700;margin-bottom:10px}
+.intro .tbl{margin-top:6px}
+.intro a{color:#1f2328}
+
+.wide{overflow-x:auto}
+.wide .tbl{margin-top:10px}
+.wide .tbl th{white-space:normal}
+h3.sec{font-size:19px;font-weight:700;margin:30px 0 0}
+h3.sec:first-child{margin-top:0}
+.page .tbl a{color:#1f2328}
+.foot{margin-top:56px;padding-top:20px;border-top:1px solid #e3e6ea;font-size:14px;color:#5b6270;text-align:center}
+
+/* 会員詳細の一覧（アプリのCSSから写した） */
+.app-shot .mlist{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.app-shot .mrow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.app-shot .mrow:last-child{border-bottom:none}
+.app-shot .minfo{flex:1;min-width:0}
+.app-shot .mname{font-size:14px;font-weight:500}
+.app-shot .mind{color:var(--text-secondary);margin-top:2px;font-size:13px}
+.app-shot .mbadges{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.app-shot .badge-cat{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--hover-bg);color:var(--text-secondary);white-space:nowrap}
+.app-shot .badge-nocat{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--help-light);color:var(--help);white-space:nowrap}
+.app-shot .badge-tl{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--primary-light);color:var(--primary-text);white-space:nowrap}
+
+/* ログイン画面（アプリ側の再定義C-2に合わせる：カード枠なし・左揃え・下線だけの入力欄） */
+.app-shot .lg{padding:34px 26px 30px}
+.app-shot .lg-logo{width:44px;height:44px;display:block;margin-bottom:12px}
+.app-shot .lg-ttl{font-size:22px;font-weight:700;letter-spacing:.03em}
+.app-shot .lg-sub{font-size:9px;font-weight:400;letter-spacing:.24em;color:var(--text-secondary);margin:4px 0 32px}
+.app-shot .lg-in{border-bottom:2px solid var(--border);color:var(--text-secondary);font-size:14px;padding:4px 0 10px;margin-bottom:18px}
+.app-shot .lg-btn{border-radius:0;padding:11px 38px;font-size:15px;font-weight:700;margin-top:22px}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<h1>月例会ツール はじめてお使いになるとき</h1>
-<p class="lead">各支部の運営者向け／使い始めの準備（ログイン → 会員リストの取り込み → 役員の登録 → 会員の情報を埋める → 開催方式を入れる → 過去の参加者名簿の取り込み → 過去のテーブル割りの取り込み）</p>
+<div class="doc-title">月例会ツール はじめてお使いになるとき</div>
+<p class="doc-sub">使い始めるときの準備をまとめた資料です。画面と見比べながらお使いください。押す場所は赤い枠で囲んでいます。</p>
 
-<h2>1. この資料について</h2>
-<p>月例会ツールを<strong>使い始めるときの準備</strong>をまとめた資料です（このうち「会員リストの取り込み」だけは毎月行います）。月例会1回分の進め方（参加者を入れる、テーブル割りをする、名簿を出す）は、別冊の「使い方マニュアル」をご覧ください。</p>
-
-<h3>やっていただくのは7つです</h3>
-<p>左の数字は、この資料の見出しの番号です。上から順に進めてください。</p>
-<table>
-  <tr><th>章</th><th>やること</th><th>どこで</th></tr>
-  <tr><td class="col">2</td><td class="col">ログインする</td><td>ログイン画面</td></tr>
-  <tr><td class="col">3</td><td class="col">会員リストを取り込む</td><td>トップ画面の <span class="btn">会員リストを取り込む</span></td></tr>
-  <tr><td class="col">4</td><td class="col">役員を登録する</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">役員</span> タブ</td></tr>
-  <tr><td class="col">5</td><td class="col">会員の情報を埋める</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">会員詳細</span> タブ</td></tr>
-  <tr><td class="col">6</td><td class="col">開催方式を入れる</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">支部の設定</span> タブ</td></tr>
-  <tr><td class="col">7</td><td class="col">過去の参加者名簿を取り込む</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">過去レポート</span> タブ</td></tr>
-  <tr><td class="col">8</td><td class="col">過去のテーブル割りを取り込む</td><td>トップ画面の <span class="key">05</span> <span class="key">設定</span> → <span class="key">テーブル履歴</span> タブ</td></tr>
-</table>
-
-<div class="box warn">
-  <p class="box-title">順番の決まり：会員リストを取り込んでから、過去の参加者名簿を取り込んでください</p>
-  <p><strong>3（会員リストの取り込み）を済ませてから、7（過去の参加者名簿の取り込み）を行ってください。</strong>逆にすると、取り込んだ過去の記録に会員のお名前が正式な表記で入らず、所属支部の欄も空のままになります。</p>
-  <p><strong>あとから会員リストを取り込んでも、先に取り込んだ過去の記録は直りません。</strong>理由は「7. 過去の参加者名簿を取り込む」にあります。</p>
-  <p><strong>8（過去のテーブル割りの取り込み）も、3を済ませてから行ってください。</strong>貼り付けたお名前を会員リストと照らし合わせて記録するためです。</p>
-</div>
-
-<div class="box">
-  <p class="box-title">いちばん大事なこと：4まで終われば、月例会は回せます</p>
-  <p><strong>2（ログイン）から4（役員の登録）までが終われば、その日から月例会の準備に使えます。</strong>まずはここまでを済ませてください。</p>
-  <p><strong>5（会員の情報）は、量が多い作業です。</strong>会員の人数ぶん（18名以上）あるので、<strong>一度に全部やらなくて構いません。</strong>使いながら少しずつ埋めていってください。埋まっていくほど、テーブル割りの精度と <span class="key">星の評価</span> の点数がそろっていきます。</p>
-</div>
-
-<div class="box warn">
-  <p class="box-title">この資料に出てこない準備について</p>
-  <p>支部専用の保存先の用意と、支部名とパスワードでログインできるようにする設定は、画面の裏側の準備として済ませてあります。運営者の側で行っていただく作業はありません。</p>
-  <p><strong>ただし「会員リストを取り込む」だけは、運営者の側で行っていただきます。</strong>最初の1回だけでなく<strong>毎月</strong>行う作業です。やり方は次の「3. 会員リストを取り込む」にあります。</p>
-  <p>このツールを新しく入れた直後は、会員リストを1回取り込むまで会員の情報が出てきません（自分の支部の方も、他の支部の方も出ません）。まず取り込みを済ませてください。</p>
-</div>
-
-<h2>2. ログインする</h2>
-<p><strong>お渡しするのはURLとパスワードの2つです。</strong>どちらもこちらからお伝えします。</p>
-<ol>
-  <li>お渡ししたURLを、パソコンやスマートフォンのブラウザで開きます。</li>
-  <li><span class="key">月例会ツール</span> という見出しの画面が出ます。</li>
-  <li><span class="key">支部名</span> の欄に、支部名を入力します。<strong>「支部」の2文字は付けずに</strong>入力してください。</li>
-  <li><span class="key">パスワード</span> の欄に、お渡ししたパスワードを入力します。</li>
-  <li><span class="btn">ログイン</span> を押します。</li>
-</ol>
-<p>どちらかが違っていると <span class="key">支部名またはパスワードが違います</span> と出ます。<strong>大文字と小文字は区別されます。</strong>前後に空白が入っていないかも確かめてください。</p>
-
-<div class="box warn">
-  <p class="box-title">パスワードについて</p>
-  <table>
-    <tr><td class="col">支部で1つ</td><td>個人ごとのアカウントはありません。<strong>役員の方2〜3人で同じものを共有してください。</strong></td></tr>
-    <tr><td class="col">こちらで作ります</td><td>読み違えにくい英数字でこちらが作ってお渡しします。運営者の側で決めていただく必要はありません。</td></tr>
-    <tr><td class="col">変更はできません</td><td>画面から変える仕組みはありません。<strong>忘れたときや、外部に漏れてしまったときはご連絡ください。</strong>お調べするか、新しいものを作ってお渡しします。</td></tr>
-    <tr><td class="col">外に出さないでください</td><td>URLとパスワードは、支部の役員以外にはお伝えしないでください。<strong>この2つを知っている人は、支部のデータを開けます。</strong></td></tr>
+<div class="intro">
+  <h2>はじめに読んでください</h2>
+  <table class="tbl">
+    <tr><th>3まで終われば使えます</th><td>ログイン・会員リストの取り込み・役員の登録が終われば、その日から月例会に使えます。<b>まずはここまでを済ませてください。</b></td></tr>
+    <tr><th>4は少しずつで構いません</th><td>会員の情報は人数ぶんあります。一度に全部やらなくて大丈夫です。使いながら埋めていくほど、テーブル割りと星の評価がそろっていきます。</td></tr>
+    <tr><th>順番の決まり</th><td><b>2（会員リスト）を済ませてから、6（過去の参加者名簿）と7（過去のテーブル割り）を行ってください。</b>逆にすると、取り込んだ過去の記録にお名前が正式な表記で入りません。<b>あとから会員リストを入れても直りません。</b></td></tr>
+    <tr><th>裏側の準備は済んでいます</th><td>支部専用の保存先と、ログインできるようにする設定はこちらで済ませてあります。運営者の側で行っていただく作業はありません。</td></tr>
+    <tr><th>月例会の進め方は別冊です</th><td>参加者を入れる・テーブル割りをする・名簿を出す、は<a href="月例会ツール_使い方マニュアル_20260816.html">使い方マニュアル</a>をご覧ください。</td></tr>
   </table>
 </div>
 
-<h3>ログインしたあとの画面</h3>
-<p>番号の付いたメニューが並んだ画面が出ます。この画面を、この資料では<strong>トップ画面</strong>と呼びます。ここが出発点です。</p>
-<p>画面の上には、どの画面を開いていても同じものが並んでいます。</p>
-<table>
-  <tr><th>表示</th><th>押すとどうなるか</th></tr>
-  <tr><td class="col">← トップに戻る</td><td>トップ画面に戻ります。</td></tr>
-  <tr><td class="col">ログアウト</td><td>ログインする前の画面に戻ります。</td></tr>
-  <tr><td class="col">?</td><td>その画面の説明が開きます。</td></tr>
-  <tr><td class="col">↑</td><td>画面の<strong>右下</strong>にあります。長い画面のいちばん上まで戻ります。</td></tr>
-</table>
-
-<div class="box">
-  <p class="box-title">入力するのは、その端末で最初の1回だけです</p>
-  <p>一度ログインすれば、<strong>同じ端末の同じブラウザで次に開いたときは、自動でログインした状態に戻ります。</strong>毎回入力する必要はありません。</p>
-  <p>もう一度入力が必要になるのは、<strong>別の端末で開いたとき</strong>と、<strong>ブラウザの履歴やデータを消したとき</strong>、<strong><span class="btn">ログアウト</span> を押したとき</strong>です。</p>
+<!-- ============ 目次 ============ -->
+<div class="toc" id="top">
+  <h2>目次</h2>
+  <p class="toc-note">見たいところへリンクします</p>
+  <ol>
+    <li><a href="#p1">ログインする<span class="toc-s">最初に1回</span></a></li>
+    <li><a href="#p2">会員リストを取り込む<span class="toc-s">毎月1回</span></a></li>
+    <li><a href="#p3">役員を登録する<span class="toc-s">最初に1回</span></a></li>
+    <li><a href="#p4">会員の情報を埋める<span class="toc-s">少しずつ</span></a></li>
+    <li><a href="#p5">開催方式を入れる<span class="toc-s">最初に1回</span></a></li>
+    <li><a href="#p6">過去の参加者名簿を取り込む<span class="toc-s">あとからで大丈夫</span></a></li>
+    <li><a href="#p7">過去のテーブル割りを取り込む<span class="toc-s">あとからで大丈夫</span></a></li>
+    <li><a href="#p8">どこまで入れると何ができるか<span class="toc-s">早見表</span></a></li>
+    <li><a href="#p9">こんな画面が出たときは<span class="toc-s">早見表</span></a></li>
+    <li><a href="#p10">よくあるご質問<span class="toc-s">早見表</span></a></li>
+  </ol>
 </div>
 
-<h2>3. 会員リストを取り込む</h2>
-<p><strong>いちばん最初に行っていただく作業です。</strong>これを行わないと会員の一覧が空のままで、次の「役員を登録する」で名前を選ぶことができません。</p>
-<p><strong>これは毎月行う作業でもあります。</strong>新しく入会した方や、属性が変わった方を反映するためです。取り込みが済んでいない月は、トップ画面の上に <span class="key">今月の会員リストがまだ取り込まれていません</span> という帯が出ます。</p>
+<!-- ============================================================
+     1. ログインする
+     ============================================================ -->
+<section class="page" id="p1">
+  <div class="page-head"><span class="page-n">1</span><h1>ログインする</h1></div>
+  <p class="page-lead">お渡しするのはURLとパスワードの2つです。どちらもこちらからお伝えします。</p>
 
-<h3>やり方</h3>
-<ol>
-  <li>トップ画面の下のほうにある <span class="btn">会員リストを取り込む</span> を押します。帯が出ているときは、帯の <span class="btn">取り込む →</span> を押しても同じ画面が開きます。</li>
-  <li>画面に、次の4つの手順が書かれています。
-    <ul>
-      <li><span class="key">会員一覧ページを開く（毎月のお知らせに記載のID・パスワード）</span></li>
-      <li><span class="key">「会員一覧」タブを選択し、表の上をクリックして Ctrl+A → Ctrl+C</span></li>
-      <li><span class="key">下のエリアをクリックして Ctrl+V で貼り付ける</span></li>
-      <li><span class="key">「取り込む」を押す</span></li>
-    </ul>
-  </li>
-  <li>コピーした表を、薄く <span class="key">ここに貼り付ける</span> と書かれた広い欄に貼り付けます。</li>
-  <li><span class="btn">取り込む</span> を押します。</li>
-</ol>
-<p>うまくいくと <span class="key">○年○月分の会員リストを取り込みました。全支部 ○名 ／ この支部 ○名</span> と出ます。</p>
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">支部名とパスワードを入れる</span></div>
+      <p>お渡ししたURLを、パソコンかスマートフォンのブラウザで開きます。<span class="key">「月例会ツール」</span>という見出しの画面が出ます。</p>
+      <p>欄は2つ、<span class="key">下線だけ</span>の形で並んでいます。上が支部名、下がパスワードです。</p>
+      <p>上の欄に支部名を入れます。<span class="key">「支部」の2文字は付けずに</span>入力してください。</p>
+      <p>パスワードを入れて<span class="key">「ログイン」</span>を押します。</p>
+      <div class="note"><b>入れないとき</b>　「支部名またはパスワードが違います」と出ます。<b>大文字と小文字は区別されます。</b>前後に空白が入っていないかも確かめてください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="lg">
+        <svg class="lg-logo" viewBox="0 0 100 100" aria-hidden="true"><g fill="var(--text-secondary)"><path d="M6 82 Q6 50 23 50 Q40 50 40 82 Z"/><circle cx="23" cy="38" r="9"/><path d="M60 82 Q60 50 77 50 Q94 50 94 82 Z"/><circle cx="77" cy="38" r="9"/></g><g fill="var(--primary)"><path d="M30 82 Q30 44 50 44 Q70 44 70 82 Z"/><circle cx="50" cy="30.5" r="10.5"/></g></svg>
+        <div class="lg-ttl">月例会ツール</div>
+        <div class="lg-sub">MONTHLY MEETING</div>
+        <span class="mark mark-out"><div class="lg-in">支部名（「支部」を除いた名称のみ）</div></span>
+        <div class="lg-in">パスワード（8文字）</div>
+        <div class="alert" style="background:var(--danger-light);color:var(--danger);border:1px solid var(--danger);margin:22px 0 0">支部名またはパスワードが違います</div>
+        <button class="btn btn-primary lg-btn">ログイン</button>
+      </div></div>
+    </div>
+  </div>
 
-<div class="box">
-  <p class="box-title">貼り付けるのは全国の会員一覧のままで構いません</p>
-  <p>コピーした表には他の支部の方も入っていますが、<strong>取り込まれるのは自分の支部の会員だけ</strong>です。選り分けていただく必要はありません。</p>
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">パスワードについて</span></div>
+      <table class="tbl">
+        <tr><th>支部で1つ</th><td>個人ごとのアカウントはありません。役員の方2〜3人で同じものを共有してください</td></tr>
+        <tr><th>こちらで作ります</th><td>読み違えにくい英数字でこちらが作ってお渡しします。決めていただく必要はありません</td></tr>
+        <tr><th>変更はできません</th><td>画面から変える仕組みはありません。忘れたとき・外に漏れたときはご連絡ください</td></tr>
+      </table>
+      <div class="note"><b>外に出さないでください</b>　URLとパスワードは、<b>支部の役員以外にはお伝えしないでください。</b>この2つを知っている人は、支部のデータを開けます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="step-text">
+        <div class="step-h"><span class="step-n">3</span><span class="t">入力するのは最初の1回だけ</span></div>
+        <p>一度ログインすれば、<span class="key">同じ端末の同じブラウザ</span>で次に開いたときは、自動でログインした状態に戻ります。毎回入力する必要はありません。</p>
+        <p>もう一度入力が必要になるのは、<b>別の端末で開いたとき</b>・<b>ブラウザの履歴やデータを消したとき</b>・<b>「ログアウト」を押したとき</b>です。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">ログインしたあとの画面</span></div>
+      <p>番号の付いたメニューが並んだ画面が出ます。この画面をこの資料では<span class="key">トップ画面</span>と呼びます。ここが出発点です。</p>
+      <p>画面のいちばん上は、どの画面を開いていても同じものが並んでいます。</p>
+      <table class="tbl">
+        <tr><th>← トップに戻る</th><td>トップ画面に戻ります</td></tr>
+        <tr><th>使い方マニュアル</th><td>別冊の使い方マニュアルが開きます</td></tr>
+        <tr><th>ログアウト</th><td>ログインする前の画面に戻ります</td></tr>
+        <tr><th>?</th><td>その画面の説明が開きます</td></tr>
+        <tr><th>↑</th><td>画面の<b>右下</b>にあります。長い画面のいちばん上まで戻ります</td></tr>
+      </table>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <span class="mark"><div class="app-header"><button class="logout-btn">← トップに戻る</button><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div><button class="logout-btn">使い方マニュアル</button><button class="logout-btn">ログアウト</button><button class="help-btn" style="font-size:13px;width:20px;height:20px">?</button></div></span>
+        <div class="hub-grp">定例会 <button class="help-btn">?</button></div>
+        <div class="hub-menu">
+          <div class="hub-item hub-item--primary"><div class="hub-item-n">01</div><div class="hub-item-body"><div class="hub-item-title">新規に定例会準備をする</div><div class="hub-item-sub">開催日をカレンダーで選ぶ</div></div><div class="hub-item-arr">→</div></div>
+          <div class="hub-item"><div class="hub-item-n">02</div><div class="hub-item-body"><div class="hub-item-title">登録済みの定例会を処理する</div><div class="hub-item-sub">開催日を一覧から選ぶ</div></div><div class="hub-item-arr">→</div></div>
+        </div>
+        <div class="hub-grp">そのほか <button class="help-btn">?</button></div>
+        <div class="hub-menu">
+          <div class="hub-item"><div class="hub-item-n">05</div><div class="hub-item-body"><div class="hub-item-title">設定</div><div class="hub-item-sub">会員詳細・役員設定</div></div><div class="hub-item-arr">→</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     2. 会員リストを取り込む
+     ============================================================ -->
+<section class="page" id="p2">
+  <div class="page-head"><span class="page-n">2</span><h1>会員リストを取り込む</h1></div>
+  <p class="page-lead">いちばん最初に行う作業です。これをしないと会員の一覧が空のままで、次の「役員を登録する」で名前を選べません。<b>毎月1回、続けて行う作業でもあります。</b></p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">取り込みの画面を開く</span></div>
+      <p>トップ画面の下のほうにある<span class="key">「会員リストを取り込む」</span>を押します。</p>
+      <p>済んでいない月は、トップ画面の上に<span class="key">「今月の会員リストがまだ取り込まれていません」</span>の帯が出ます。帯の「取り込む →」でも同じ画面が開きます。</p>
+      <div class="note"><b>入れた直後は空です</b>　ツールを新しく入れた直後は、1回取り込むまで会員の情報が出てきません（自分の支部の方も、他の支部の方も出ません）。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="app-header"><div class="ttl">月例会ツール<small>MONTHLY MEETING</small></div><div class="branch-label">デモ</div></div>
+        <span class="mark"><div class="hub-banner"><div class="hub-banner-body"><div class="hub-banner-t">今月の会員リストがまだ取り込まれていません</div><div class="hub-banner-s">タップして取り込む</div></div><div class="hub-banner-a">取り込む →</div></div></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">会員一覧をコピーする</span></div>
+      <p>会員一覧のページを開きます。IDとパスワードは毎月のお知らせに載っています。</p>
+      <p><span class="key">「会員一覧」</span>のタブを選び、表の上をクリックしてから、</p>
+      <table class="tbl">
+        <tr><th>Ctrl を押しながら A</th><td>全部を選ぶ</td></tr>
+        <tr><th>Ctrl を押しながら C</th><td>コピーする</td></tr>
+      </table>
+      <div class="note"><b>見出しごとコピーしてください</b>　表の見出し（NM会員ID・姓名・フリガナ・支部・属性）と、ページの上のほうにある日付の表示も入るように選んでください。<b>どちらかが抜けると取り込めません。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">会員リストを取り込む <button class="help-btn">?</button></div>
+        <p class="muted">会員一覧の表を、見出しごとコピーして貼り付けてください。</p>
+        <div class="share">NM会員ID　姓名　フリガナ　支部　属性
+NM-9001　佐々木 涼介　ササキ リョウスケ　デモ　役員
+NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">貼り付けて取り込む</span></div>
+      <p>ツールの画面に戻り、薄く<span class="key">「ここに貼り付ける」</span>と書かれた広い欄をクリックして、<span class="key">Ctrl を押しながら V</span>（貼り付け）を押します。</p>
+      <p>そのあと<span class="key">「取り込む」</span>を押します。</p>
+      <p>うまくいくと「○年○月分の会員リストを取り込みました。全支部 ○名 ／ この支部 ○名」と出ます。</p>
+      <div class="note"><b>全国の一覧のままで構いません</b>　他の支部の方も入っていますが、<b>取り込まれるのは自分の支部の会員だけ</b>です。選り分けていただく必要はありません。</div>
+      <div class="note"><b>先月分を貼ってしまったとき</b>　「基準日が当月ではありません。」と確認が出ます。そのままでよければ「取り込む」、貼り直すなら「キャンセル」です。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <span class="mark mark-out"><textarea rows="3" placeholder="ここに貼り付ける"></textarea></span>
+        <div style="margin-top:18px"><span class="mark mark-out mark-inline"><button class="btn btn-primary">取り込む</button></span></div>
+        <div class="alert alert-success" style="margin:22px 0 0">2026年8月分の会員リストを取り込みました。全支部 1,842名 ／ この支部 24名</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">取り込んだあとに1つ</span></div>
+      <p>取り込むと、フルネームが<span class="key">「姓」と「名」に自動で分けられます</span>。分け方が合っているかを見る画面が別にあります。</p>
+      <p>トップ画面の<span class="key">「07 姓名確認」</span>です。<b>参加者名簿を出す前に一度見ておいてください。</b>やり方は<a href="月例会ツール_使い方マニュアル_20260816.html#p12">使い方マニュアルの12枚目</a>にあります。</p>
+      <div class="note"><b>急ぎではありません</b>　月例会の準備やテーブル割りには関わりません。名簿を出す前までに済ませれば大丈夫です。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot">
+        <div class="hub-grp">そのほか <button class="help-btn">?</button></div>
+        <div class="hub-menu">
+          <span class="mark">
+            <div class="hub-item"><div class="hub-item-n">07</div><div class="hub-item-body"><div class="hub-item-title">姓名確認</div><div class="hub-item-sub">会員マスタの姓・名のドラフトを確認・修正します</div></div><div class="hub-item-arr">→</div></div>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     3. 役員を登録する
+     ============================================================ -->
+<section class="page" id="p3">
+  <div class="page-head"><span class="page-n">3</span><h1>役員を登録する</h1></div>
+  <p class="page-lead"><b>ここまで終われば、月例会は回せます。</b>まずはこの章を済ませてください。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">何に効くのか</span></div>
+      <table class="tbl">
+        <tr><th>役員</th><td>参加者名簿で役員として扱われます。テーブル割りでは<b>役員が同じテーブルに固まらないように分かれます</b></td></tr>
+        <tr><th>固定テーブル</th><td>「毎回この人はこのテーブル」と決めたいときに使います。決めない場合は「固定しない」のままで構いません</td></tr>
+        <tr><th>毎月参加</th><td>入にしておくと、月例会の参加者を入れるときに自動で入ります</td></tr>
+      </table>
+    </div>
+    <div class="step-shot">
+      <div class="step-text">
+        <div class="step-h"><span class="step-n">2</span><span class="t">役員のタブを開く</span></div>
+        <p>トップ画面の<span class="key">「05 設定」</span>を押します。上にタブが5つ並ぶので、<span class="key">「役員」</span>を押します。</p>
+        <p>見出しの横の「?」を押すと、業種・役員の設定が何に効くかの説明が開きます。</p>
+      </div>
+      <div class="app-shot" style="margin-top:14px"><div class="container">
+        <div class="scr-title">設定 <button class="help-btn">?</button></div>
+        <div class="tab-nav">
+          <button class="tab-btn active">会員詳細</button>
+          <span class="mark mark-inline"><button class="tab-btn">役員</button></span>
+          <button class="tab-btn">支部の設定</button>
+          <button class="tab-btn">過去レポート</button>
+          <button class="tab-btn">テーブル履歴</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">5つを入れて「追加する」</span></div>
+      <p>画面の下のほうの<span class="key">「役員を追加する」</span>のカードに、上から順に入れます。</p>
+      <table class="tbl">
+        <tr><th>名前</th><td><b>打ち込む欄ではありません。</b>「（タップして会員を選ぶ）」を押すと一覧が開くので、その中から選びます</td></tr>
+        <tr><th>役職</th><td>主催／事務局長／幹事／統括 の4つから選びます</td></tr>
+        <tr><th>固定テーブル</th><td>テーブル番号を常に固定したいときに、その番号を選びます。決めていなければ「固定しない」のままで構いません</td></tr>
+        <tr><th>毎月参加</th><td>毎月必ず参加する方は入にします</td></tr>
+        <tr><th>NM ID</th><td>わからなければ空欄で構いません。入れるときは「NM-」に続けて数字です</td></tr>
+      </table>
+      <p>入れ終えたら<span class="key">「追加する」</span>を押します。カードの上の一覧に、その方が加わります。</p>
+      <div class="note"><b>主催の方を1人は登録してください</b>　参加者名簿に出る主催者名は、<b>役職が「主催」の方から自動で取ります。</b>別に名前を入れる欄はありません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">役員を追加する</div>
+        <p class="muted">名前</p>
+        <span class="mark mark-out"><div class="sel">（タップして会員を選ぶ）</div></span>
+        <p class="muted" style="margin-top:14px">役職</p>
+        <div class="sel">（タップして選ぶ）</div>
+        <p class="muted" style="margin-top:12px">固定テーブル</p>
+        <div class="sel">固定しない</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:14px;font-size:14px"><span class="sw"></span><span>毎月参加</span></div>
+        <div style="margin-top:14px"><input type="text" placeholder="例: NM-1234（空欄可）"></div>
+        <div style="margin-top:14px"><span class="mark mark-out mark-inline"><button class="btn btn-primary">追加する</button></span></div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">固定テーブルで選べるもの</span></div>
+      <table class="tbl">
+        <tr><th>固定しない</th><td>テーブルを決めません。テーブル割りのときに自動で決まります。<b>ふだんはこれで構いません</b></td></tr>
+        <tr><th>A 〜 Z</th><td>毎回、その記号のテーブルに入ります</td></tr>
+        <tr><th>後ろから1番目</th><td>いちばん後ろのテーブルに入ります。テーブルの数が回によって変わっても、いつも最後になります</td></tr>
+        <tr><th>後ろから2番目</th><td>後ろから2つめのテーブルに入ります</td></tr>
+      </table>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="picker">
+          <div class="ph"><span>固定テーブルを選ぶ</span><span style="color:var(--text-secondary)">✕</span></div>
+          <div class="pr">固定しない</div>
+          <div class="pr">A</div>
+          <div class="pr">B</div>
+          <div class="pr">後ろから1番目</div>
+          <div class="pr">後ろから2番目</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">5</span><span class="t">直す・消す・保存する</span></div>
+      <p>一覧の各行の右に<span class="key">「編集」</span>と<span class="key">「削除」</span>があります。</p>
+      <table class="tbl">
+        <tr><th>編集</th><td>その方の内容がカードに読み込まれます。見出しが「役員を編集する」、ボタンが「この内容で更新する」に変わります。やめるときは「編集をやめる」</td></tr>
+        <tr><th>削除</th><td>確認が出ます。「削除すると参加者名簿の役員扱いが外れます。よろしいですか？」でよければ「削除する」</td></tr>
+      </table>
+      <div class="note"><b>いちばん大事なこと</b>　追加・編集・削除は、まだ画面の中だけの状態です。<b>いちばん下の「役員設定を保存する」を押してはじめて残ります。</b>「役員設定を保存しました」と出たら保存できています。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="participant-list">
+          <div class="p-item"><span class="p-name">佐々木 涼介</span><span class="p-branch">主催</span><button class="p-assign">編集</button><button class="p-remove">削除</button></div>
+          <div class="p-item"><span class="p-name">早瀬 千夏</span><span class="p-branch">事務局長</span><button class="p-assign">編集</button><button class="p-remove">削除</button></div>
+        </div>
+        <div style="margin-top:20px"><span class="mark mark-out"><button class="btn btn-success btn-block">役員設定を保存する</button></span></div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     4. 会員の情報を埋める
+     ============================================================ -->
+<section class="page" id="p4">
+  <div class="page-head"><span class="page-n">4</span><h1>会員の情報を埋める</h1></div>
+  <p class="page-lead">量の多い作業です。<b>一度に全部やらなくて構いません。</b>月例会を回しながら少しずつ埋めていけます。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">何に効くのか</span></div>
+      <table class="tbl">
+        <tr><th>業種</th><td>テーブル割りで<b>同じ業種の方が同じテーブルに固まらないように分かれます</b></td></tr>
+        <tr><th>カテゴリ</th><td>業種より大きなくくりでの分散に使います。入っていないとこの分散が効きません</td></tr>
+        <tr><th>TL研修受講済み</th><td>TL（テーブルリーダー）として置ける方かどうかの判断に使います。1テーブルにTLは1名までです</td></tr>
+        <tr><th>TL優先度</th><td>TLを決めるときに、この方を先に選びます。「TL研修受講済み」を入にすると出てきます</td></tr>
+        <tr><th>SL可否</th><td>SL（サブリーダー）を任せてよいかどうかです。<b>はじめは全員が入</b>になっています</td></tr>
+        <tr><th>入会：</th><td>星の評価の受講率を計算する対象（入会から3か月以上の方）を決めます。空のままだと計算できません</td></tr>
+        <tr><th>受講済み研修</th><td>SU・SDが「必須研修受講率」に、FEが「フロント+TL研修受講率」になります。SK・UEは記録として残ります</td></tr>
+        <tr><th>準役：</th><td>星の評価の「準役員就任（過去6か月）」の人数になります</td></tr>
+      </table>
+      <p>星の評価は、トップ画面の<span class="key">「06 分析を見る」</span>を開いて、上のタブから「星の評価」を押すと見られます。</p>
+    </div>
+    <div class="step-shot">
+      <div class="step-text">
+        <div class="step-h"><span class="step-n">2</span><span class="t">開いて、目当ての人を探す</span></div>
+        <p>トップ画面の<span class="key">「05 設定」</span>を押します。<span class="key">「会員詳細」</span>のタブは、開いたときから選ばれています。</p>
+        <table class="tbl">
+          <tr><th>名前で絞り込む</th><td>名前の一部を入れると、その方だけが残ります</td></tr>
+          <tr><th>自支部のみ</th><td>入にすると、自分の支部の方だけが並びます</td></tr>
+        </table>
+        <p>一覧の上には<span class="key">「残り○名（全体○名）」</span>と出ます。「残り」は<b>カテゴリがまだ入っていない方の人数</b>です。0に近づくほど分散が効きます。</p>
+        <div class="note"><b>他の支部の方も並びます</b>　月例会に来てくださった他支部の方は、この一覧に残ります。次に来られたときに名前と支部がすぐ分かるようにするためです。<b>「受講済み研修」「入会：」「準役：」は自分の支部の方を開いたときだけ出ます。</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">一覧に出ている印</span></div>
+      <p>名前の下に、業種と小さな印が並びます。開かなくても、今どこまで入っているかが分かります。</p>
+      <table class="tbl">
+        <tr><th>（カテゴリ名）</th><td>灰色の印です。入れたカテゴリがそのまま出ます</td></tr>
+        <tr><th>カテゴリ未設定</th><td>赤い印です。カテゴリがまだ入っていません</td></tr>
+        <tr><th>TL受講済</th><td>黄色い印です。「TL研修受講済み」が入になっています</td></tr>
+        <tr><th>TL受講済・優先</th><td>あわせて「TL優先度」も入になっています</td></tr>
+        <tr><th>SL不可</th><td>赤い印です。<b>「SL可否」を切にした方だけ</b>に出ます</td></tr>
+      </table>
+      <p>名前の右の<span class="key">「編集」</span>を押すと、その行のすぐ下に編集の画面が開きます。押したボタンは<span class="key">「編集中」</span>に変わります。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <p class="muted">残り12名（全体24名）</p>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+          <input type="text" placeholder="名前で絞り込む" style="flex:1">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px"><span class="sw"></span>自支部のみ</span>
+        </div>
+        <div class="mlist">
+          <div class="mrow">
+            <div class="minfo">
+              <div class="mname">佐々木 涼介</div>
+              <div class="mind">不動産仲介</div>
+              <div class="mbadges"><span class="badge-cat">建設・不動産</span><span class="badge-tl">TL受講済・優先</span></div>
+            </div>
+            <button class="btn btn-sm btn-outline">編集</button>
+          </div>
+          <div class="mrow">
+            <div class="minfo">
+              <div class="mname">岩隈 さやか</div>
+              <div class="mbadges"><span class="badge-nocat">カテゴリ未設定</span><span class="badge-nocat">SL不可</span></div>
+            </div>
+            <span class="mark mark-inline"><button class="btn btn-sm btn-outline">編集</button></span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">1人ぶんを埋める</span></div>
+      <p>一覧の行を押すか、右の<span class="key">「編集」</span>を押すと、<b>その行のすぐ下に</b>編集の画面が開きます。押したボタンは「編集中」に変わります。</p>
+      <table class="tbl">
+        <tr><th>業種</th><td>打ち込む欄です。その方の仕事の内容を入れます</td></tr>
+        <tr><th>カテゴリ</th><td>「（未設定）」を押すと一覧が開きます。どれにも当てはまらないときは、いちばん上の「（カテゴリなし）」を選びます</td></tr>
+        <tr><th>3つのスイッチ</th><td>TL研修受講済み／TL優先度／SL可否。<b>TL研修受講済みを入にすると、その横にTL優先度が出ます</b></td></tr>
+        <tr><th>受講済み研修</th><td>SU・SD・FE・SK・UE の5つ。受け終わっている研修を入にします（自分の支部の方だけ）</td></tr>
+        <tr><th>入会：</th><td>入会した日。<b>2026-04-01</b> のように、年4けた・月2けた・日2けたを半角ハイフンでつなぎます</td></tr>
+        <tr><th>準役：</th><td>準役員に就任した月。<b>2026-04</b> のように<b>日は入れません</b>。就任していない方は空欄のままです</td></tr>
+      </table>
+      <div class="note"><b>SL可否を切にしたら、戻りません</b>　一度切にしたら、毎月の会員リストの取り込みで入に戻ることもありません。<b>あとから増えた方ははじめは入</b>で入るので、任せたくない方だけ切にしてください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">岩隈 さやか を編集</div>
+        <p class="muted">業種</p>
+        <input type="text" value="不動産仲介">
+        <p class="muted" style="margin-top:12px">カテゴリ</p>
+        <span class="mark mark-out"><div class="sel">（未設定）</div></span>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;font-size:13px">
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>TL研修受講済み</span>
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>TL優先度</span>
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>SL可否</span>
+        </div>
+        <p class="muted" style="margin-top:16px">受講済み研修（自支部のみ）</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:13px">
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>SU</span>
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>SD</span>
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>FE</span>
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>SK</span>
+          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>UE</span>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:14px;font-size:13px;align-items:center">
+          <span>入会：</span><input type="text" placeholder="YYYY-MM-DD" style="flex:1">
+          <span>準役：</span><input type="text" placeholder="YYYY-MM" style="flex:1">
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm">この内容で更新する</button>
+          <button class="btn btn-outline btn-sm">編集をやめる</button>
+        </div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">5</span><span class="t">保存は2段階です</span></div>
+      <p><span class="key">「この内容で更新する」</span>は、<b>1人ぶんを画面の中で確定するボタン</b>です。これだけでは残りません。</p>
+      <p>その日に触った方をひととおり終えたら、いちばん下の<span class="key">「会員情報を保存する」</span>を押してください。「会員情報を保存しました」と出れば保存できています。</p>
+      <div class="note"><b>途中でやめても構いません</b>　保存したところまでは残ります。次に開いたとき、その続きから埋めていけます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <span class="mark mark-out"><button class="btn btn-primary btn-block">会員情報を保存する</button></span>
+        <div class="alert alert-success" style="margin:22px 0 0">会員情報を保存しました</div>
+      </div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     5. 開催方式を入れる
+     ============================================================ -->
+<section class="page" id="p5">
+  <div class="page-head"><span class="page-n">5</span><h1>開催方式を入れる</h1></div>
+  <p class="page-lead">NM本部に提出する参加者名簿に印字される項目です。最初に1回入れておけば、以降は自動で入ります。<b>初めて名簿を出す前までに済ませれば大丈夫です。</b></p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">支部の設定のタブで入れる</span></div>
+      <p>トップ画面の<span class="key">「05 設定」</span>を開き、<span class="key">「支部の設定」</span>のタブを押します。</p>
+      <p><span class="key">開催方式</span>の欄に入れます。<b>オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名</b>です。</p>
+      <p><span class="key">「支部の設定を保存する」</span>を押すと「保存しました」と出ます。</p>
+      <div class="note"><b>空のままだと名簿の欄も空で出ます</b>　提出する書類のその欄が空欄のまま出力されます。書類を出す前に入れておいてください。</div>
+      <div class="note"><b>あとから変えられます</b>　オンライン開催と会場開催が切り替わったときは同じ画面で、主催者が交代したときは「役員」のタブで直してください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="tab-nav">
+          <button class="tab-btn">会員詳細</button>
+          <button class="tab-btn">役員</button>
+          <span class="mark mark-inline"><button class="tab-btn active">支部の設定</button></span>
+          <button class="tab-btn">過去レポート</button>
+          <button class="tab-btn">テーブル履歴</button>
+        </div>
+        <div class="card">
+          <div class="card-title">開催方式</div>
+          <span class="mark mark-out"><input type="text" placeholder="ネット または 都道府県名（例: 大阪府）"></span>
+          <p class="muted" style="margin-top:12px">オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名を入れます。参加者名簿にそのまま印字されます。</p>
+          <button class="btn btn-primary btn-block">支部の設定を保存する</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     6. 過去の参加者名簿を取り込む
+     ============================================================ -->
+<section class="page" id="p6">
+  <div class="page-head"><span class="page-n">6</span><h1>過去の参加者名簿を取り込む</h1></div>
+  <p class="page-lead">これまでNM本部に提出してきた参加者名簿（xlsx）を読み込んで、過去の参加記録として残します。<b>月例会の準備やテーブル割りには関わりません。</b>お手元のレポートがそろってからで大丈夫です。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">先に確かめる2つ</span></div>
+      <div class="note"><b>必ず、会員リストを取り込んだあとに</b>　参加者名簿には会員番号しか入っていません。取り込むときに会員リストを見てお名前と所属支部を補っています。<b>先に取り込むと、お名前が姓と名をつないだ形のまま残り、所属支部は空のままになります。あとから会員リストを入れても直りません。</b></div>
+      <div class="note"><b>レポートのタブ名は8桁の数字に</b>　読み込むのは<b>タブ名が8桁の数字になっているタブだけ</b>です（2026年6月18日 → <b>20260618</b>）。「20260618（6月）」「6月」「6月18日」は対象外です。1つのファイルに月ごとのタブが並んでいる場合は、8桁の数字のタブを全部読み込みます。</div>
+      <p>例外がひとつあります。<b>8桁の数字のタブが1枚も無いファイルのときだけ、いちばん左のタブを読み込みます。</b>開催日はそのタブの中に書かれた日付から読み取ります。取り違えの元になるので、できるだけ8桁の数字に直してからアップロードしてください。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="tab-nav">
+          <button class="tab-btn">会員詳細</button>
+          <button class="tab-btn">役員</button>
+          <button class="tab-btn">支部の設定</button>
+          <span class="mark mark-inline"><button class="tab-btn active">過去レポート</button></span>
+          <button class="tab-btn">テーブル履歴</button>
+        </div>
+        <div class="card">
+          <div class="card-title">過去レポートの取り込み</div>
+          <p class="muted">ステップ1：xlsxをアップロードする（複数可）</p>
+          <div class="drop">xlsxファイルをここにドロップするか、タップして選択してください</div>
+          <div style="margin-top:12px"><button class="btn btn-primary">アップロードする</button></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">ステップ1：アップロードする</span></div>
+      <p>トップ画面の<span class="key">「05 設定」</span>→<span class="key">「過去レポート」</span>のタブを開きます。</p>
+      <p>枠にファイルを置くか、枠を押して選びます。<b>複数まとめて選べます。</b>選んだファイル名が枠の下に並びます。</p>
+      <p><span class="key">「アップロードする」</span>を押します。1件ずつ順に上がるので、<b>ファイル1件あたり数秒</b>かかります（20件を超えると2分ほど）。何件目まで終わったかが画面に出ます。</p>
+      <div class="note"><b>この知らせが出てから、次へ</b>　「○件をアップロードしました。ステップ2で取り込みを実行してください。」と出るまで待ってください。<b>途中で次を押すと、まだ届いていないファイルは読み込まれません。</b>そのぶんはスキップにもエラーにも出ないため、気づきにくくなります。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="drop">xlsxファイルをここにドロップするか、タップして選択してください</div>
+        <p class="muted" style="margin-top:10px">主催レポート_20260618.xlsx<br>主催レポート_20260521.xlsx</p>
+        <span class="mark mark-out mark-inline"><button class="btn btn-primary">アップロードする</button></span>
+        <div class="alert alert-success" style="margin:20px 0 0">2件をアップロードしました。ステップ2で取り込みを実行してください。</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">ステップ2：取り込みを実行する</span></div>
+      <p><span class="key">「過去レポートを取り込む」</span>を押します。<b>数十秒かかることがあります。</b>画面が変わるまでお待ちください。</p>
+      <p>取り込めた開催日が並んで出ます。読み飛ばしたものがあれば、その理由も出ます。</p>
+      <div class="note"><b>途中で止まったとき</b>　もう一度「過去レポートを取り込む」を押してください。<b>すでに入ったぶんが二重になることはありません。</b></div>
+      <div class="note"><b>あとから見つかったレポート</b>　同じ手順で足せます。すでに取り込んだ開催日は読み飛ばされます。取り込みが終わったファイルは控えとして別のフォルダへ自動で移るので、次の対象は新しく上げたぶんだけです。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <p class="muted">ステップ2：取り込みを実行する</p>
+        <p class="muted">途中で止まったらもう一度実行してください。入ったぶんは重複しません。</p>
+        <span class="mark mark-out"><button class="btn btn-primary btn-block">過去レポートを取り込む</button></span>
+        <div class="alert alert-success" style="margin:20px 0 0">2回分を取り込みました（スキップ 0件、エラー 0件）</div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     7. 過去のテーブル割りを取り込む
+     ============================================================ -->
+<section class="page" id="p7">
+  <div class="page-head"><span class="page-n">7</span><h1>過去のテーブル割りを取り込む</h1></div>
+  <p class="page-lead">これまでの月例会の席順がお手元に残っていれば、ここから入れられます。入れておくと、<b>同じ人が続けて同じテーブルにならないようにする計算</b>が過去のぶんまでさかのぼって効きます。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">なぜ、この作業が別に要るのか</span></div>
+      <p>6で入る参加者名簿には、<b>誰がどのテーブルに座ったかが入っていません。</b>そのため、参加者名簿を取り込んだだけでは、前回と同じ人が同じテーブルになるのを避ける計算は効きません。席の記録はここで別に入れます。</p>
+      <div class="note"><b>記録が残っていなければ飛ばして構いません</b>　これから月例会をこのツールで回していけば、席順はそのつど自動でたまっていきます。</div>
+      <div class="note"><b>必ず、会員リストを取り込んだあとに</b>　貼り付けたお名前を会員リストと照らし合わせて記録します。<b>会員リストがまだ入っていないと、どの行も取り込まれません。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="tab-nav">
+          <button class="tab-btn">会員詳細</button>
+          <button class="tab-btn">役員</button>
+          <button class="tab-btn">支部の設定</button>
+          <button class="tab-btn">過去レポート</button>
+          <span class="mark mark-inline"><button class="tab-btn active">テーブル履歴</button></span>
+        </div>
+        <div class="card">
+          <p class="muted">過去の席配置（開催日・名前・テーブル記号）を貼り付けて取り込みます。取り込んだデータは同席計算に反映されます。</p>
+          <textarea rows="3" placeholder="ここに貼り付ける"></textarea>
+          <div style="margin-top:12px"><button class="btn btn-primary">テーブル履歴を取り込む</button></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">3つの列を貼り付ける</span></div>
+      <p>トップ画面の<span class="key">「05 設定」</span>を開き、<span class="key">いちばん右</span>の<span class="key">「テーブル履歴」</span>のタブを押します。</p>
+      <p>スプレッドシートやExcelで<span class="key">開催日・名前・テーブル記号の3列</span>を選んでコピーし、広い欄に貼り付けて<span class="key">「テーブル履歴を取り込む」</span>を押します。<b>1行目が見出しでも構いません。</b></p>
+      <table class="tbl">
+        <tr><th>1列目：開催日</th><td>その回の開催日です</td></tr>
+        <tr><th>2列目：名前</th><td>その日に参加した方のお名前です。<b>会員リストと同じ表記にしてください</b></td></tr>
+        <tr><th>3列目：テーブル記号</th><td>A、B、C… の<b>英字1文字</b>です。「A卓」「ａ」のような書き方も受け付けます</td></tr>
+      </table>
+      <p><b>1人が1行です。</b>同じ開催日の人数ぶん行が並びます。開催日が違うぶんも、続けて並べて構いません。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="share">2026-06-18　佐々木 涼介　A
+2026-06-18　早瀬 千夏　A
+2026-06-18　諏訪 陽一　B
+2026-05-21　佐々木 涼介　B</div>
+        <div style="margin-top:14px"><span class="mark mark-out mark-inline"><button class="btn btn-primary">テーブル履歴を取り込む</button></span></div>
+        <div class="alert alert-success" style="margin:20px 0 0">取り込み成功: 4 件</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">取り込めなかった行があるとき</span></div>
+      <p>取り込めた件数が欄の下に出ます。<b>貼り付けた行数と合っているか確かめてください。</b></p>
+      <div class="note"><b>二重に入ることはありません</b>　すでに入っている開催日は、その日のぶんがまるごと読み飛ばされます。読み飛ばした開催日は結果に出ます。</div>
+      <div class="note"><b>お名前が結び付かなかった行は入りません</b>　貼り付けたお名前が会員リストの中に見つからないと、その行は取り込まれません。どの行が入らなかったかは結果に出ます。<b>お名前の表記を直すか、その方が入った会員リストを取り込んでから、もう一度貼り付けてください。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="alert alert-success">取り込み成功: 32 件</div>
+        <div class="alert alert-warn">スキップ（重複開催日）: 2026-05-21</div>
+        <div class="alert" style="background:var(--danger-light);color:var(--danger);border:1px solid var(--danger);margin-bottom:0">照合失敗: 1 件<br>行12: 高橋 まさし</div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     8. どこまで入れると何ができるか
+     ============================================================ -->
+<section class="page" id="p8">
+  <div class="page-head"><span class="page-n">8</span><h1>どこまで入れると何ができるか</h1></div>
+  <p class="page-lead">上から順に、できることが増えていきます。<b>全部を一度に埋める必要はありません。</b></p>
+
+  <div class="wide">
+    <table class="tbl">
+      <tr><th style="width:34%">どこまで入れたか</th><th>できるようになること</th></tr>
+      <tr><td>ログインした</td><td>月例会の準備・テーブル割り・参加者名簿の出力まで、ひととおり使えます</td></tr>
+      <tr><td>＋ 役員を登録した</td><td>参加者名簿に役職が出ます。テーブル割りで役員が同じテーブルに固まらないように分かれます。<b>ここまでで、月例会は回せます</b></td></tr>
+      <tr><td>＋ 役員の固定テーブルを決めた</td><td>決めた方が、毎回そのテーブルに入ります</td></tr>
+      <tr><td>＋ 役員に毎月参加を付けた</td><td>毎月参加する方を、参加者を入れるときに手間なく入れられます</td></tr>
+      <tr><td>＋ 業種を入れた</td><td>同じ業種の方が同じテーブルに固まらないように分かれます</td></tr>
+      <tr><td>＋ カテゴリを入れた</td><td>業種より大きなくくりでも分かれます。一覧の「カテゴリ未設定」の印が消えていきます</td></tr>
+      <tr><td>＋ TL研修受講済みを入れた</td><td>TLを置ける方がはっきりします。「TL優先度」も入れると、その方が先に選ばれます</td></tr>
+      <tr><td>＋ SL可否を切にした</td><td>切にした方は、テーブル割りでSLに選ばれなくなります。<b>はじめは全員が入なので、そのままでも構いません</b></td></tr>
+      <tr><td>＋ 入会：を入れた</td><td>星の評価の受講率が計算できるようになります。空のうちは、受講率の欄に計算できない旨が出ます</td></tr>
+      <tr><td>＋ 研修の受講を入れた</td><td>「必須研修受講率（SU+SD）」と「フロント+TL研修受講率」の点数が出ます</td></tr>
+      <tr><td>＋ 準役：を入れた</td><td>「準役員就任（過去6か月）」の点数が出ます</td></tr>
+      <tr><td>＋ 過去の参加者名簿を取り込んだ</td><td>星の評価の参加人数とゲスト割合が、過去の月のぶんも出ます</td></tr>
+      <tr><td>＋ 過去のテーブル割りを取り込んだ</td><td>過去に同じテーブルだった組み合わせがわかり、<b>同じ人が続けて同じテーブルにならないように</b>席が決まります</td></tr>
+    </table>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     9. こんな画面が出たときは
+     ============================================================ -->
+<section class="page" id="p9">
+  <div class="page-head"><span class="page-n">9</span><h1>こんな画面が出たときは</h1></div>
+  <p class="page-lead">表示の中の「（名前）」「（数）」のところには、実際の名前や人数が入ります。</p>
+
+  <div class="wide">
+    <h3 class="sec">ログインするとき</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
+      <tr><td>支部名またはパスワードが違います</td><td>「支部」の2文字を付けていないか、前後に余分な空白が入っていないか、大文字と小文字が合っているかを確かめてください。それでも入れないときはご連絡ください</td></tr>
+      <tr><td>もう一度ログインしてください</td><td>時間が経ってログインの状態が切れました。入れ直してください。<b>入力していた内容は残らないので、長い作業の途中では「保存」を押しながら進めてください</b></td></tr>
+    </table>
+
+    <h3 class="sec">役員を登録するとき</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
+      <tr><td>名前を選択してください</td><td>名前がまだ「（タップして会員を選ぶ）」のままです。押して一覧から選んでから「追加する」を押してください</td></tr>
+      <tr><td>NM IDは「NM-数字」の形式か、空欄にしてください</td><td>「NM-」に続けて数字を入れるか、わからなければ欄を空にしてください</td></tr>
+      <tr><td>先に「この内容で更新する」を押してください</td><td>1人ぶんの編集を開いたまま保存を押しています。「この内容で更新する」で編集を閉じてから「役員設定を保存する」を押してください。やめるなら「編集をやめる」です</td></tr>
+      <tr><td>役員設定を保存しました</td><td>保存できています。そのまま次に進んで構いません</td></tr>
+    </table>
+
+    <h3 class="sec">会員の情報を埋めるとき</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
+      <tr><td>会員マスタにデータがありません。先に会員リストを取り込んでください</td><td>会員の一覧がまだ入っていません。<a href="#p2">2. 会員リストを取り込む</a>を済ませてから開き直してください</td></tr>
+      <tr><td>先に「この内容で更新する」を押してください</td><td>1人ぶんの編集を開いたまま保存を押しています。編集を閉じてから「会員情報を保存する」を押してください</td></tr>
+      <tr><td>保存に失敗しました。もう一度試してください。</td><td>通信がうまくいきませんでした。もう一度押してください。何度も出るときは、ブラウザを再読み込みしてから開き直してください</td></tr>
+      <tr><td>会員情報を保存しました</td><td>保存できています。ここまでの内容は残りました</td></tr>
+    </table>
+
+    <h3 class="sec">星の評価の画面で</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
+      <tr><td>会員の入会日が登録されていないため、受講率を計算できません</td><td><b>不具合ではありません。</b>「入会：」がまだ1人も入っていないと出ます。会員詳細のタブで入れていくと計算されます</td></tr>
+      <tr><td>就任記録がありません</td><td>準役員の就任月がまだ入っていません。会員詳細のタブの「準役：」に入れると点数に出ます</td></tr>
+      <tr><td>入会3か月以上の人数：（数）人</td><td>受講率の計算に使われている人数です。「入会：」を埋めていくと増えていきます</td></tr>
+    </table>
+
+    <h3 class="sec">過去の参加者名簿を取り込むとき</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
+      <tr><td>（数）回分を取り込みました（スキップ （数）件、エラー （数）件）</td><td>取り込みが終わった知らせです。この下に、取り込めた開催日・読み飛ばしたもの・エラーになったものが並びます。<b>取り込んだ数が、レポートのタブの枚数と合っているか確かめてください</b></td></tr>
+      <tr><td>すでに取り込み済み</td><td><b>不具合ではありません。</b>その開催日はもう入っているため、二重にならないように読み飛ばしています</td></tr>
+      <tr><td>D3から開催日を取得できませんでした</td><td>そのタブの中に書かれた開催日を読み取れませんでした。タブ名が8桁の数字なのにこれが出るときは、レポートの様式が違う可能性があります。ご連絡ください</td></tr>
+    </table>
+
+    <h3 class="sec">過去のテーブル割りを取り込むとき</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
+      <tr><td>取り込み成功: （数） 件</td><td>入った行数です。貼り付けた行数と合っているか確かめてください</td></tr>
+      <tr><td>スキップ（重複開催日）: （日付）</td><td><b>不具合ではありません。</b>その開催日はもう入っているため、その日のぶんをまるごと読み飛ばしています</td></tr>
+      <tr><td>照合失敗: （数） 件</td><td>貼り付けたお名前が会員リストの中に見つかりませんでした。下に「行（数）: （名前）」の形で並びます。表記を直すか、その方が入った会員リストを取り込んでから貼り直してください</td></tr>
+      <tr><td>エラー行: （数） 件</td><td>3つの列がそろっていないか、開催日を読み取れなかった行です。下に行の番号と中身が並ぶので、その行を直してから貼り直してください</td></tr>
+      <tr><td>貼り付けデータがありません。</td><td>欄が空のままです。3つの列をコピーして貼り付けてから押してください</td></tr>
+    </table>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     10. よくあるご質問
+     ============================================================ -->
+<section class="page" id="p10">
+  <div class="page-head"><span class="page-n">10</span><h1>よくあるご質問</h1></div>
+
+  <div class="wide">
+    <table class="tbl">
+      <tr><th style="width:38%">ご質問</th><th>お答え</th></tr>
+      <tr><td>全部入れ終わらないと、月例会には使えませんか？</td><td>使えます。ログイン・会員リストの取り込み・役員の登録が終わっていれば、その日から使えます。会員の情報は使いながら少しずつ埋めてください</td></tr>
+      <tr><td>会員の情報は、途中でやめても大丈夫ですか？</td><td>大丈夫です。「会員情報を保存する」を押したところまでは残ります。次に開いたとき、その続きから埋めていけます</td></tr>
+      <tr><td>役員の名前を打ち込む欄が見つかりません</td><td>名前は打ち込む形ではありません。「（タップして会員を選ぶ）」を押すと一覧が開くので、その中から選んでください</td></tr>
+      <tr><td>役員の固定テーブルは、必ず決めないといけませんか？</td><td>決めなくて構いません。「固定しない」のままにしておくと、テーブル割りのときに自動で決まります</td></tr>
+      <tr><td>「この内容で更新する」と「会員情報を保存する」は何が違いますか？</td><td>前者は1人ぶんを画面の中で確定するボタンで、これだけでは残りません。ひととおり終えたら後者を押してください。役員も同じで、「追加する」のあとに「役員設定を保存する」が要ります</td></tr>
+      <tr><td>他支部の方を開くと、研修の欄が出てきません</td><td>「受講済み研修（自支部のみ）」から下は、自分の支部の方を開いたときだけ出ます</td></tr>
+      <tr><td>カテゴリにあてはまるものがありません</td><td>「カテゴリを選ぶ」のいちばん上にある「（カテゴリなし）」を選んでください</td></tr>
+      <tr><td>一覧の「残り（数）名」は何の数ですか？</td><td>カテゴリがまだ入っていない方の人数です。0に近づくほど、テーブル割りの分散が効くようになります</td></tr>
+      <tr><td>入会日がわからない人がいます</td><td>空欄のままにしておいてください。わかった時点で入れれば、そこから星の評価の受講率に反映されます</td></tr>
+      <tr><td>入会したばかりの人にSLを任せたくありません</td><td>「05 設定」→「会員詳細」でその方の「編集」を押し、SL可否を切にしてください。<b>はじめは全員が入</b>です。一度切にしたら、勝手に入へ戻ることはありません</td></tr>
+      <tr><td>過去の席順の記録が残っていない場合は？</td><td>入れなくて構いません。7を飛ばしてください。これから月例会をこのツールで回していけば、席順はそのつど自動でたまっていきます</td></tr>
+      <tr><td>すでに取り込んだ開催日の内容を直したいときは？</td><td><b>ご連絡ください。</b>同じ開催日は読み飛ばされるため、入れ直すには先に古い記録を消す必要があります</td></tr>
+      <tr><td>パスワードを忘れました</td><td><b>ご連絡ください。</b>お調べしてお伝えするか、新しいものを作ってお渡しします。画面から変えたり調べたりする仕組みはありません</td></tr>
+      <tr><td>あとから見つかった参加者名簿は、足せますか？</td><td>足せます。同じ手順でアップロードして取り込んでください。すでに取り込んだ開催日は読み飛ばされます</td></tr>
+      <tr><td>過去の参加者名簿を、会員リストより先に取り込んでしまいました</td><td><b>ご連絡ください。</b>あとから会員リストを取り込んでも、先に入った記録のお名前と所属支部は直りません。入れ直すには古い記録を消す必要があります</td></tr>
+      <tr><td>月例会の進め方はどこに書いてありますか？</td><td>別冊の<a href="月例会ツール_使い方マニュアル_20260816.html">使い方マニュアル</a>をご覧ください。参加者を入れるところから、テーブル割り・当日の出欠・参加者名簿の出力までが載っています</td></tr>
+      <tr><td>次に何をすればよいかわからなくなりました</td><td>画面の上にある「?」を押してください。その画面の説明が開きます</td></tr>
+    </table>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<p class="foot">ご不明な点は、ネコノテ 山下美樹まで Messenger または LINE でご連絡ください。</p>
+
 </div>
-
-<div class="box warn">
-  <p class="box-title">先月分を貼ってしまったときは</p>
-  <p>貼り付けた表の日付が今月でないときは <span class="key">基準日が当月ではありません。</span> という確認が出ます。日付を確かめて、そのままでよければ <span class="btn">取り込む</span>、貼り直すなら <span class="btn">キャンセル</span> を押してください。</p>
-</div>
-
-<h2>4. 役員を登録する</h2>
-<p><strong>ここまで終われば、月例会は回せます。</strong>まずはこの章を済ませてください。</p>
-
-<h3>なぜ登録するのか</h3>
-<table>
-  <tr><th>入れるもの</th><th>何に効くか</th></tr>
-  <tr><td class="col">役員（誰が役員か）</td><td>参加者名簿で役員として扱われます。あわせて、テーブル割りのときに<strong>役員が同じテーブルに固まらないように分散</strong>されます。</td></tr>
-  <tr><td class="col">固定テーブル</td><td>「毎回この人はこのテーブル」と決めておきたいときに使います。<strong>決めない場合は <span class="key">固定しない</span> のままで構いません。</strong></td></tr>
-  <tr><td class="col">毎月参加</td><td>毎月必ず参加する方に付けておくと、月例会の参加者を入れるときに手間なく入れられます。</td></tr>
-</table>
-
-<h3>開き方</h3>
-<ol>
-  <li>トップ画面の <span class="key">05</span> <span class="key">設定</span>（説明は <span class="key">会員詳細・役員設定</span>）を押します。</li>
-  <li><span class="key">設定</span> の画面が開きます。上に <span class="key">会員詳細</span> <span class="key">役員</span> <span class="key">支部の設定</span> <span class="key">過去レポート</span> のタブが並んでいます。</li>
-  <li><span class="key">役員</span> のタブを押します。</li>
-</ol>
-<p>見出しの横にある <span class="btn">?</span> を押すと <span class="key">業種・役員の設定が何に効くか</span> の説明が開きます。</p>
-
-<h3>1人ずつ登録する</h3>
-<p>画面の下のほうに <span class="key">役員を追加する</span> というカードがあります。ここに入れていきます。</p>
-
-<h3><span class="step">1.</span> 名前</h3>
-<p>ここは<strong>文字を打つ欄ではありません。</strong>最初は <span class="key">（タップして会員を選ぶ）</span> と表示されています。ここを押すと <span class="key">会員を選択</span> の一覧が開くので、その中から選びます。</p>
-
-<h3><span class="step">2.</span> 役職</h3>
-<p>その方の役職を選びます。<span class="key">（タップして選ぶ）</span> と書かれたところを押すと <span class="key">役職を選ぶ</span> の一覧が開き、<span class="key">主催</span> <span class="key">事務局長</span> <span class="key">幹事</span> <span class="key">統括</span> の4つから選べます。ここで選んだ役職は参加者名簿に出ます。</p>
-<p><strong>主催の方を1人は登録してください。</strong>参加者名簿に印字される主催者名は、<strong>役職が <span class="key">主催</span> の方から自動で取ります</strong>（別に主催者名を入れる欄はありません）。</p>
-
-<h3><span class="step">3.</span> 固定テーブル</h3>
-<p>最初は <span class="key">固定しない</span> と表示されています。押すと <span class="key">固定テーブルを選ぶ</span> の一覧が開きます。</p>
-<table>
-  <tr><th>選ぶもの</th><th>意味</th></tr>
-  <tr><td class="col">固定しない</td><td>テーブルを決めません。テーブル割りのときに自動で決まります。<strong>ふだんはこれで構いません。</strong></td></tr>
-  <tr><td class="col">A 〜 Z</td><td>毎回、その記号のテーブルに入ります。</td></tr>
-  <tr><td class="col">後ろから1番目</td><td>いちばん後ろのテーブルに入ります。テーブルの数が回によって変わっても、いつも最後のテーブルになります。</td></tr>
-  <tr><td class="col">後ろから2番目</td><td>後ろから2つめのテーブルに入ります。</td></tr>
-</table>
-
-<h3><span class="step">4.</span> 毎月参加</h3>
-<p>左右に動く<strong>切り替えスイッチ</strong>です。毎月必ず参加する方は、ここを入にしておきます。</p>
-
-<h3><span class="step">5.</span> NM ID</h3>
-<p>欄の中には <span class="key">例: NM-1234（空欄可）</span> と薄く書かれています。<strong>わからなければ空欄のままで構いません。</strong></p>
-<p>入れる場合は「NM-」に続けて数字を入れます。形が違うと、欄の下に <span class="key">NM IDは「NM-数字」の形式か、空欄にしてください</span> と赤い文字が出ます。</p>
-
-<h3><span class="step">6.</span> 追加する</h3>
-<p>5つを入れ終えたら <span class="btn">追加する</span> を押します。カードの上にある一覧に、その方が加わります。次の方を登録するときは、また名前から入れていきます。</p>
-
-<h3>登録した人を直す・消す</h3>
-<p>一覧の各行の右に <span class="btn">編集</span> と <span class="btn">削除</span> があります。</p>
-<table>
-  <tr><th>ボタン</th><th>できること</th></tr>
-  <tr><td class="col">編集</td><td>その方の内容がカードに読み込まれます。カードの見出しが <span class="key">役員を編集する</span> に変わり、ボタンも <span class="btn">この内容で更新する</span> に変わります。直したら押してください。直すのをやめるときは <span class="btn">編集をやめる</span> です。</td></tr>
-  <tr><td class="col">削除</td><td>確認の画面が出ます。<br><span class="key">（名前）さんを役員設定から削除します。<br>削除すると参加者名簿の役員扱いが外れます。<br>よろしいですか？</span><br>よければ <span class="btn">削除する</span>、やめるときは <span class="btn">キャンセル</span> を押します。</td></tr>
-</table>
-
-<h3><span class="step">最後に</span> 保存する</h3>
-<div class="box warn">
-  <p class="box-title">保存を押さないと残りません</p>
-  <p>ここまでの追加・編集・削除は、まだ画面の中だけの状態です。<strong>いちばん下の <span class="btn">役員設定を保存する</span> を押してはじめて残ります。</strong></p>
-  <p><span class="key">役員設定を保存しました</span> と出たら、保存できています。</p>
-</div>
-
-<h2>5. 会員の情報を埋める</h2>
-<p><strong>ここは量の多い作業です。一度に全部やらなくて構いません。</strong>月例会を回しながら、少しずつ埋めていくことが可能です。</p>
-
-<div class="box">
-  <p class="box-title">一覧に他の支部の方も並ぶ理由</p>
-  <p><strong>基本は自分の支部の会員を管理する画面です。</strong>会員リストの取り込みで入るのも、自分の支部の会員だけです。</p>
-  <p>そのうえで、<strong>他の支部から月例会に参加してくださった方も、この一覧に残ります。</strong>次に来てくださったときに名前と支部がすぐ分かるようにするためです。テーブル割りでも、その方の支部と業種を見て席を決めています。</p>
-  <p>自分の支部の会員だけを見たいときは、絞り込み欄の右にある <span class="key">自支部のみ</span> の切り替えを入にしてください。</p>
-  <p>なお <span class="key">受講済み研修（自支部のみ）</span>・<span class="key">入会：</span>・<span class="key">準役：</span> の欄は、<strong>自分の支部の会員を開いたときだけ</strong>出ます。他の支部の方には出ません。</p>
-</div>
-
-<h3>なぜ埋めるのか</h3>
-<table>
-  <tr><th>入れるもの</th><th>何に効くか</th></tr>
-  <tr><td class="col">業種</td><td>テーブル割りのときに、<strong>同じ業種の方が同じテーブルに固まらないように分散</strong>されます。</td></tr>
-  <tr><td class="col">カテゴリ</td><td>業種より大きなくくりでの分散に使います。<strong>カテゴリが入っていないと、この分散が効きません。</strong></td></tr>
-  <tr><td class="col">TL研修受講済み</td><td>テーブル割りのときに、TL（テーブルリーダー＝テーブルの進行役）として置ける方かどうかの判断に使います。1つのテーブルにTLは1名までです。あわせて <span class="key">星の評価</span> の <span class="key">フロント+TL研修受講率</span> の対象になります。</td></tr>
-  <tr><td class="col">TL優先度</td><td>TLを決めるときに、この方を先に選びます。<span class="key">TL研修受講済み</span> を入にすると出てきます。</td></tr>
-  <tr><td class="col">SL可否</td><td>テーブル割りのときに、SL（サブリーダー＝TLを助ける役）を任せてよい方かどうかの判断に使います。<strong>はじめは全員が入になっています。</strong>入会して間もない方など、SLを任せたくない方だけ切にします。</td></tr>
-  <tr><td class="col">入会：</td><td><span class="key">星の評価</span> の受講率を計算する対象（<strong>入会から3か月以上たった方</strong>）を決めるのに使います。<strong>ここが空のままだと、受講率は計算できません。</strong></td></tr>
-  <tr><td class="col">受講済み研修</td><td><span class="key">SU スタートアップ</span> と <span class="key">SD 商談</span> が <span class="key">星の評価</span> の <span class="key">必須研修受講率（SU+SD）</span> に、<span class="key">FE フロントエンド</span> が <span class="key">TL研修受講済み</span> と組み合わさって <span class="key">フロント+TL研修受講率</span> になります。<span class="key">SK 集客</span> と <span class="key">UE 運営</span> は記録として残ります。</td></tr>
-  <tr><td class="col">準役：</td><td><span class="key">星の評価</span> の <span class="key">準役員就任（過去6か月）</span> の人数になります。</td></tr>
-</table>
-<p><span class="key">星の評価</span> は、トップ画面の <span class="key">06</span> <span class="key">分析を見る</span> を開いて、上のタブから <span class="key">星の評価</span> を押すと見られます。</p>
-
-<h3>開き方</h3>
-<ol>
-  <li>トップ画面の <span class="key">05</span> <span class="key">設定</span> を押します。</li>
-  <li>上のタブから <span class="key">会員詳細</span> を押します（この画面を開くと、最初からこちらが選ばれています）。</li>
-</ol>
-
-<h3>目当ての人を探す</h3>
-<table>
-  <tr><th>使うもの</th><th>できること</th></tr>
-  <tr><td class="col">名前で絞り込む</td><td>入力欄です。名前の一部を入れると、その方だけが残ります。</td></tr>
-  <tr><td class="col">自支部のみ</td><td>切り替えスイッチです。入にすると、自分の支部の方だけが並びます。</td></tr>
-</table>
-<p>一覧の上には <span class="key">残り（数）名（全体（数）名）</span> と出ます。<strong>「残り」は、カテゴリがまだ入っていない方の人数です。</strong>ここが0に近づくほど、テーブル割りの分散が効くようになります。</p>
-
-<h3>一覧に出ている印</h3>
-<p>名前の下に、色の付いた小さな印が並びます。今どこまで入っているかが、開かなくてもわかります。</p>
-<table>
-  <tr><th>印</th><th>意味</th></tr>
-  <tr><td class="col">カテゴリ未設定</td><td>カテゴリがまだ入っていません。</td></tr>
-  <tr><td class="col">TL受講済</td><td><span class="key">TL研修受講済み</span> が入になっています。</td></tr>
-  <tr><td class="col">TL受講済・優先</td><td>あわせて <span class="key">TL優先度</span> も入になっています。</td></tr>
-</table>
-<p><strong><span class="key">SL可否</span> は、この印には出ません。</strong>今どうなっているかは、その方の <span class="btn">編集</span> を押して確かめてください。</p>
-
-<h3>1人ぶんを埋める</h3>
-<p>一覧の行を押すか、右の <span class="btn">編集</span> を押すと、<strong>その行のすぐ下に編集の画面が開きます。</strong>押したボタンは <span class="btn">編集中</span> に変わります。見出しは <span class="key">（名前） を編集</span> です。</p>
-
-<h3><span class="step">1.</span> 業種</h3>
-<p>入力欄です。その方の仕事の内容を入れます。</p>
-
-<h3><span class="step">2.</span> カテゴリ</h3>
-<p>まだ入っていないときは <span class="key">（未設定）</span> と表示されています。押すと <span class="key">カテゴリを選ぶ</span> の一覧が開くので、あてはまるものを選びます。<strong>どれにも当てはまらないときは、いちばん上の <span class="key">（カテゴリなし）</span> を選びます。</strong></p>
-
-<h3><span class="step">3.</span> TL研修受講済み ／ TL優先度 ／ SL可否</h3>
-<p>どれも切り替えスイッチで、横に並んでいます。<span class="key">TL研修受講済み</span> を入にすると、その横に <span class="key">TL優先度</span> が出てきます。<span class="key">TL研修受講済み</span> を切にすると <span class="key">TL優先度</span> も一緒に切に戻ります。</p>
-<p><span class="key">SL可否</span> は、その方にSL（サブリーダー）を任せてよいかどうかの切り替えです。<strong>はじめは全員が入になっています。</strong>入会して間もない方など、SLを任せたくない方だけ切にしてください。切にした方は、テーブル割りでSLに選ばれなくなります。</p>
-<div class="box">
-  <p class="box-title">切にしたあと、勝手に入へ戻ることはありません</p>
-  <p>一度切にしたら、そのまま残ります。毎月の会員リストの取り込みで入に戻ることもありません。</p>
-  <p><strong>あとから会員リストを取り込んで増えた方は、はじめは入で入ります。</strong>新しく入会した方にSLを任せたくないときは、その方を切にしてください。</p>
-</div>
-
-<h3><span class="step">4.</span> 受講済み研修（自支部のみ）</h3>
-<p><strong>この区切りから下は、自分の支部の方を開いたときだけ出ます。</strong>他支部の方には出ません。</p>
-<p>切り替えスイッチが5つ並んでいます。受け終わっている研修を入にします。</p>
-<table>
-  <tr><th>表示</th><th>星の評価への効き方</th></tr>
-  <tr><td class="col">SU スタートアップ</td><td><span class="key">必須研修受講率（SU+SD）</span>。SUとSDの<strong>両方</strong>を受け終わった方が対象になります。</td></tr>
-  <tr><td class="col">SD 商談</td><td>同上。</td></tr>
-  <tr><td class="col">FE フロントエンド</td><td><span class="key">フロント+TL研修受講率</span>。FEと <span class="key">TL研修受講済み</span> の<strong>両方</strong>が入っている方が対象になります。</td></tr>
-  <tr><td class="col">SK 集客</td><td>記録として残ります。</td></tr>
-  <tr><td class="col">UE 運営</td><td>記録として残ります。</td></tr>
-</table>
-
-<h3><span class="step">5.</span> 入会： ／ 準役：</h3>
-<table>
-  <tr><th>欄</th><th>入れかた</th></tr>
-  <tr><td class="col">入会：</td><td>入会した日です。欄の中に <span class="key">YYYY-MM-DD</span> と薄く書かれています。<strong>年4けた・月2けた・日2けたを、半角のハイフンでつなぎます</strong>（2026年4月1日なら 2026-04-01）。</td></tr>
-  <tr><td class="col">準役：</td><td>準役員に就任した月です。欄の中に <span class="key">YYYY-MM</span> と薄く書かれています。<strong>日は入れません</strong>（2026年4月なら 2026-04）。就任していない方は空欄のままにします。</td></tr>
-</table>
-
-<h3><span class="step">6.</span> 1人ぶんを確定する</h3>
-<p>その方の入力が終わったら <span class="btn">この内容で更新する</span> を押します。編集の画面が閉じて、一覧に戻ります。やめるときは <span class="btn">編集をやめる</span> です。</p>
-
-<h3><span class="step">最後に</span> 保存する</h3>
-<div class="box warn">
-  <p class="box-title">保存は2段階です</p>
-  <p><span class="btn">この内容で更新する</span> は、<strong>1人ぶんを画面の中で確定するボタンです。</strong>これだけでは残りません。</p>
-  <p>その日に触った方をひととおり終えたら、<strong>いちばん下の <span class="btn">会員情報を保存する</span> を押してください。</strong><span class="key">会員情報を保存しました</span> と出れば、保存できています。</p>
-</div>
-<p>途中でやめても構いません。<strong>保存したところまでは残ります。</strong>次に開いたとき、その続きから埋めていけます。</p>
-
-<h2>6. 開催方式を入れる</h2>
-<p><strong>NM本部に提出する参加者名簿に印字される項目です。</strong>最初に1回入れておけば、以降は自動で入ります。</p>
-<p><strong>この章は、初めて参加者名簿を出す前までに済ませれば大丈夫です。</strong>月例会の準備やテーブル割りには関わりません。</p>
-
-<h3>やり方</h3>
-<ol>
-  <li>トップ画面の <span class="key">05</span> <span class="key">設定</span> を開き、<span class="key">支部の設定</span> のタブを押します。</li>
-  <li><span class="key">開催方式</span> の欄に入れます。欄の中には <span class="key">ネット または 都道府県名（例: 大阪府）</span> と薄く書かれています。<strong>オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名</strong>を入れてください。</li>
-  <li><span class="btn">支部の設定を保存する</span> を押します。</li>
-</ol>
-<p>うまくいくと <span class="key">保存しました</span> と出ます。</p>
-
-<div class="box warn">
-  <p class="box-title">空のままだと名簿の欄も空で出ます</p>
-  <p>開催方式は、参加者名簿にそのまま印字されるだけの項目です。<strong>入れていないと、提出する書類のその欄が空欄のまま出力されます。</strong>書類を出す前に入れておいてください。</p>
-</div>
-
-<p>あとから変えることもできます。オンライン開催と会場開催が切り替わったときは同じ画面で、主催者が交代したときは <span class="key">役員</span> のタブで直してください。</p>
-
-<h2>7. 過去の参加者名簿を取り込む</h2>
-<p><strong>これまでNM本部に提出してきた参加者名簿（xlsx）を読み込んで、過去の参加記録として残す作業です。</strong>取り込むと、<span class="key">星の評価</span> の参加人数とゲスト割合が過去の月のぶんも出るようになります。</p>
-<p><strong>月例会の準備やテーブル割りには関わりません。</strong>お手元のレポートがそろってから行っていただければ大丈夫です。</p>
-
-<div class="box warn">
-  <p class="box-title">必ず、会員リストを取り込んだあとに行ってください</p>
-  <p><strong>参加者名簿には会員番号しか入っていません。</strong>そのため、取り込むときに会員リストを見てお名前と所属支部を補っています。会員リストがまだ入っていないうちに取り込むと、<strong>お名前がレポートに書かれた姓と名をつないだ形のまま残り、所属支部の欄は空のまま</strong>になります。</p>
-  <p><strong>あとから会員リストを取り込んでも、先に取り込んだ過去の記録は直りません。</strong>順番は「会員リスト → 過去の参加者名簿」です。</p>
-</div>
-
-<div class="box warn">
-  <p class="box-title">レポートのタブ名は、8桁の数字であることが必須です</p>
-  <p><strong>読み込むのは、タブ名が8桁の数字になっているタブだけです。</strong>年4桁・月2桁・日2桁を続けた形にしてください（例：2026年6月18日 → <span class="key">20260618</span>）。「20260618（6月）」のように後ろに文字が付いているものや、「6月」「6月18日」のようなタブ名は対象外です。数字だけの8桁にしてください。</p>
-  <p>1つのファイルに月ごとのタブが並んでいる場合は、8桁の数字になっているタブを全部読み込みます。</p>
-  <p><strong>例外がひとつあります。</strong>8桁の数字のタブが1枚も無いファイルのときだけ、いちばん左のタブを読み込みます。<strong>この場合、開催日はそのタブの中に書かれた日付から読み取ります。</strong>タブ名を直さずに入れると、どの回のものか取り違える元になるので、<strong>できるだけ8桁の数字に直してからアップロードしてください。</strong></p>
-</div>
-
-<p>トップ画面の <span class="key">05</span> <span class="key">設定</span> を開き、<span class="key">過去レポート</span> のタブを押します。<span class="key">過去レポートの取り込み</span> という見出しの画面が出ます。</p>
-
-<h3><span class="step">ステップ1.</span> xlsxをアップロードする（複数可）</h3>
-<ol>
-  <li><span class="key">xlsxファイルをここにドロップするか、タップして選択してください</span> と書かれた枠に、参加者名簿のファイルを置きます。枠を押してファイルを選んでも同じです。<strong>複数まとめて選べます。</strong></li>
-  <li>選んだファイルの名前が枠の下に並びます。</li>
-  <li><span class="btn">アップロードする</span> を押します。</li>
-</ol>
-<p>1件ずつ順にアップロードします。<strong>ファイル1件あたり数秒かかります</strong>（20件を超えると2分ほどかかります）。何件目まで終わったかが画面に出るので、そのまま待ってください。</p>
-<p>全部終わると <span class="key">（数）件をアップロードしました。ステップ2で取り込みを実行してください。</span> と出ます。</p>
-
-<div class="box warn">
-  <p class="box-title">この知らせが出てから、ステップ2に進んでください</p>
-  <p>取り込みは、押した時点でアップロードが済んでいるファイルだけを読み込みます。<strong>アップロードの途中で <span class="btn">過去レポートを取り込む</span> を押すと、まだ届いていないファイルは読み込まれません。</strong>そのぶんはスキップにもエラーにも出ないため、気づきにくくなります。</p>
-</div>
-
-<h3><span class="step">ステップ2.</span> 取り込みを実行する</h3>
-<ol>
-  <li><span class="btn">過去レポートを取り込む</span> を押します。</li>
-  <li>数十秒かかることがあります。画面が変わるまでお待ちください。</li>
-  <li>取り込めた開催日が並んで出ます。読み飛ばしたものがあれば、その理由も出ます。</li>
-</ol>
-<p><strong>途中で止まったときは、もう一度 <span class="btn">過去レポートを取り込む</span> を押してください。</strong>すでに入ったぶんが二重になることはありません。</p>
-
-<h3>あとから見つかったレポートも、あとで足せます</h3>
-<p>同じ手順で足してください。<strong>すでに取り込んだ開催日は読み飛ばされるので、二重に入ることはありません。</strong>足したぶんだけが増えます。</p>
-
-<p><strong>取り込みが終わったファイルは、控えとして別のフォルダへ自動で移ります。</strong>次に取り込むときの対象は、新しくアップロードしたぶんだけになります。</p>
-
-<h2>8. 過去のテーブル割りを取り込む</h2>
-<p><strong>これまでの月例会の席順がお手元に残っていれば、ここから入れられます。</strong>入れておくと、テーブル割りのときに<strong>同じ人が続けて同じテーブルにならないようにする計算</strong>が、過去のぶんまでさかのぼって効くようになります。</p>
-<p><strong>月例会の準備やテーブル割りには関わりません。</strong>お手元の記録がそろってから行っていただければ大丈夫です。</p>
-
-<div class="box warn">
-  <p class="box-title">なぜ、この作業が別に要るのか</p>
-  <p>「7. 過去の参加者名簿を取り込む」で入る参加者名簿には、<strong>誰がどのテーブルに座ったかが入っていません。</strong>そのため、参加者名簿を取り込んだだけでは、前回と同じ人が同じテーブルになるのを避ける計算は効きません。席の記録は、この章で別に入れます。</p>
-  <p><strong>お手元に過去の席順の記録が残っている場合だけの作業です。</strong>残っていなければ飛ばして構いません。これから月例会をこのツールで回していけば、席順はそのつど自動でたまっていきます。</p>
-</div>
-
-<div class="box warn">
-  <p class="box-title">必ず、会員リストを取り込んだあとに行ってください</p>
-  <p>貼り付けたお名前を会員リストと照らし合わせて記録します。<strong>会員リストがまだ入っていないと、どの行も取り込まれません。</strong></p>
-</div>
-
-<h3>やり方</h3>
-<ol>
-  <li>トップ画面の <span class="key">05</span> <span class="key">設定</span> を開き、<strong>いちばん右</strong>の <span class="key">テーブル履歴</span> のタブを押します。</li>
-  <li>スプレッドシートやExcelで、<strong>開催日・名前・テーブル記号の3列</strong>を選んでコピーします。<strong>1行目が見出しでも構いません。</strong></li>
-  <li>広い入力欄をクリックして貼り付けます。</li>
-  <li><span class="btn">テーブル履歴を取り込む</span> を押します。</li>
-</ol>
-<p>取り込めた件数が、欄の下に出ます。</p>
-
-<h3>3つの列に入れるもの</h3>
-<table>
-  <tr><th>列</th><th>入れるもの</th></tr>
-  <tr><td class="col">1列目：開催日</td><td>その回の開催日です。</td></tr>
-  <tr><td class="col">2列目：名前</td><td>その日に参加した方のお名前です。<strong>会員リストと同じ表記にしてください。</strong></td></tr>
-  <tr><td class="col">3列目：テーブル記号</td><td>A、B、C… の<strong>英字1文字</strong>です。「A卓」「ａ」のような書き方も受け付けます。</td></tr>
-</table>
-<p><strong>1人が1行です。</strong>同じ開催日の人数ぶん、行が並びます。開催日が違うぶんも、続けて並べて構いません。</p>
-
-<div class="box">
-  <p class="box-title">二重に入ることはありません</p>
-  <p><strong>すでに入っている開催日は、その日のぶんがまるごと読み飛ばされます。</strong>読み飛ばした開催日は結果に出ます。あとから見つかった記録を足したいときは、同じ手順でもう一度貼り付けてください。</p>
-</div>
-
-<div class="box warn">
-  <p class="box-title">お名前が会員リストと結び付かなかった行は入りません</p>
-  <p>貼り付けたお名前が会員リストの中に見つからないと、その行は取り込まれません。<strong>どの行が入らなかったかは結果に出ます。</strong>お名前の表記を直すか、その方が入った会員リストを取り込んでから、もう一度貼り付けてください。</p>
-</div>
-
-<h2>9. どこまで入れると何ができるようになるか</h2>
-<p>上から順に、できることが増えていきます。<strong>全部を一度に埋める必要はありません。</strong></p>
-<table>
-  <tr><th>どこまで入れたか</th><th>できるようになること</th></tr>
-  <tr><td class="col">ログインした</td><td>月例会の準備・テーブル割り・参加者名簿の出力まで、ひととおり使えます。</td></tr>
-  <tr><td class="col">＋ 役員を登録した</td><td>参加者名簿に役職が出ます。テーブル割りで役員が同じテーブルに固まらないように分散されます。<strong>ここまでで、月例会は回せます。</strong></td></tr>
-  <tr><td class="col">＋ 役員の固定テーブルを決めた</td><td>決めた方が、毎回そのテーブルに入ります。</td></tr>
-  <tr><td class="col">＋ 役員に毎月参加を付けた</td><td>毎月参加する方を、参加者を入れるときに手間なく入れられます。</td></tr>
-  <tr><td class="col">＋ 業種を入れた</td><td>同じ業種の方が同じテーブルに固まらないように分散されます。</td></tr>
-  <tr><td class="col">＋ カテゴリを入れた</td><td>業種より大きなくくりでも分散されます。一覧の <span class="key">カテゴリ未設定</span> の印が消えていきます。</td></tr>
-  <tr><td class="col">＋ TL研修受講済みを入れた</td><td>TLを置ける方がはっきりします。<span class="key">TL優先度</span> も入れると、その方が先に選ばれます。</td></tr>
-  <tr><td class="col">＋ SL可否を切にした</td><td>切にした方は、テーブル割りでSLに選ばれなくなります。<strong>はじめは全員が入なので、そのままでも構いません。</strong></td></tr>
-  <tr><td class="col">＋ 入会：を入れた</td><td><span class="key">星の評価</span> の受講率が計算できるようになります。<strong>ここが空のうちは、受講率の欄に計算できない旨が出ます。</strong></td></tr>
-  <tr><td class="col">＋ 研修の受講を入れた</td><td><span class="key">必須研修受講率（SU+SD）</span> と <span class="key">フロント+TL研修受講率</span> の点数が出ます。</td></tr>
-  <tr><td class="col">＋ 準役：を入れた</td><td><span class="key">準役員就任（過去6か月）</span> の点数が出ます。</td></tr>
-  <tr><td class="col">＋ 過去の参加者名簿を取り込んだ</td><td><span class="key">星の評価</span> の参加人数とゲスト割合が、過去の月のぶんも出ます。</td></tr>
-  <tr><td class="col">＋ 過去のテーブル割りを取り込んだ</td><td>過去に同じテーブルだった組み合わせがわかるようになり、<strong>同じ人が続けて同じテーブルにならないように</strong>席が決まります。</td></tr>
-</table>
-
-<h2>10. こんな画面が出たときは</h2>
-<p>表示の中の <span class="key">（名前）</span> <span class="key">（数）</span> のところには、実際の名前や人数が入ります。</p>
-
-<h3>ログインするとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">支部名またはパスワードが違います</td><td>どちらかが登録と合っていません。「支部」の2文字を付けていないか、前後に余分な空白が入っていないか、大文字と小文字が合っているかを確かめてください。それでも入れないときはご連絡ください。</td></tr>
-  <tr><td class="col">もう一度ログインしてください</td><td>時間が経ってログインの状態が切れました。支部名とパスワードを入れ直してください。<strong>入力していた内容は残らないので、長い作業の途中では「保存」を押しながら進めてください。</strong></td></tr>
-</table>
-
-<h3>役員を登録するとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">名前を選択してください</td><td>名前がまだ <span class="key">（タップして会員を選ぶ）</span> のままです。押して <span class="key">会員を選択</span> の一覧から選んでから、<span class="btn">追加する</span> を押してください。</td></tr>
-  <tr><td class="col">NM IDは「NM-数字」の形式か、空欄にしてください</td><td>入れた形が違います。「NM-」に続けて数字を入れるか、わからなければ欄を空にしてください。</td></tr>
-  <tr><td class="col">先に「この内容で更新する」を押してください</td><td>1人ぶんの編集を開いたまま、保存を押しています。<span class="btn">この内容で更新する</span> で編集を閉じてから、<span class="btn">役員設定を保存する</span> を押してください。直すのをやめるなら <span class="btn">編集をやめる</span> です。</td></tr>
-  <tr><td class="col">役員設定を保存しました</td><td>保存できています。そのまま次の作業に進んで構いません。</td></tr>
-</table>
-
-<h3>会員の情報を埋めるとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">会員マスタにデータがありません。先に会員リストを取り込んでください</td><td>会員の一覧がまだ入っていません。「3. 会員リストを取り込む」の手順で取り込んでから、もう一度開いてください。</td></tr>
-  <tr><td class="col">先に「この内容で更新する」を押してください</td><td>1人ぶんの編集を開いたまま、保存を押しています。<span class="btn">この内容で更新する</span> で編集を閉じてから、<span class="btn">会員情報を保存する</span> を押してください。</td></tr>
-  <tr><td class="col">保存に失敗しました。もう一度試してください。</td><td>通信がうまくいきませんでした。もう一度 <span class="btn">会員情報を保存する</span> を押してください。何度も出るときは、ブラウザを再読み込みしてから開き直してください。</td></tr>
-  <tr><td class="col">会員情報を保存しました</td><td>保存できています。ここまでの内容は残りました。</td></tr>
-</table>
-
-<h3>星の評価の画面で</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">会員の入会日が登録されていないため、受講率を計算できません。会員詳細画面から入会日を登録してください</td><td>不具合ではありません。<span class="key">入会：</span> がまだ1人も入っていないと出ます。<span class="key">会員詳細</span> のタブで入会日を入れていくと、計算されるようになります。</td></tr>
-  <tr><td class="col">就任記録がありません（今後の会員リスト取り込みから自動で記録されます。会員詳細画面から手動入力もできます）</td><td>準役員の就任月がまだ入っていません。<span class="key">会員詳細</span> のタブの <span class="key">準役：</span> に入れると点数に出ます。</td></tr>
-  <tr><td class="col">入会3か月以上の人数：（数）人（受講率の計測対象）</td><td>受講率の計算に使われている人数です。<span class="key">入会：</span> を埋めていくと、この人数が増えていきます。</td></tr>
-</table>
-
-<h3>過去の参加者名簿を取り込むとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">（数）回分を取り込みました（スキップ （数）件、エラー （数）件）</td><td>取り込みが終わった知らせです。この下に、取り込めた開催日・読み飛ばしたもの・エラーになったものが並びます。</td></tr>
-  <tr><td class="col">すでに取り込み済み</td><td>不具合ではありません。その開催日はもう入っているため、二重にならないように読み飛ばしています。</td></tr>
-  <tr><td class="col">D3から開催日を取得できませんでした</td><td>そのタブの中に書かれた開催日を読み取れませんでした。タブ名が8桁の数字になっているのにこの表示が出るときは、レポートの様式が違う可能性があります。ご連絡ください。</td></tr>
-</table>
-<p><strong>取り込んだ数が、レポートのタブの枚数と合っているかを確かめてください。</strong>数が足りないときは、タブ名が8桁の数字になっていないタブが混ざっている可能性があります。</p>
-
-<h3>過去のテーブル割りを取り込むとき</h3>
-<table>
-  <tr><th>出た表示</th><th>どうすればよいか</th></tr>
-  <tr><td class="col">取り込み成功: （数） 件</td><td>入った行数です。貼り付けた行数と合っているか確かめてください。</td></tr>
-  <tr><td class="col">スキップ（重複開催日）: （日付）</td><td>不具合ではありません。その開催日はもう入っているため、二重にならないように、その日のぶんをまるごと読み飛ばしています。</td></tr>
-  <tr><td class="col">照合失敗: （数） 件</td><td>貼り付けたお名前が会員リストの中に見つかりませんでした。下に <span class="key">行（数）: （名前）</span> の形で並びます。お名前の表記を直すか、その方が入った会員リストを取り込んでから、もう一度貼り付けてください。</td></tr>
-  <tr><td class="col">エラー行: （数） 件</td><td>3つの列がそろっていないか、開催日を読み取れなかった行です。下に行の番号と中身が並ぶので、その行を直してから貼り直してください。</td></tr>
-  <tr><td class="col">貼り付けデータがありません。</td><td>欄が空のままです。3つの列をコピーして貼り付けてから、もう一度 <span class="btn">テーブル履歴を取り込む</span> を押してください。</td></tr>
-</table>
-
-<h2>11. よくあるご質問</h2>
-
-<h3>全部入れ終わらないと、月例会には使えませんか？</h3>
-<p>使えます。ログイン・会員リストの取り込み・役員の登録が終わっていれば、その日から月例会の準備に使えます。会員の情報は、使いながら少しずつ埋めていってください。</p>
-
-<h3>会員の情報は、途中でやめても大丈夫ですか？</h3>
-<p>大丈夫です。<span class="btn">会員情報を保存する</span> を押したところまでは残ります。次に開いたとき、その続きから埋めていけます。</p>
-
-<h3>役員の名前を打ち込む欄が見つかりません</h3>
-<p>名前は打ち込む形ではありません。<span class="key">（タップして会員を選ぶ）</span> と書かれたところを押すと <span class="key">会員を選択</span> の一覧が開くので、その中から選んでください。</p>
-
-<h3>役員の固定テーブルは、必ず決めないといけませんか？</h3>
-<p>決めなくて構いません。<span class="key">固定しない</span> のままにしておくと、テーブル割りのときに自動で決まります。</p>
-
-<h3><span class="key">この内容で更新する</span> と <span class="key">会員情報を保存する</span> は何が違いますか？</h3>
-<p><span class="key">この内容で更新する</span> は、1人ぶんを画面の中で確定するボタンです。これだけでは残りません。ひととおり終えたら、いちばん下の <span class="key">会員情報を保存する</span> を押してください。役員のほうも同じで、<span class="key">追加する</span> のあとに <span class="key">役員設定を保存する</span> が要ります。</p>
-
-<h3>他支部の方を開くと、研修の欄が出てきません</h3>
-<p><span class="key">受講済み研修（自支部のみ）</span> の区切りから下は、自分の支部の方を開いたときだけ出ます。他支部の方には出ません。</p>
-
-<h3>カテゴリにあてはまるものがありません</h3>
-<p><span class="key">カテゴリを選ぶ</span> のいちばん上にある <span class="key">（カテゴリなし）</span> を選んでください。</p>
-
-<h3>一覧の <span class="key">残り（数）名</span> は何の数ですか？</h3>
-<p>カテゴリがまだ入っていない方の人数です。0に近づくほど、テーブル割りの分散が効くようになります。</p>
-
-<h3>入会日がわからない人がいます</h3>
-<p>空欄のままにしておいてください。わかった時点で入れれば、そこから <span class="key">星の評価</span> の受講率に反映されます。</p>
-
-<h3>入会したばかりの人にSLを任せたくありません</h3>
-<p><span class="key">05</span> <span class="key">設定</span> → <span class="key">会員詳細</span> のタブを開き、その方の <span class="btn">編集</span> を押して <span class="key">SL可否</span> を切にしてください。切にした方は、テーブル割りでSLに選ばれなくなります。<strong>はじめは全員が入になっているので、SLを任せたくない方だけ切にします。</strong>一度切にしたら、勝手に入へ戻ることはありません。</p>
-
-<h3>過去の席順の記録が残っていない場合は？</h3>
-<p>入れなくて構いません。「8. 過去のテーブル割りを取り込む」は飛ばしてください。これから月例会をこのツールで回していけば、席順はそのつど自動でたまっていきます。たまるほど、同じ人が続けて同じテーブルにならないように席が決まります。</p>
-
-<h3>すでに取り込んだ開催日の内容を直したいときは？</h3>
-<p>ご連絡ください。<strong>同じ開催日は読み飛ばされるため、入れ直すには先に古い記録を消す必要があります。</strong>こちらで消してから、もう一度アップロードしていただきます。</p>
-
-<h3>パスワードを忘れました</h3>
-<p>ご連絡ください。お調べしてお伝えするか、新しいものを作ってお渡しします。<strong>画面から変えたり調べたりする仕組みはありません。</strong></p>
-
-<h3>あとから見つかった参加者名簿は、足せますか？</h3>
-<p>足せます。<span class="key">05</span> <span class="key">設定</span> → <span class="key">過去レポート</span> のタブで、同じ手順でアップロードして取り込んでください。<strong>すでに取り込んだ開催日は読み飛ばされるので、二重に入ることはありません。</strong>まだ入れていないレポートだけをアップロードしてください。</p>
-
-<h3>過去の参加者名簿を、会員リストより先に取り込んでしまいました</h3>
-<p>ご連絡ください。<strong>あとから会員リストを取り込んでも、先に入った過去の記録のお名前と所属支部は直りません。</strong>入れ直すには、古い記録を消してから取り込み直す必要があります。</p>
-
-<h3>月例会の進め方はどこに書いてありますか？</h3>
-<p>別冊の「使い方マニュアル」をご覧ください。参加者を入れるところから、テーブル割り・当日の出欠・参加者名簿の出力までが載っています。</p>
-
-<h3>次に何をすればよいかわからなくなりました</h3>
-<p>画面の上にある <span class="btn">?</span> を押してください。その画面の説明が開きます。</p>
-
-<p class="foot">
-ご不明な点は、ネコノテ 山下美樹まで Messenger または LINE でご連絡ください。<br>
-月例会ツール はじめてお使いになるとき（2026年8月21日版）
-</p>
-
 </body>
 </html>
