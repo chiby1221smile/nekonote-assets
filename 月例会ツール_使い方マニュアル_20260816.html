@@ -179,6 +179,18 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
 .app-shot .picker .ph{padding:10px 12px;font-size:14px;font-weight:700;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
 .app-shot .picker .pr{padding:9px 12px;font-size:14px;border-top:1px solid var(--border)}
 .app-shot .sel{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:10px 12px;font-size:14px;color:var(--text-secondary)}
+
+/* 会員詳細の一覧（アプリのCSSから写した） */
+.app-shot .mlist{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.app-shot .mrow{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.app-shot .mrow:last-child{border-bottom:none}
+.app-shot .minfo{flex:1;min-width:0}
+.app-shot .mname{font-size:14px;font-weight:500}
+.app-shot .mind{color:var(--text-secondary);margin-top:2px;font-size:13px}
+.app-shot .mbadges{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.app-shot .badge-cat{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--hover-bg);color:var(--text-secondary);white-space:nowrap}
+.app-shot .badge-subofficer{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--success-light);color:var(--success);white-space:nowrap}
+.app-shot .badge-no-joinmonth{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--danger-light);color:var(--danger);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -205,6 +217,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
     <li><a href="#p11">会員リストを取り込む方法<span class="toc-s">毎月1回</span></a></li>
     <li><a href="#p12">姓名を確認する方法<span class="toc-s">毎月1回</span></a></li>
     <li><a href="#p13">役員を登録する方法<span class="toc-s">最初に1回</span></a></li>
+    <li><a href="#p14">準役員のお知らせが出たときの見かた<span class="toc-s">年に1回</span></a></li>
   </ol>
 </div>
 
@@ -509,6 +522,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
         <tr><th>SL</th><td>サブリーダー。1テーブルに1名まで</td></tr>
       </table>
       <p style="margin-top:12px">下のほうに<span class="key">「共有用テキスト」</span>があります。<span class="key">「共有テキストをコピー」</span>を押すと、そのままLINEなどに貼り付けられます。</p>
+      <div class="note"><b>テーブルの呼び方を変えられます</b>　A・B・C… ではなく 1・2・3… で出したいときは、<span class="key">「05 設定」→「支部の設定」</span>の<b>「テーブルを数字で表示する（1・2・3…）」</b>を入にして保存してください。この結果の画面も共有用テキストも切り替わります。</div>
     </div>
     <div class="step-shot">
       <div class="app-shot"><div class="container">
@@ -1257,7 +1271,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
   <div class="step">
     <div class="step-text">
       <div class="step-h"><span class="step-n">1</span><span class="t">役員のタブを開く</span></div>
-      <p>トップ画面の<span class="key">「05 設定」</span>を押します。上に「会員詳細／役員／支部の設定／過去レポート」のタブが並ぶので、<span class="key">「役員」</span>を押します。</p>
+      <p>トップ画面の<span class="key">「05 設定」</span>を押します。上に「会員詳細／役員／支部の設定／過去レポート／テーブル履歴」のタブが並ぶので、<span class="key">「役員」</span>を押します。</p>
       <table class="tbl">
         <tr><th>役員</th><td>参加者名簿で役員として扱われます。テーブル割りでは役員が同じテーブルに固まらないように分かれます</td></tr>
         <tr><th>固定テーブル</th><td>「毎回この人はこのテーブル」と決めたいときに使います</td></tr>
@@ -1272,6 +1286,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
           <span class="mark mark-out mark-inline"><button class="tab-btn active">役員</button></span>
           <button class="tab-btn">支部の設定</button>
           <button class="tab-btn">過去レポート</button>
+          <button class="tab-btn">テーブル履歴</button>
         </div>
       </div></div>
     </div>
@@ -1320,6 +1335,84 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
         </div>
         <div style="margin-top:14px"><span class="mark mark-out mark-inline"><button class="btn btn-primary">追加する</button></span></div>
         <div style="margin-top:20px"><span class="mark mark-out"><button class="btn btn-success btn-block">役員設定を保存する</button></span></div>
+      </div></div></div>
+    </div>
+  </div>
+  <a class="back" href="#top">目次に戻る</a>
+</section>
+
+<!-- ============================================================
+     14. 準役員のお知らせが出たときの見かた
+     ============================================================ -->
+<section class="page" id="p14">
+  <div class="page-head"><span class="page-n">14</span><h1>準役員のお知らせが出たときの見かた</h1></div>
+  <p class="page-lead">トップ画面のいちばん上に、準役員の方についてのお知らせが出ることがあります。<b>自分の支部の準役員の方だけ</b>が対象です。</p>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">1</span><span class="t">2種類のお知らせがあります</span></div>
+      <table class="tbl">
+        <tr><th style="width:42%">準役員の任期更新が近づいています</th><td>任期は<b>就任月から12か月</b>です。更新月の<b>3か月前から更新月の末日まで</b>出ます。支部で更新の手続きを進めてください</td></tr>
+        <tr><th>準役員の就任月が未設定です</th><td>準役員の方の<b>就任月がまだ入っていません</b>。入れないと、上の更新のお知らせも出せません</td></tr>
+      </table>
+      <p>どちらの帯も、<b>押すと「設定 → 会員詳細」が開きます</b>。対象の方が1名のときは、帯にその方のお名前と更新月が出ます。2名以上のときは人数だけが出ます。</p>
+      <div class="note"><b>就任月を書き直す必要はありません</b>　更新月を過ぎると帯は自動で消えます。翌年の更新月が近づくと、また同じ帯が出ます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <span class="mark"><div class="hub-banner"><div class="hub-banner-body"><div class="hub-banner-t">準役員の任期更新が近づいています</div><div class="hub-banner-s">対象：西村 洋平さん（2025年4月就任）　更新月：2026年4月</div></div><div class="hub-banner-a">確認する →</div></div></span>
+        <div class="hub-banner"><div class="hub-banner-body"><div class="hub-banner-t">準役員の就任月が未設定です</div><div class="hub-banner-s">就任月未設定 2名　会員詳細から就任月を入力してください</div></div><div class="hub-banner-a">確認する →</div></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">一覧で対象の方を見つける</span></div>
+      <p>帯を押すと開く<span class="key">「会員詳細」</span>の一覧では、名前の下に小さな印が並びます。</p>
+      <table class="tbl">
+        <tr><th>準役員</th><td>緑の印です。会員リストの属性が「準役員」の方に出ます</td></tr>
+        <tr><th>就任月未設定</th><td>赤い印です。<b>この印が付いた方が、就任月を入れる相手</b>です</td></tr>
+      </table>
+      <p>探しにくいときは、上の<span class="key">「自支部のみ」</span>を入にすると自分の支部の方だけが並びます。</p>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="mlist">
+          <div class="mrow">
+            <div class="minfo">
+              <div class="mname">西村 洋平</div>
+              <div class="mind">経営コンサルタント</div>
+              <div class="mbadges"><span class="badge-cat">士業・コンサル</span><span class="badge-subofficer">準役員</span><span class="badge-no-joinmonth">就任月未設定</span></div>
+            </div>
+            <span class="mark mark-inline"><button class="btn btn-sm btn-outline">編集</button></span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">就任月を入れて保存する</span></div>
+      <p>その方の<span class="key">「編集」</span>を押すと、行のすぐ下に編集の画面が開きます。いちばん下の<span class="key">「準役：」</span>の欄に、準役員に就任した月を入れます。</p>
+      <p><b>2026-04</b> のように、年4けたと月2けたを半角ハイフンでつなぎます。<b>日は入れません。</b></p>
+      <p>入れたら<span class="key">「この内容で更新する」</span>を押し、続けて一覧のいちばん下の<span class="key">「会員情報を保存する」</span>を押します。<b>この2つ目を押してはじめて残ります。</b></p>
+      <div class="note"><b>「準役：」の欄が出てこないとき</b>　この欄は<b>自分の支部の方を開いたときだけ</b>出ます。他の支部の方には出ません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="card-title">西村 洋平 を編集</div>
+        <p class="muted" style="margin-top:12px">受講済み研修（自支部のみ）</p>
+        <div style="display:flex;gap:10px;margin-top:14px;font-size:13px;align-items:center">
+          <span>入会：</span><input type="text" placeholder="YYYY-MM-DD" style="flex:1">
+          <span>準役：</span><span class="mark mark-inline" style="flex:1"><input type="text" placeholder="YYYY-MM" style="width:100%"></span>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm">この内容で更新する</button>
+          <button class="btn btn-outline btn-sm">編集をやめる</button>
+        </div>
+        <div style="margin-top:20px"><span class="mark mark-out"><button class="btn btn-primary btn-block">会員情報を保存する</button></span></div>
       </div></div></div>
     </div>
   </div>
