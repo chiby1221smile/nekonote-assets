@@ -207,6 +207,8 @@ h3.sec:first-child{margin-top:0}
 .app-shot .badge-cat{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--hover-bg);color:var(--text-secondary);white-space:nowrap}
 .app-shot .badge-nocat{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--help-light);color:var(--help);white-space:nowrap}
 .app-shot .badge-tl{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--primary-light);color:var(--primary-text);white-space:nowrap}
+.app-shot .badge-subofficer{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--success-light);color:var(--success);white-space:nowrap}
+.app-shot .badge-no-joinmonth{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--danger-light);color:var(--danger);white-space:nowrap}
 
 /* ログイン画面（アプリ側の再定義C-2に合わせる：カード枠なし・左揃え・下線だけの入力欄） */
 .app-shot .lg{padding:34px 26px 30px}
@@ -243,7 +245,7 @@ h3.sec:first-child{margin-top:0}
     <li><a href="#p2">会員リストを取り込む<span class="toc-s">毎月1回</span></a></li>
     <li><a href="#p3">役員を登録する<span class="toc-s">最初に1回</span></a></li>
     <li><a href="#p4">会員の情報を埋める<span class="toc-s">少しずつ</span></a></li>
-    <li><a href="#p5">開催方式を入れる<span class="toc-s">最初に1回</span></a></li>
+    <li><a href="#p5">支部の設定を入れる<span class="toc-s">最初に1回</span></a></li>
     <li><a href="#p6">過去の参加者名簿を取り込む<span class="toc-s">あとからで大丈夫</span></a></li>
     <li><a href="#p7">過去のテーブル割りを取り込む<span class="toc-s">あとからで大丈夫</span></a></li>
     <li><a href="#p8">どこまで入れると何ができるか<span class="toc-s">早見表</span></a></li>
@@ -572,6 +574,8 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
         <tr><th>TL受講済</th><td>黄色い印です。「TL研修受講済み」が入になっています</td></tr>
         <tr><th>TL受講済・優先</th><td>あわせて「TL優先度」も入になっています</td></tr>
         <tr><th>SL不可</th><td>赤い印です。<b>「SL可否」を切にした方だけ</b>に出ます</td></tr>
+        <tr><th>準役員</th><td>緑の印です。<b>会員リストの属性が「準役員」の方</b>に出ます（自分の支部の方だけ）</td></tr>
+        <tr><th>就任月未設定</th><td>赤い印です。準役員の方で、下の<b>「準役：」がまだ空</b>のときに出ます</td></tr>
       </table>
       <p>名前の右の<span class="key">「編集」</span>を押すと、その行のすぐ下に編集の画面が開きます。押したボタンは<span class="key">「編集中」</span>に変わります。</p>
     </div>
@@ -597,6 +601,14 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
               <div class="mbadges"><span class="badge-nocat">カテゴリ未設定</span><span class="badge-nocat">SL不可</span></div>
             </div>
             <span class="mark mark-inline"><button class="btn btn-sm btn-outline">編集</button></span>
+          </div>
+          <div class="mrow">
+            <div class="minfo">
+              <div class="mname">西村 洋平</div>
+              <div class="mind">経営コンサルタント</div>
+              <div class="mbadges"><span class="badge-cat">士業・コンサル</span><span class="badge-subofficer">準役員</span><span class="badge-no-joinmonth">就任月未設定</span></div>
+            </div>
+            <button class="btn btn-sm btn-outline">編集</button>
           </div>
         </div>
       </div></div>
@@ -667,11 +679,11 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
 </section>
 
 <!-- ============================================================
-     5. 開催方式を入れる
+     5. 支部の設定を入れる
      ============================================================ -->
 <section class="page" id="p5">
-  <div class="page-head"><span class="page-n">5</span><h1>開催方式を入れる</h1></div>
-  <p class="page-lead">NM本部に提出する参加者名簿に印字される項目です。最初に1回入れておけば、以降は自動で入ります。<b>初めて名簿を出す前までに済ませれば大丈夫です。</b></p>
+  <div class="page-head"><span class="page-n">5</span><h1>支部の設定を入れる</h1></div>
+  <p class="page-lead">「支部の設定」のタブには2つあります。<b>開催方式</b>（参加者名簿に印字されます）と、<b>テーブルの呼び方</b>（A・B・C… か 1・2・3…）です。どちらも最初に1回入れておけば、以降はそのまま使えます。<b>開催方式は、初めて名簿を出す前までに済ませれば大丈夫です。</b></p>
 
   <div class="step">
     <div class="step-text">
@@ -692,11 +704,28 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
           <button class="tab-btn">テーブル履歴</button>
         </div>
         <div class="card">
+          <div style="display:flex;align-items:center;gap:10px;font-size:14px;margin-bottom:16px"><span class="sw"></span><span>テーブルを数字で表示する（1・2・3…）</span></div>
           <div class="card-title">開催方式</div>
           <span class="mark mark-out"><input type="text" placeholder="ネット または 都道府県名（例: 大阪府）"></span>
           <p class="muted" style="margin-top:12px">オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名を入れます。参加者名簿にそのまま印字されます。</p>
           <button class="btn btn-primary btn-block">支部の設定を保存する</button>
         </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">テーブルの呼び方を選ぶ</span></div>
+      <p>同じ<span class="key">「支部の設定」</span>のタブのいちばん上に、<span class="key">「テーブルを数字で表示する（1・2・3…）」</span>のスイッチがあります。</p>
+      <p><b>切のときは A・B・C…</b>、<b>入にすると 1・2・3…</b> で表示されます。テーブル割りの結果・共有用テキスト・当日の出欠の画面・過去のテーブル割りなど、<b>テーブルの記号が出るところはすべて</b>切り替わります。</p>
+      <p>スイッチを動かしたら、下の<span class="key">「支部の設定を保存する」</span>を押してください。押さないと元に戻ります。</p>
+      <div class="note"><b>いつ切り替えても大丈夫です</b>　変わるのは見た目の呼び方だけです。これまでに保存した過去のテーブル割りも、そのまま新しい呼び方で表示されます。記録が消えたり、ずれたりすることはありません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <span class="mark mark-out"><div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="sw on"></span><span>テーブルを数字で表示する（1・2・3…）</span></div></span>
+        <p class="muted" style="margin-top:8px">オフのときは A・B・C… で表示します</p>
       </div></div>
     </div>
   </div>
@@ -889,6 +918,14 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
       <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
       <tr><td>支部名またはパスワードが違います</td><td>「支部」の2文字を付けていないか、前後に余分な空白が入っていないか、大文字と小文字が合っているかを確かめてください。それでも入れないときはご連絡ください</td></tr>
       <tr><td>もう一度ログインしてください</td><td>時間が経ってログインの状態が切れました。入れ直してください。<b>入力していた内容は残らないので、長い作業の途中では「保存」を押しながら進めてください</b></td></tr>
+    </table>
+
+    <h3 class="sec">トップ画面で</h3>
+    <table class="tbl">
+      <tr><th style="width:38%">出た表示</th><th>どうすればよいか</th></tr>
+      <tr><td>準役員の就任月が未設定です</td><td>準役員の方の<b>就任月（準役：）がまだ空</b>です。帯を押すと「設定 → 会員詳細」が開きます。<b>「就任月未設定」の赤い印</b>が付いた方の「編集」を押し、就任した月を <b>2026-04</b> の形で入れてください（→ 4. 会員の情報を埋める）</td></tr>
+      <tr><td>準役員の任期更新が近づいています</td><td>準役員の任期は<b>就任月から12か月</b>です。更新月の<b>3か月前から更新月の末日まで</b>この帯が出ます。支部で更新の手続きを進めてください。<b>「準役：」は書き直さなくて構いません</b>。更新月を過ぎると帯は自動で消え、翌年の更新月が近づくとまた出ます</td></tr>
+      <tr><td>準役員のお知らせを取得できませんでした</td><td>読み込みに失敗しています。時間をおいて画面を開き直してください。何度も出るときはご連絡ください</td></tr>
     </table>
 
     <h3 class="sec">役員を登録するとき</h3>
