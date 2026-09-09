@@ -16,17 +16,21 @@ body{font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN','Meiryo',san
 .doc-title{font-size:38px;font-weight:700;text-align:center;letter-spacing:.02em}
 .doc-sub{text-align:center;color:#5b6270;font-size:15px;margin:8px 0 40px}
 
-/* 目次 */
-.toc{border:2px solid #1f2328;padding:24px 28px;margin-bottom:56px}
-.toc h2{font-size:24px;font-weight:700;margin-bottom:2px}
-.toc .toc-note{font-size:14px;color:#5b6270;margin-bottom:14px}
-.toc ol{list-style:none;counter-reset:toc}
-.toc li{counter-increment:toc;border-top:1px solid #e3e6ea}
-.toc li:first-child{border-top:none}
-.toc a{display:flex;gap:14px;align-items:baseline;padding:11px 4px;color:#1f2328;text-decoration:none;font-size:17px;font-weight:600}
-.toc a::before{content:counter(toc);color:#e53935;font-weight:700;width:20px;flex:none}
-.toc a:hover{background:#fdf3f2}
-.toc .toc-s{font-size:13px;color:#5b6270;font-weight:400;margin-left:auto;text-align:right}
+/* できること一覧（目次を兼ねる） */
+.cando{border:2px solid #1f2328;padding:24px 28px 22px;margin-bottom:56px}
+.cando h2{font-size:24px;font-weight:700;margin-bottom:2px}
+.cando .cando-note{font-size:14px;color:#5b6270}
+.cando .grp{margin-top:22px}
+.cando .grp-h{font-size:15px;font-weight:700;color:#e53935;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid #e53935}
+.cando ul{list-style:none}
+.cando li{border-top:1px solid #e3e6ea}
+.cando li:first-child{border-top:none}
+.cando a{display:flex;gap:14px;align-items:baseline;padding:12px 4px;color:#1f2328;text-decoration:none}
+.cando a:hover{background:#fdf3f2}
+.cando .ct{flex:1;min-width:0;font-size:17px;font-weight:600}
+.cando .cd{display:block;font-size:14px;font-weight:400;color:#5b6270;margin-top:3px}
+.cando .cn{flex:none;font-size:13px;font-weight:700;color:#e53935;white-space:nowrap}
+@media (max-width:860px){.cando{padding:20px 16px}.cando .ct{font-size:16px}}
 
 /* 各ページ */
 .page{padding-top:24px;margin-bottom:64px;border-top:4px solid #1f2328}
@@ -191,6 +195,14 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
 .app-shot .badge-cat{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--hover-bg);color:var(--text-secondary);white-space:nowrap}
 .app-shot .badge-subofficer{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--success-light);color:var(--success);white-space:nowrap}
 .app-shot .badge-no-joinmonth{display:inline-block;padding:0 7px;border-radius:8px;font-size:10px;font-weight:600;line-height:16px;background:var(--danger-light);color:var(--danger);white-space:nowrap}
+.app-shot table.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.app-shot table.data-table th{background:var(--primary-light);padding:7px 9px;text-align:left;font-weight:600;border-bottom:2px solid var(--border)}
+.app-shot table.data-table td{padding:7px 9px;border-bottom:1px solid var(--border)}
+.app-shot .link-btn{background:none;border:none;color:var(--primary-text);font-size:14px;padding:0;text-decoration:underline;font-family:inherit;font-weight:600}
+.app-shot .star-row{padding:9px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:14px}
+.app-shot .star-score-header{font-size:32px;font-weight:700;text-align:center;margin:18px 0 6px}
+.app-shot .star-score-rank{font-size:15px;text-align:center;margin-bottom:14px}
+.app-shot .star-info-row{padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text-secondary)}
 </style>
 </head>
 <body>
@@ -199,26 +211,57 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
 <div class="doc-title">月例会ツールの使い方</div>
 <p class="doc-sub">画面と見比べながらお使いください。押す場所は赤い枠で囲んでいます。<br>はじめて使うときの準備は<a href="月例会ツール_はじめてお使いになるとき_20260816.html" style="color:#5b6270">はじめてお使いになるとき</a>をご覧ください。</p>
 
-<!-- ============ 目次 ============ -->
-<div class="toc" id="top">
-  <h2>目次</h2>
-  <p class="toc-note">見たいところへリンクします</p>
-  <ol>
-    <li><a href="#p1">参加者を入れる方法<span class="toc-s">月例会の前に</span></a></li>
-    <li><a href="#p2">業種とTLを確認する方法<span class="toc-s">月例会の前に</span></a></li>
-    <li><a href="#p3">テーブル割りをする方法<span class="toc-s">月例会の前に</span></a></li>
-    <li><a href="#p4">手動でテーブルを決める方法<span class="toc-s">月例会の前に</span></a></li>
-    <li><a href="#p5">テーブル割りを調整する方法<span class="toc-s">月例会の前に</span></a></li>
-    <li><a href="#p6">紹介者を記録する方法<span class="toc-s">月例会の前後</span></a></li>
-    <li><a href="#p7">出欠をつける方法<span class="toc-s">月例会の当日</span></a></li>
-    <li><a href="#p8">参加者名簿を出す方法<span class="toc-s">月例会のあと</span></a></li>
-    <li><a href="#p9">過去のテーブル割りを見る方法<span class="toc-s">いつでも</span></a></li>
-    <li><a href="#p10">分析を見る方法<span class="toc-s">いつでも</span></a></li>
-    <li><a href="#p11">会員リストを取り込む方法<span class="toc-s">毎月1回</span></a></li>
-    <li><a href="#p12">姓名を確認する方法<span class="toc-s">毎月1回</span></a></li>
-    <li><a href="#p13">役員を登録する方法<span class="toc-s">最初に1回</span></a></li>
-    <li><a href="#p14">準役員のお知らせが出たときの見かた<span class="toc-s">年に1回</span></a></li>
-  </ol>
+<!-- ============ できること一覧 ============ -->
+<div class="cando" id="top">
+  <h2>このツールでできること</h2>
+  <p class="cando-note">やりたいことを押すと、その手順のページへ移ります。右の数字は章の番号です。</p>
+
+  <div class="grp">
+    <div class="grp-h">月例会の前に</div>
+    <ul>
+      <li><a href="#p1"><span class="ct">その日に来る方を登録できます<span class="cd">会員の方は一覧から選ぶだけです。ゲストの方や、ほかの支部から来られる方も入れられます</span></span><span class="cn">1章</span></a></li>
+      <li><a href="#p2"><span class="ct">業種とTLの入れ忘れに、席を決める前に気づけます<span class="cd">足りないところだけが確認のカードに出ます</span></span><span class="cn">2章</span></a></li>
+      <li><a href="#p3"><span class="ct">ボタン1つで、その日のテーブル割りができます<span class="cd">業種・カテゴリ・役員・過去に同じテーブルだった組み合わせが散らばるように組み上がります</span></span><span class="cn">3章</span></a></li>
+      <li><a href="#p4"><span class="ct">自分でテーブルを決めることもできます<span class="cd">1人ずつ、テーブルとTL・SLを選んでいきます</span></span><span class="cn">4章</span></a></li>
+      <li><a href="#p5"><span class="ct">組み上がったあと、一部だけ直せます<span class="cd">1人を別のテーブルへ移す、2人を入れ替える。全部を組み直す必要はありません</span></span><span class="cn">5章</span></a></li>
+    </ul>
+  </div>
+
+  <div class="grp">
+    <div class="grp-h">月例会の当日</div>
+    <ul>
+      <li><a href="#p7"><span class="ct">来た人・来なかった人を反映できます<span class="cd">当日の欠席や飛び入りを、その場で直せます</span></span><span class="cn">7章</span></a></li>
+      <li><a href="#p6"><span class="ct">ゲストを誰が連れてきたかを残せます<span class="cd">紹介者として記録に残ります</span></span><span class="cn">6章</span></a></li>
+    </ul>
+  </div>
+
+  <div class="grp">
+    <div class="grp-h">月例会が終わったあと</div>
+    <ul>
+      <li><a href="#p8"><span class="ct">NM本部へ出す参加者名簿を作れます<span class="cd">開催日を選ぶと、Excelで開けるファイルができます。押すと手元に保存されます</span></span><span class="cn">8章</span></a></li>
+    </ul>
+  </div>
+
+  <div class="grp">
+    <div class="grp-h">支部の様子を見る（分析）</div>
+    <ul>
+      <li><a href="#p10"><span class="ct">支部の参加の傾向を見られます<span class="cd">リピート参加率／ほかの支部からの参加／月ごとの参加者数の移り変わり／業種の内訳の4つが出ます。期間は選べます</span></span><span class="cn">10章</span></a></li>
+      <li><a href="#p10"><span class="ct">星の基準の点数を、いまの数字で確認できます<span class="cd">月例会の参加人数・会員数・準役員就任・研修の受講率・ゲスト割合・スライドを項目ごとに点数にして、合計点と★の数、次のランクまであと何点かが出ます</span></span><span class="cn">10章</span></a></li>
+      <li><a href="#p10"><span class="ct">「この2人、前も同じテーブルだったかな」を名前から調べられます<span class="cd">その方が過去に同じテーブルだった相手が一覧で出ます</span></span><span class="cn">10章</span></a></li>
+      <li><a href="#p9"><span class="ct">過去のテーブル割りを見返せます<span class="cd">どの回に、誰がどのテーブルにいたかが残っています</span></span><span class="cn">9章</span></a></li>
+    </ul>
+  </div>
+
+  <div class="grp">
+    <div class="grp-h">準備と、毎月のお世話</div>
+    <ul>
+      <li><a href="#p2"><span class="ct">会員ごとのTL可否を登録する<span class="cd">毎月出るTLの確認をあらかじめ済ませておけます</span></span><span class="cn">2章</span></a></li>
+      <li><a href="#p11"><span class="ct">毎月の会員リストを取り込めます<span class="cd">新しく入会された方や、変わった情報を反映します</span></span><span class="cn">11章</span></a></li>
+      <li><a href="#p12"><span class="ct">姓名の分け方を確認できます<span class="cd">フルネームを自動で姓と名に分けます。参加者名簿を出す前に一度見ておきます</span></span><span class="cn">12章</span></a></li>
+      <li><a href="#p13"><span class="ct">役員を登録できます<span class="cd">参加者名簿の役職欄と、テーブル割りの分け方に効きます</span></span><span class="cn">13章</span></a></li>
+      <li><a href="#p14"><span class="ct">準役員の更新の時期を知らせてくれます<span class="cd">更新月の3か月前から、トップ画面にお知らせが出ます</span></span><span class="cn">14章</span></a></li>
+    </ul>
+  </div>
 </div>
 
 <!-- ============================================================
@@ -367,7 +410,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -380,7 +423,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
   <div class="step">
     <div class="step-text">
       <div class="step-h"><span class="step-n">1</span><span class="t">出てくるときと、出てこないとき</span></div>
-      <p>参加者の中に、<span class="key">業種カテゴリ</span>か<span class="key">TL可否</span>がまだ決まっていない方がいると、<span class="key">「参加者の業種とTLの確認」</span>のカードが出ます。</p>
+      <p>参加者の中に、<span class="key">業種カテゴリ</span>か<span class="key">TL（テーブルリーダー）可能の設定</span>がまだ決まっていない方がいると、<span class="key">「参加者の業種とTLの確認」</span>のカードが出ます。</p>
       <p>足りないものが無ければ、代わりに緑の帯で<span class="key">「参加者の業種とTLは確認できました」</span>と出ます。そのまま実行して構いません。</p>
       <div class="note"><b>毎回は出ません</b>　ここで保存した内容は会員の情報として残ります。同じ方が来月また出てくることはありません。</div>
     </div>
@@ -389,7 +432,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
         <div class="scr-title">テーブル割り　開催日: 2026年8月28日（金）</div>
         <span class="mark"><div class="card">
           <div class="card-title">参加者の業種とTLの確認</div>
-          <p class="muted">以下の方の業種カテゴリまたはTL可否が未設定です。確認してから保存してください。</p>
+          <p class="muted">以下の方の業種カテゴリまたはTL（テーブルリーダー）可能の設定がまだありません。確認してから保存してください。</p>
           <div style="background:#fff;color:#1f2328;border:1px solid #ccc;border-radius:4px;padding:10px;font-size:13px">
             <div style="font-weight:700;margin-bottom:8px">岩隈 さやか (NM-9007)</div>
             <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
@@ -447,18 +490,32 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
   <div class="step">
     <div class="step-text">
       <div class="step-h"><span class="step-n">4</span><span class="t">保存する</span></div>
-      <p>直し終えたら、カードの下の<span class="key">「保存する」</span>を押します。<span class="key">「業種とTL可否を保存しました」</span>と出れば保存できています。</p>
+      <p>直し終えたら、カードの下の<span class="key">「保存する」</span>を押します。<span class="key">「業種とTL（テーブルリーダー）可能の設定を保存しました」</span>と出れば保存できています。</p>
       <p>保存すると画面が読み直され、まだ足りないところがあればもう一度カードが出ます。何も無くなれば緑の帯に変わります。</p>
       <div class="note"><b>押さないと残りません</b>　カテゴリを選んだだけ・スイッチを動かしただけでは残りません。必ず「保存する」を押してください。</div>
     </div>
     <div class="step-shot">
       <div class="app-shot"><div class="container"><div class="card">
         <span class="mark mark-out"><button class="btn btn-primary btn-block">保存する</button></span>
-        <div class="alert alert-success" style="margin:22px 0 0">業種とTL可否を保存しました</div>
+        <div class="alert alert-success" style="margin:22px 0 0">業種とTL（テーブルリーダー）可能の設定を保存しました</div>
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">5</span><span class="t">あらかじめTLを登録しておく方法</span></div>
+      <p>毎月「業種とTLの確認」が出てくる場合は、あらかじめ設定画面で登録しておくと次回から出なくなります。</p>
+      <ol>
+        <li>トップ画面の「設定」を押す</li>
+        <li>会員の一覧から登録したい方の名前を押す（<span class="key">TL未設定</span>のバッジが出ている方が対象です）</li>
+        <li>「TL（テーブルリーダー）可能」のスイッチをONにする</li>
+        <li>「保存する」を押す</li>
+      </ol>
+      <div class="note"><b>いつでも変更できます</b>　同じ画面からOFF（TL不可）に戻すこともできます。</div>
+    </div>
+  </div>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -561,7 +618,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -655,7 +712,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -743,7 +800,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -813,7 +870,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -895,7 +952,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -960,7 +1017,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -1034,7 +1091,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -1073,7 +1130,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
         <tr><th>月次参加者数推移</th><td>月ごとの参加者数の移り変わり</td></tr>
         <tr><th>業種分布</th><td>その期間の業種の内訳</td></tr>
       </table>
-      <p><span class="key">「星の評価」</span>はもう1つのタブです。押すと切り替わります。</p>
+      <p><span class="key">「星の評価」</span>はもう1つのタブです。押すと切り替わります（次のステップ）。</p>
     </div>
     <div class="step-shot">
       <div class="app-shot"><div class="container"><div class="card">
@@ -1091,7 +1148,52 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
 
   <div class="step">
     <div class="step-text">
-      <div class="step-h"><span class="step-n">3</span><span class="t">同席確認を使う</span></div>
+      <div class="step-h"><span class="step-n">3</span><span class="t">星の評価を見る</span></div>
+      <p><span class="key">「星の評価」</span>のタブを押すと、いまの支部の点数が出ます。<b>この表は期間の指定を使いません。</b>いつも最新の状態で出ます。</p>
+      <p>上に<span class="key">合計点と★の数</span>、その下に項目ごとの点数が並びます。いちばん下に<span class="key">次のランクまであと何点か</span>が出ます。</p>
+      <table class="tbl">
+        <tr><th>月例会の参加人数</th><td>22点｜直近3回の人数から出ます</td></tr>
+        <tr><th>会員数</th><td>18点｜いまの会員数から出ます</td></tr>
+        <tr><th>準役員就任（過去6か月）</th><td>15点｜会員リストの取り込みで自動で記録されます</td></tr>
+        <tr><th>フロント+TL研修受講率</th><td>6点</td></tr>
+        <tr><th>ゲスト割合（3か月平均）</th><td>5点</td></tr>
+        <tr><th>必須研修受講率（SU+SD）</th><td>4点</td></tr>
+        <tr><th>スライド</th><td>30点｜提出したかどうかを、この画面で選びます</td></tr>
+      </table>
+      <p><span class="key">「スライド」</span>と<span class="key">「本部評価」</span>は、押して選ぶところです。スライドを<span class="key">「提出済み」</span>にすると30点が合計に入ります。本部評価は、本部から受け取った★を控えておく欄です。</p>
+      <div class="note"><b>点数が出ないときは</b>　「会員の入会日が登録されていないため、受講率を計算できません」と出るのは不具合ではありません。会員詳細で<b>入会：</b>を埋めていくと計算されます。月例会のデータが3回分たまっていないときも、そのように出ます。<b>★★★★★（星5つ）は全支部の順位で決まるため、このツールでは判定しません。</b></div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container"><div class="card">
+        <div class="tab-nav">
+          <button class="tab-btn">集計指標</button>
+          <button class="tab-btn active">星の評価</button>
+        </div>
+        <div class="star-row"><span>スライド（30点）</span><span class="mark mark-inline"><button class="link-btn">未提出（0点） ▼</button></span></div>
+        <div class="star-row"><span>本部評価</span><span><span class="muted" style="margin:0">未登録</span> <button class="link-btn">登録 ▼</button></span></div>
+        <div class="star-score-header">42点</div>
+        <div class="star-score-rank">★</div>
+        <table class="data-table">
+          <thead><tr><th>項目名</th><th>現在点</th><th>最大点</th></tr></thead>
+          <tbody>
+            <tr><td>月例会の参加人数</td><td>14点</td><td>22点</td></tr>
+            <tr><td>会員数</td><td>12点</td><td>18点</td></tr>
+            <tr><td>準役員就任（過去6か月）</td><td>10点</td><td>15点</td></tr>
+            <tr><td>フロント+TL研修受講率</td><td>3点</td><td>6点</td></tr>
+            <tr><td>ゲスト割合（3か月平均）</td><td>3点</td><td>5点</td></tr>
+            <tr><td>必須研修受講率（SU+SD）</td><td>0点</td><td>4点</td></tr>
+            <tr><td>スライド</td><td>0点</td><td>30点</td></tr>
+          </tbody>
+        </table>
+        <div class="star-info-row" style="margin-top:12px">入会3か月以上の人数：18人（受講率の計測対象）</div>
+        <div class="star-info-row">あと8点で★★</div>
+      </div></div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">同席確認を使う</span></div>
       <p>画面のいちばん下に<span class="key">「同席確認」</span>があります。<b>「集計実行」とは別に動きます</b>ので、集計を押していなくても使えます。</p>
       <p>名前を打ち込むと候補が出ます。選ぶと、その方が<span class="key">過去に同じテーブルだった相手</span>の一覧が出ます。</p>
       <div class="note"><b>いつ使うか</b>　「この2人、前も同じテーブルだったかな」と迷ったときに使います。テーブル割りの前に見ておくと調整しやすくなります。</div>
@@ -1108,7 +1210,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -1187,7 +1289,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -1258,7 +1360,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -1338,7 +1440,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 <!-- ============================================================
@@ -1416,7 +1518,7 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
       </div></div></div>
     </div>
   </div>
-  <a class="back" href="#top">目次に戻る</a>
+  <a class="back" href="#top">できること一覧に戻る</a>
 </section>
 
 </div>
