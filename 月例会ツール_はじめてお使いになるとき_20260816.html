@@ -170,10 +170,16 @@ h1{font-size:31px;font-weight:700;letter-spacing:.02em}
 /* チェック・スイッチ・貼り付け欄 */
 .app-shot .chk{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:14px}
 .app-shot .chk i{width:16px;height:16px;border:1px solid var(--text-secondary);border-radius:3px;display:inline-block;flex:none}
-.app-shot .sw{width:34px;height:19px;border-radius:10px;background:#4a4f5e;position:relative;display:inline-block;flex:none}
+.app-shot .sw{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;display:inline-block;flex:none}
 .app-shot .sw.on{background:var(--primary)}
-.app-shot .sw::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff}
-.app-shot .sw.on::after{left:auto;right:2px}
+.app-shot .sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--text-secondary)}
+.app-shot .sw.on::after{left:23px;background:#fff}
+/* スイッチ1行（アプリの .switch-wrap / .switch-label。切のとき文字は灰色、入のとき白） */
+.app-shot .swrow{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:14px;color:var(--text-secondary)}
+.app-shot .swrow.on{color:var(--text)}
+/* 項目名（アプリの label）と選ぶ欄（アプリの .picker-display） */
+.app-shot .lb{display:block;font-size:14px;font-weight:500;margin-bottom:4px;color:var(--text-secondary)}
+.app-shot .pdisp{padding:10px 12px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:15px;display:flex;justify-content:space-between;align-items:center}
 .app-shot .drop{border:2px dashed var(--border);border-radius:var(--radius);background:var(--primary-light);
   padding:26px 12px;text-align:center;color:var(--text-secondary);font-size:13px}
 .app-shot .picker{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
@@ -231,7 +237,7 @@ h3.sec:first-child{margin-top:0}
   <table class="tbl">
     <tr><th>3まで終われば使えます</th><td>ログイン・会員リストの取り込み・役員の登録が終われば、その日から月例会に使えます。<b>まずはここまでを済ませてください。</b></td></tr>
     <tr><th>4は少しずつで構いません</th><td>会員の情報は人数ぶんあります。一度に全部やらなくて大丈夫です。使いながら埋めていくほど、テーブル割りと星の評価がそろっていきます。</td></tr>
-    <tr><th>順番の決まり</th><td><b>2（会員リスト）を済ませてから、6（過去の参加者名簿）と7（過去のテーブル割り）を行ってください。</b>逆にすると、取り込んだ過去の記録にお名前が正式な表記で入りません。<b>あとから会員リストを入れても直りません。</b></td></tr>
+    <tr><th>順番の決まり</th><td><b>2（会員リスト）を済ませてから、6（過去の参加者名簿）と7（過去のテーブル割り）を行ってください。</b><br>6を先にすると、取り込んだ過去の記録にお名前が正式な表記で入らず、所属支部も空のままになります。<b>あとから会員リストを入れても直りません。</b><br>7を先にすると、1件も取り込まれません。この場合は、会員リストを取り込んでからもう一度貼り付ければ入ります。</td></tr>
     <tr><th>裏側の準備は済んでいます</th><td>支部専用の保存先と、ログインできるようにする設定はこちらで済ませてあります。運営者の側で行っていただく作業はありません。</td></tr>
     <tr><th>月例会の進め方は別冊です</th><td>参加者を入れる・テーブル割りをする・名簿を出す、は<a href="月例会ツール_使い方マニュアル_20260816.html" target="_blank" rel="noopener">使い方マニュアル</a>をご覧ください。<b>このツールで何ができるかの一覧</b>も、<a href="月例会ツール_使い方マニュアル_20260816.html#top">使い方マニュアルの冒頭</a>にあります。</td></tr>
   </table>
@@ -542,9 +548,10 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
       <table class="tbl">
         <tr><th>業種</th><td>テーブル割りで<b>同じ業種の方が同じテーブルに固まらないように分かれます</b></td></tr>
         <tr><th>カテゴリ</th><td>業種より大きなくくりでの分散に使います。入っていないとこの分散が効きません</td></tr>
-        <tr><th>TL研修受講済み</th><td>TL（テーブルリーダー）として置ける方かどうかの判断に使います。1テーブルにTLは1名までです</td></tr>
-        <tr><th>TL優先度</th><td>TLを決めるときに、この方を先に選びます。「TL研修受講済み」を入にすると出てきます</td></tr>
+        <tr><th>TL（テーブルリーダー）可能</th><td>TLを任せられる方かどうかです。会員が加わったときは<b>切</b>で入ります。1テーブルにTLは1名までです</td></tr>
+        <tr><th>TL優先度</th><td>TLを決めるときに、この方を先に選びます。「TL（テーブルリーダー）可能」を入にすると出てきます</td></tr>
         <tr><th>SL可否</th><td>SL（サブリーダー）を任せてよいかどうかです。<b>はじめは全員が入</b>になっています</td></tr>
+        <tr><th>TL・SL不可にする</th><td>入にした方は、上の3つに関わらず<b>TLにもSLにもなりません</b>。はじめは全員が切です。<b>入れなくても動きます</b>（→ 手順5）</td></tr>
         <tr><th>入会：</th><td>星の評価の受講率を計算する対象（入会から3か月以上の方）を決めます。空のままだと計算できません</td></tr>
         <tr><th>受講済み研修</th><td>SU・SDが「必須研修受講率」に、FEが「フロント+TL研修受講率」になります。SK・UEは記録として残ります</td></tr>
         <tr><th>準役：</th><td>星の評価の「準役員就任（過去6か月）」の人数になります</td></tr>
@@ -557,7 +564,7 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
         <p>トップ画面の<span class="key">「05 設定」</span>を押します。<span class="key">「会員詳細」</span>のタブは、開いたときから選ばれています。</p>
         <table class="tbl">
           <tr><th>名前で絞り込む</th><td>名前の一部を入れると、その方だけが残ります</td></tr>
-          <tr><th>自支部のみ</th><td>入にすると、自分の支部の方だけが並びます</td></tr>
+          <tr><th style="white-space:normal;width:42%">すべて／自支部のみ／他支部のみ</th><td>押したボタンの方だけが並びます。選んでいるボタンは黄色になります</td></tr>
         </table>
         <p>一覧の上には<span class="key">「残り○名（全体○名）」</span>と出ます。「残り」は<b>カテゴリがまだ入っていない方の人数</b>です。0に近づくほど分散が効きます。</p>
         <div class="note"><b>他の支部の方も並びます</b>　月例会に来てくださった他支部の方は、この一覧に残ります。次に来られたときに名前と支部がすぐ分かるようにするためです。<b>「受講済み研修」「入会：」「準役：」は自分の支部の方を開いたときだけ出ます。</b></div>
@@ -572,20 +579,24 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
       <table class="tbl">
         <tr><th>（カテゴリ名）</th><td>灰色の印です。入れたカテゴリがそのまま出ます</td></tr>
         <tr><th>カテゴリ未設定</th><td>赤い印です。カテゴリがまだ入っていません</td></tr>
-        <tr><th>TL受講済</th><td>黄色い印です。「TL研修受講済み」が入になっています</td></tr>
+        <tr><th>TL受講済</th><td>黄色い印です。「TL（テーブルリーダー）可能」が入になっています</td></tr>
         <tr><th>TL受講済・優先</th><td>あわせて「TL優先度」も入になっています</td></tr>
+        <tr><th>TL未設定</th><td>赤い印です。「TL（テーブルリーダー）可能」が切の方に出ます</td></tr>
         <tr><th>SL不可</th><td>赤い印です。<b>「SL可否」を切にした方だけ</b>に出ます</td></tr>
         <tr><th>準役員</th><td>緑の印です。<b>会員リストの属性が「準役員」の方</b>に出ます（自分の支部の方だけ）</td></tr>
         <tr><th>就任月未設定</th><td>赤い印です。準役員の方で、下の<b>「準役：」がまだ空</b>のときに出ます</td></tr>
       </table>
       <p>名前の右の<span class="key">「編集」</span>を押すと、その行のすぐ下に編集の画面が開きます。押したボタンは<span class="key">「編集中」</span>に変わります。</p>
+      <div class="note"><b>「TL・SL不可にする」には印がありません</b>　入にしているかどうかは、その方の「編集」を開いて確かめてください。</div>
     </div>
     <div class="step-shot">
       <div class="app-shot"><div class="container">
         <p class="muted">残り12名（全体24名）</p>
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
-          <input type="text" placeholder="名前で絞り込む" style="flex:1">
-          <span style="display:flex;align-items:center;gap:8px;font-size:13px"><span class="sw"></span>自支部のみ</span>
+        <input type="text" placeholder="名前で絞り込む" style="margin-bottom:8px">
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="btn btn-sm btn-primary">すべて</button>
+          <button class="btn btn-sm btn-outline">自支部のみ</button>
+          <button class="btn btn-sm btn-outline">他支部のみ</button>
         </div>
         <div class="mlist">
           <div class="mrow">
@@ -599,7 +610,7 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
           <div class="mrow">
             <div class="minfo">
               <div class="mname">岩隈 さやか</div>
-              <div class="mbadges"><span class="badge-nocat">カテゴリ未設定</span><span class="badge-nocat">SL不可</span></div>
+              <div class="mbadges"><span class="badge-nocat">カテゴリ未設定</span><span class="badge-nocat">TL未設定</span><span class="badge-nocat">SL不可</span></div>
             </div>
             <span class="mark mark-inline"><button class="btn btn-sm btn-outline">編集</button></span>
           </div>
@@ -607,7 +618,7 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
             <div class="minfo">
               <div class="mname">西村 洋平</div>
               <div class="mind">経営コンサルタント</div>
-              <div class="mbadges"><span class="badge-cat">士業・コンサル</span><span class="badge-subofficer">準役員</span><span class="badge-no-joinmonth">就任月未設定</span></div>
+              <div class="mbadges"><span class="badge-cat">士業・コンサル</span><span class="badge-nocat">TL未設定</span><span class="badge-subofficer">準役員</span><span class="badge-no-joinmonth">就任月未設定</span></div>
             </div>
             <button class="btn btn-sm btn-outline">編集</button>
           </div>
@@ -623,48 +634,84 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
       <table class="tbl">
         <tr><th>業種</th><td>打ち込む欄です。その方の仕事の内容を入れます</td></tr>
         <tr><th>カテゴリ</th><td>「（未設定）」を押すと一覧が開きます。どれにも当てはまらないときは、いちばん上の「（カテゴリなし）」を選びます</td></tr>
-        <tr><th>3つのスイッチ</th><td>TL研修受講済み／TL優先度／SL可否。<b>TL研修受講済みを入にすると、その横にTL優先度が出ます</b></td></tr>
-        <tr><th>受講済み研修</th><td>SU・SD・FE・SK・UE の5つ。受け終わっている研修を入にします（自分の支部の方だけ）</td></tr>
+        <tr><th>4つのスイッチ</th><td>TL（テーブルリーダー）可能／TL優先度／SL可否（不可の方はOFFに）／TL・SL不可にする。<b>TL（テーブルリーダー）可能を入にすると、その横にTL優先度が出ます</b></td></tr>
+        <tr><th>受講済み研修</th><td>SU スタートアップ・SD 商談・FE フロントエンド・SK 集客・UE 運営 の5つ。受け終わっている研修を入にします（自分の支部の方だけ）</td></tr>
         <tr><th>入会：</th><td>入会した日。<b>2026-04-01</b> のように、年4けた・月2けた・日2けたを半角ハイフンでつなぎます</td></tr>
         <tr><th>準役：</th><td>準役員に就任した月。<b>2026-04</b> のように<b>日は入れません</b>。就任していない方は空欄のままです</td></tr>
       </table>
+      <p style="margin-top:12px">スイッチの下には、次の注意書きが出ています。「※ TLは追加時にOFF（不可）、SLはON（可）が初期設定です。TL・SL不可をONにすると上記に関わらずテーブルリーダーとサブリーダーになりません（ブロックされます）。」</p>
       <div class="note"><b>SL可否を切にしたら、戻りません</b>　一度切にしたら、毎月の会員リストの取り込みで入に戻ることもありません。<b>あとから増えた方ははじめは入</b>で入るので、任せたくない方だけ切にしてください。</div>
     </div>
     <div class="step-shot">
-      <div class="app-shot"><div class="container"><div class="card">
-        <div class="card-title">岩隈 さやか を編集</div>
-        <p class="muted">業種</p>
-        <input type="text" value="不動産仲介">
-        <p class="muted" style="margin-top:12px">カテゴリ</p>
-        <span class="mark mark-out"><div class="sel">（未設定）</div></span>
-        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;font-size:13px">
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>TL研修受講済み</span>
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>TL優先度</span>
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>SL可否</span>
+      <div class="app-shot"><div class="container">
+        <div style="padding:12px;background:var(--primary-light)">
+          <div class="card" style="border:2px solid var(--primary);border-radius:0;box-shadow:none;margin-bottom:0">
+            <div class="card-title">岩隈 さやか を編集</div>
+            <span class="lb">業種</span>
+            <input type="text" value="不動産仲介" style="margin-bottom:12px;border-radius:0">
+            <span class="lb">カテゴリ</span>
+            <span class="mark mark-out"><div class="pdisp"><span>（未設定）</span><span>▶</span></div></span>
+            <div style="display:flex;align-items:center;gap:16px;margin:12px 0;flex-wrap:wrap">
+              <span class="swrow on"><span class="sw on"></span>TL（テーブルリーダー）可能</span>
+              <span class="swrow"><span class="sw"></span>TL優先度</span>
+              <span class="swrow on"><span class="sw on"></span>SL可否（不可の方はOFFに）</span>
+              <span class="swrow"><span class="sw"></span>TL・SL不可にする</span>
+            </div>
+            <p style="font-size:12px;color:var(--text-secondary);margin-top:4px">※ TLは追加時にOFF（不可）、SLはON（可）が初期設定です。TL・SL不可をONにすると上記に関わらずテーブルリーダーとサブリーダーになりません（ブロックされます）。</p>
+            <div style="border-top:1px solid var(--border);padding-top:12px;margin:12px 0">
+              <div style="font-size:14px;margin-bottom:8px;color:var(--text-secondary)">受講済み研修（自支部のみ）</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 8px;margin-bottom:12px">
+                <span class="swrow on"><span class="sw on"></span>SU スタートアップ</span>
+                <span class="swrow on"><span class="sw on"></span>SD 商談</span>
+                <span class="swrow"><span class="sw"></span>FE フロントエンド</span>
+                <span class="swrow"><span class="sw"></span>SK 集客</span>
+                <span class="swrow"><span class="sw"></span>UE 運営</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="display:flex;align-items:center"><span style="font-size:14px;width:4em;flex:none">入会：</span><input type="text" placeholder="YYYY-MM-DD" style="flex:1;min-width:0;padding:8px;border-radius:0"></div>
+                <div style="display:flex;align-items:center"><span style="font-size:14px;width:4em;flex:none">準役：</span><input type="text" placeholder="YYYY-MM" style="flex:1;min-width:0;padding:8px;border-radius:0"></div>
+              </div>
+            </div>
+            <div style="margin-top:16px;display:flex;gap:8px">
+              <button class="btn btn-primary" style="flex:1;border-radius:0">この内容で更新する</button>
+              <button class="btn btn-outline" style="flex:1;border-radius:0">編集をやめる</button>
+            </div>
+          </div>
         </div>
-        <p class="muted" style="margin-top:16px">受講済み研修（自支部のみ）</p>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:13px">
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>SU</span>
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw on"></span>SD</span>
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>FE</span>
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>SK</span>
-          <span style="display:flex;align-items:center;gap:6px"><span class="sw"></span>UE</span>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:14px;font-size:13px;align-items:center">
-          <span>入会：</span><input type="text" placeholder="YYYY-MM-DD" style="flex:1">
-          <span>準役：</span><input type="text" placeholder="YYYY-MM" style="flex:1">
-        </div>
-        <div style="margin-top:14px;display:flex;gap:8px">
-          <button class="btn btn-primary btn-sm">この内容で更新する</button>
-          <button class="btn btn-outline btn-sm">編集をやめる</button>
-        </div>
-      </div></div></div>
+      </div></div>
     </div>
   </div>
 
   <div class="step">
     <div class="step-text">
-      <div class="step-h"><span class="step-n">5</span><span class="t">保存は2段階です</span></div>
+      <div class="step-h"><span class="step-n">5</span><span class="t">TLもSLも任せたくない方がいるとき</span></div>
+      <p>その方の「編集」を開き、<span class="key">「TL・SL不可にする」</span>を入にします。そのあと<span class="key">「この内容で更新する」</span>を押し、最後に<span class="key">「会員情報を保存する」</span>を押します（手順6）。</p>
+      <table class="tbl">
+        <tr><th>テーブル割り</th><td>TLにもSLにも選ばれません。「TL（テーブルリーダー）可能」や「SL可否」が入のままでも同じです</td></tr>
+        <tr><th>手動で決める・調整する</th><td>この方をTL・SLにすることはできません</td></tr>
+        <tr><th>効く範囲</th><td>この支部の月例会の中だけです。その方がほかの支部の月例会に出たときには関わりません</td></tr>
+        <tr><th>元に戻す</th><td>いつでも切に戻せます。切に戻すと、「TL（テーブルリーダー）可能」「SL可否」のとおりに戻ります</td></tr>
+      </table>
+      <div class="note"><b>入れなくても動きます</b>　はじめは全員が切です。任せたくない方がいるときだけ使ってください。テーブル割りの前に出る確認のカード（<a href="月例会ツール_使い方マニュアル_20260816.html#p2" target="_blank" rel="noopener">使い方マニュアル 2章</a>）からも入にできます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div class="card" style="border:2px solid var(--primary);border-radius:0;box-shadow:none;margin-bottom:0">
+          <div class="card-title">西村 洋平 を編集</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap">
+            <span class="swrow"><span class="sw"></span>TL（テーブルリーダー）可能</span>
+            <span class="swrow on"><span class="sw on"></span>SL可否（不可の方はOFFに）</span>
+            <span class="mark mark-out mark-inline"><span class="swrow on"><span class="sw on"></span>TL・SL不可にする</span></span>
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);margin-top:4px">※ TLは追加時にOFF（不可）、SLはON（可）が初期設定です。TL・SL不可をONにすると上記に関わらずテーブルリーダーとサブリーダーになりません（ブロックされます）。</p>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">6</span><span class="t">保存は2段階です</span></div>
       <p><span class="key">「この内容で更新する」</span>は、<b>1人ぶんを画面の中で確定するボタン</b>です。これだけでは残りません。</p>
       <p>その日に触った方をひととおり終えたら、いちばん下の<span class="key">「会員情報を保存する」</span>を押してください。「会員情報を保存しました」と出れば保存できています。</p>
       <div class="note"><b>途中でやめても構いません</b>　保存したところまでは残ります。次に開いたとき、その続きから埋めていけます。</div>
@@ -684,19 +731,25 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
      ============================================================ -->
 <section class="page" id="p5">
   <div class="page-head"><span class="page-n">5</span><h1>支部の設定を入れる</h1></div>
-  <p class="page-lead">「支部の設定」のタブには2つあります。<b>開催方式</b>（参加者名簿に印字されます）と、<b>テーブルの呼び方</b>（A・B・C… か 1・2・3…）です。どちらも最初に1回入れておけば、以降はそのまま使えます。<b>開催方式は、初めて名簿を出す前までに済ませれば大丈夫です。</b></p>
+  <p class="page-lead">「支部の設定」のタブでは、<b>開催方式</b>（参加者名簿に印字されます）と、テーブル割りの決め方（テーブルの呼び方・人数の多いテーブルの位置・TLとSLの選び方）を入れます。<b>必ず入れるのは開催方式だけです。</b>ほかは既定のままでも動きます。開催方式は、初めて名簿を出す前までに済ませれば大丈夫です。</p>
 
   <div class="step">
     <div class="step-text">
-      <div class="step-h"><span class="step-n">1</span><span class="t">支部の設定のタブで入れる</span></div>
-      <p>トップ画面の<span class="key">「05 設定」</span>を開き、<span class="key">「支部の設定」</span>のタブを押します。</p>
-      <p><span class="key">開催方式</span>の欄に入れます。<b>オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名</b>です。</p>
-      <p><span class="key">「支部の設定を保存する」</span>を押すと「保存しました」と出ます。</p>
-      <div class="note"><b>空のままだと名簿の欄も空で出ます</b>　提出する書類のその欄が空欄のまま出力されます。書類を出す前に入れておいてください。</div>
-      <div class="note"><b>あとから変えられます</b>　オンライン開催と会場開催が切り替わったときは同じ画面で、主催者が交代したときは「役員」のタブで直してください。</div>
+      <div class="step-h"><span class="step-n">1</span><span class="t">支部の設定のタブを開く</span></div>
+      <p>トップ画面の<span class="key">「05 設定」</span>を開き、<span class="key">「支部の設定」</span>のタブを押します。上から次の順に並んでいます。</p>
+      <table class="tbl">
+        <tr><th style="white-space:normal;width:42%">テーブルを数字で表示する（1・2・3…）</th><td>テーブルの呼び方です。既定は A・B・C…（→ 手順3）</td></tr>
+        <tr><th style="white-space:normal;width:42%">人数が多いテーブルを後ろにする</th><td>5名のテーブルを前と後ろのどちらに置くかです。既定は前（→ 手順4）</td></tr>
+        <tr><th style="white-space:normal;width:42%">役員をTLに優先的に選ぶ</th><td>既定は切です。入にすると、その下に<b>「TL選出の優先順位」</b>が出ます（→ 手順5）</td></tr>
+        <tr><th>SL選出の優先順位</th><td>SLに選ぶ方の順番です。既定は参加回数が多い方から（→ 手順6）</td></tr>
+        <tr><th>開催方式</th><td>参加者名簿に印字されます。<b>この項目だけは入れてください</b>（→ 手順2）</td></tr>
+      </table>
+      <div class="note"><b>開催方式のほかは、入れなくても動きます</b>　はじめは既定のままで使えます。支部のやり方に合わないと感じたときに変えてください。</div>
+      <div class="note"><b>スイッチと選ぶ欄は、その場で保存されます</b>　動かした・選んだ時点で「保存中...」と出て、消えれば保存できています。<b>「支部の設定を保存する」を押す必要はありません。</b>うまく保存できなかったときは「エラー:」で始まる知らせが出て、元の状態に戻ります。もう一度やり直してください。</div>
     </div>
     <div class="step-shot">
       <div class="app-shot"><div class="container">
+        <div class="card-title" style="display:flex;align-items:center;gap:8px;font-size:16px">設定 <button class="help-btn">?</button></div>
         <div class="tab-nav">
           <button class="tab-btn">会員詳細</button>
           <button class="tab-btn">役員</button>
@@ -704,12 +757,101 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
           <button class="tab-btn">過去レポート</button>
           <button class="tab-btn">テーブル履歴</button>
         </div>
-        <div class="card">
-          <div style="display:flex;align-items:center;gap:10px;font-size:14px;margin-bottom:16px"><span class="sw"></span><span>テーブルを数字で表示する（1・2・3…）</span></div>
-          <div class="card-title">開催方式</div>
-          <span class="mark mark-out"><input type="text" placeholder="ネット または 都道府県名（例: 大阪府）"></span>
-          <p class="muted" style="margin-top:12px">オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名を入れます。参加者名簿にそのまま印字されます。</p>
-          <button class="btn btn-primary btn-block">支部の設定を保存する</button>
+        <div style="margin-bottom:16px">
+          <span class="swrow"><span class="sw"></span>テーブルを数字で表示する（1・2・3…）</span>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">オフのときは A・B・C… で表示します</div>
+        </div>
+        <div style="margin-bottom:16px">
+          <span class="swrow"><span class="sw"></span>人数が多いテーブルを後ろにする</span>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">オフのときは前方のテーブル（A・B…）が多い人数になります</div>
+        </div>
+        <div style="margin-bottom:16px">
+          <span class="swrow"><span class="sw"></span>役員をTLに優先的に選ぶ</span>
+        </div>
+        <div style="margin-bottom:16px">
+          <span class="lb" style="font-weight:700">SL選出の優先順位</span>
+          <button class="btn btn-outline" style="width:100%;justify-content:space-between;padding:8px;background:transparent;color:var(--primary-text);border-radius:0"><span>参加回数が多い方を優先（既定）</span><span>▼</span></button>
+        </div>
+        <span class="lb">開催方式</span>
+        <input type="text" placeholder="ネット または 都道府県名（例: 大阪府）" style="margin-bottom:4px;border-radius:0">
+        <p style="font-size:13px;color:var(--text-secondary);margin:0 0 16px">オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名を入れます。参加者名簿にそのまま印字されます。</p>
+        <button class="btn btn-primary btn-block" style="border-radius:0">支部の設定を保存する</button>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">2</span><span class="t">開催方式を入れて保存する</span></div>
+      <p>いちばん下の<span class="key">開催方式</span>の欄に入れます。<b>オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名</b>です。</p>
+      <p><span class="key">「支部の設定を保存する」</span>を押すと「保存しました」と出ます。<b>このボタンで保存されるのは、開催方式だけです。</b></p>
+      <div class="note"><b>空のままだと名簿の欄も空で出ます</b>　提出する書類のその欄が空欄のまま出力されます。書類を出す前に入れておいてください。</div>
+      <div class="note"><b>あとから変えられます</b>　オンライン開催と会場開催が切り替わったときは同じ画面で、主催者が交代したときは「役員」のタブで直してください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <span class="lb">開催方式</span>
+        <span class="mark mark-out"><input type="text" value="大阪府" style="border-radius:0"></span>
+        <p style="font-size:13px;color:var(--text-secondary);margin:8px 0 16px">オンライン開催なら「ネット」、会場での開催なら開催地の都道府県名を入れます。参加者名簿にそのまま印字されます。</p>
+        <span class="mark mark-out"><button class="btn btn-primary btn-block" style="border-radius:0">支部の設定を保存する</button></span>
+        <div class="alert alert-success" style="margin:22px 0 0;border-radius:0">保存しました</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">3</span><span class="t">テーブルの呼び方を選ぶ</span></div>
+      <p>いちばん上の<span class="key">「テーブルを数字で表示する（1・2・3…）」</span>のスイッチです。</p>
+      <p><b>切のときは A・B・C…</b>、<b>入にすると 1・2・3…</b> で表示されます。テーブル割りの結果・共有用テキスト・当日の出欠の画面・過去のテーブル割りなど、<b>テーブルの記号が出るところはすべて</b>切り替わります。</p>
+      <p>スイッチを動かした時点で保存されます。</p>
+      <div class="note"><b>いつ切り替えても大丈夫です</b>　変わるのは見た目の呼び方だけです。これまでに保存した過去のテーブル割りも、そのまま新しい呼び方で表示されます。記録が消えたり、ずれたりすることはありません。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <span class="mark mark-out"><span class="swrow on"><span class="sw on"></span>テーブルを数字で表示する（1・2・3…）</span></span>
+        <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">オフのときは A・B・C… で表示します</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">4</span><span class="t">人数の多いテーブルを前にするか後ろにするか</span></div>
+      <p>テーブル割りでは、1テーブルが4名か5名になります。参加者の人数によっては、5名のテーブルと4名のテーブルが混ざります。</p>
+      <p><span class="key">「人数が多いテーブルを後ろにする」</span>が<b>切（既定）のときは、前のテーブル（A・B…）が5名</b>になります。<b>入にすると、後ろのテーブルが5名</b>になります。</p>
+      <p>スイッチを動かした時点で保存され、次にテーブル割りを実行したときから効きます。</p>
+      <div class="note"><b>入れなくても動きます</b>　会場の席の並びに合わせたいときだけ変えてください。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <span class="mark mark-out"><span class="swrow"><span class="sw"></span>人数が多いテーブルを後ろにする</span></span>
+        <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">オフのときは前方のテーブル（A・B…）が多い人数になります</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <div class="step-h"><span class="step-n">5</span><span class="t">役員を先にTLにするかどうか</span></div>
+      <p><span class="key">「役員をTLに優先的に選ぶ」</span>を入にすると、テーブル割りでTLを決めるときに、<b>TLができる方（「TL（テーブルリーダー）可能」が入の方）の中から役員を先に選びます</b>。「TL優先度」を入にしている方は、それよりさらに先に選ばれます。</p>
+      <p>入にすると、すぐ下に<span class="key">「TL選出の優先順位」</span>が出ます。押すと次の2つから選べます。</p>
+      <table class="tbl">
+        <tr><th style="white-space:normal;width:42%">役員なら自支部・他支部を問わない（既定）</th><td>自分の支部の役員も、ほかの支部の役員も同じように先に選びます</td></tr>
+        <tr><th style="white-space:normal;width:42%">自支部役員 → 自支部会員 → 他支部役員の順</th><td>自分の支部の役員、自分の支部の会員、ほかの支部の役員の順に選びます</td></tr>
+      </table>
+      <p style="margin-top:12px">スイッチも選ぶ欄も、その場で保存されます。</p>
+      <div class="note"><b>入れなくても動きます</b>　切（既定）のままでも、TLができる方の中から自動で選ばれます。</div>
+    </div>
+    <div class="step-shot">
+      <div class="app-shot"><div class="container">
+        <div style="margin-bottom:16px">
+          <span class="mark mark-out mark-inline"><span class="swrow on"><span class="sw on"></span>役員をTLに優先的に選ぶ</span></span>
+        </div>
+        <div style="margin-bottom:4px">
+          <span class="lb" style="font-weight:700">TL選出の優先順位</span>
+          <span class="mark mark-out"><button class="btn btn-outline" style="width:100%;justify-content:space-between;padding:8px;background:transparent;color:var(--primary-text);border-radius:0"><span>役員なら自支部・他支部を問わない（既定）</span><span>▼</span></button></span>
+          <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">「役員を優先する」設定がONのときの動作です</div>
         </div>
       </div></div>
     </div>
@@ -717,16 +859,19 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
 
   <div class="step">
     <div class="step-text">
-      <div class="step-h"><span class="step-n">2</span><span class="t">テーブルの呼び方を選ぶ</span></div>
-      <p>同じ<span class="key">「支部の設定」</span>のタブのいちばん上に、<span class="key">「テーブルを数字で表示する（1・2・3…）」</span>のスイッチがあります。</p>
-      <p><b>切のときは A・B・C…</b>、<b>入にすると 1・2・3…</b> で表示されます。テーブル割りの結果・共有用テキスト・当日の出欠の画面・過去のテーブル割りなど、<b>テーブルの記号が出るところはすべて</b>切り替わります。</p>
-      <p>スイッチを動かしたら、下の<span class="key">「支部の設定を保存する」</span>を押してください。押さないと元に戻ります。</p>
-      <div class="note"><b>いつ切り替えても大丈夫です</b>　変わるのは見た目の呼び方だけです。これまでに保存した過去のテーブル割りも、そのまま新しい呼び方で表示されます。記録が消えたり、ずれたりすることはありません。</div>
+      <div class="step-h"><span class="step-n">6</span><span class="t">SLに選ぶ方の順番</span></div>
+      <p><span class="key">「SL選出の優先順位」</span>を押すと、次の2つから選べます。</p>
+      <table class="tbl">
+        <tr><th style="white-space:normal;width:42%">参加回数が多い方を優先（既定）</th><td>月例会に多く来ている方から先にSLに選びます</td></tr>
+        <tr><th style="white-space:normal;width:42%">参加回数が少ない方を優先（新人を優先）</th><td>来た回数が少ない方から先にSLに選びます。新しい方にSLを経験してほしいときに使います</td></tr>
+      </table>
+      <p style="margin-top:12px">選んだ時点で保存されます。どちらの場合も、「SL可否」を切にした方と「TL・SL不可にする」を入にした方は選ばれません。</p>
+      <div class="note"><b>入れなくても動きます</b>　既定のままで構いません。</div>
     </div>
     <div class="step-shot">
       <div class="app-shot"><div class="container">
-        <span class="mark mark-out"><div style="display:flex;align-items:center;gap:10px;font-size:14px"><span class="sw on"></span><span>テーブルを数字で表示する（1・2・3…）</span></div></span>
-        <p class="muted" style="margin-top:8px">オフのときは A・B・C… で表示します</p>
+        <span class="lb" style="font-weight:700">SL選出の優先順位</span>
+        <span class="mark mark-out"><button class="btn btn-outline" style="width:100%;justify-content:space-between;padding:8px;background:transparent;color:var(--primary-text);border-radius:0"><span>参加回数が多い方を優先（既定）</span><span>▼</span></button></span>
       </div></div>
     </div>
   </div>
@@ -894,8 +1039,10 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
       <tr><td>＋ 役員に毎月参加を付けた</td><td>毎月参加する方を、参加者を入れるときに手間なく入れられます</td></tr>
       <tr><td>＋ 業種を入れた</td><td>同じ業種の方が同じテーブルに固まらないように分かれます</td></tr>
       <tr><td>＋ カテゴリを入れた</td><td>業種より大きなくくりでも分かれます。一覧の「カテゴリ未設定」の印が消えていきます</td></tr>
-      <tr><td>＋ TL研修受講済みを入れた</td><td>TLを置ける方がはっきりします。「TL優先度」も入れると、その方が先に選ばれます</td></tr>
+      <tr><td>＋ TL（テーブルリーダー）可能を入れた</td><td>TLを置ける方がはっきりします。「TL優先度」も入れると、その方が先に選ばれます</td></tr>
       <tr><td>＋ SL可否を切にした</td><td>切にした方は、テーブル割りでSLに選ばれなくなります。<b>はじめは全員が入なので、そのままでも構いません</b></td></tr>
+      <tr><td>＋ TL・SL不可にするを入れた</td><td>入れた方は、テーブル割りでTLにもSLにも選ばれません。手動で決めるときや調整するときも、TL・SLにできなくなります。<b>はじめは全員が切なので、任せたくない方がいるときだけで構いません</b></td></tr>
+      <tr><td>＋ 支部の設定でテーブル割りの決め方を選んだ</td><td>人数の多いテーブルを前・後ろのどちらにするか、役員を先にTLにするか、SLに参加回数の多い方・少ない方のどちらを先に選ぶかが、支部のやり方に合います。<b>選ばなくても既定のままで動きます</b></td></tr>
       <tr><td>＋ 入会：を入れた</td><td>星の評価の受講率が計算できるようになります。空のうちは、受講率の欄に計算できない旨が出ます</td></tr>
       <tr><td>＋ 研修の受講を入れた</td><td>「必須研修受講率（SU+SD）」と「フロント+TL研修受講率」の点数が出ます</td></tr>
       <tr><td>＋ 準役：を入れた</td><td>「準役員就任（過去6か月）」の点数が出ます</td></tr>
@@ -995,6 +1142,8 @@ NM-9002　早瀬 千夏　ハヤセ チナツ　デモ　役員</div>
       <tr><td>一覧の「残り（数）名」は何の数ですか？</td><td>カテゴリがまだ入っていない方の人数です。0に近づくほど、テーブル割りの分散が効くようになります</td></tr>
       <tr><td>入会日がわからない人がいます</td><td>空欄のままにしておいてください。わかった時点で入れれば、そこから星の評価の受講率に反映されます</td></tr>
       <tr><td>入会したばかりの人にSLを任せたくありません</td><td>「05 設定」→「会員詳細」でその方の「編集」を押し、SL可否を切にしてください。<b>はじめは全員が入</b>です。一度切にしたら、勝手に入へ戻ることはありません</td></tr>
+      <tr><td>この方には、TLもSLも任せたくありません</td><td>「05 設定」→「会員詳細」でその方の「編集」を押し、<b>「TL・SL不可にする」を入</b>にして、「この内容で更新する」→「会員情報を保存する」の順に押してください。テーブル割りでTL・SLに選ばれなくなり、手動で決めるときや調整するときもTL・SLにできなくなります。いつでも切に戻せます（→ <a href="#p4">4. 会員の情報を埋める</a>）</td></tr>
+      <tr><td>支部の設定のスイッチを動かしたあと、保存のボタンは押しますか？</td><td>押さなくて大丈夫です。スイッチと選ぶ欄は、動かした・選んだ時点で保存されます。「支部の設定を保存する」のボタンで保存されるのは開催方式だけです（→ <a href="#p5">5. 支部の設定を入れる</a>）</td></tr>
       <tr><td>過去の席順の記録が残っていない場合は？</td><td>入れなくて構いません。7を飛ばしてください。これから月例会をこのツールで回していけば、席順はそのつど自動でたまっていきます</td></tr>
       <tr><td>すでに取り込んだ開催日の内容を直したいときは？</td><td><b>ご連絡ください。</b>同じ開催日は読み飛ばされるため、入れ直すには先に古い記録を消す必要があります</td></tr>
       <tr><td>パスワードを忘れました</td><td><b>ご連絡ください。</b>お調べしてお伝えするか、新しいものを作ってお渡しします。画面から変えたり調べたりする仕組みはありません</td></tr>
